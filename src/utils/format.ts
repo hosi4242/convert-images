@@ -24,5 +24,6 @@ export function getFileNameWithoutExtension(filename: string): string {
 
 // 다운로드에 문제가 없는 안전한 파일명으로 만드는 함수
 export function sanitizeFilename(filename: string): string {
+  // eslint-disable-next-line no-control-regex
   return filename.replace(/[<>:"/\\|?*\x00-\x1f]/g, "_").trim() || "image";
 }

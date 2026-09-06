@@ -58,8 +58,7 @@ export interface Translation {
   seoDescriptionP2: string;
 
   // 방문자 수
-  visitorToday: string;
-  visitorTotal: string;
+  visitorCountLabel: string;
   visitorCountAria: string;
 
   // 푸터
@@ -120,8 +119,7 @@ const ko: Translation = {
   seoDescriptionP2:
     "품질 설정을 통해 파일 크기를 줄이면서도 화질을 유지할 수 있어 웹사이트 이미지 최적화에도 유용합니다. 지금 바로 이미지를 업로드해서 간편하게 변환해 보세요.",
 
-  visitorToday: "오늘",
-  visitorTotal: "전체",
+  visitorCountLabel: "방문자 수",
   visitorCountAria: "방문자 수 새로고침",
 
   footerText:
@@ -183,8 +181,7 @@ const en: Translation = {
   seoDescriptionP2:
     "With adjustable quality settings, you can reduce file size while maintaining image quality, making it perfect for optimizing website images too. Upload an image now and try it for yourself.",
 
-  visitorToday: "Today",
-  visitorTotal: "Total",
+  visitorCountLabel: "Visitors",
   visitorCountAria: "Refresh visitor count",
 
   footerText:

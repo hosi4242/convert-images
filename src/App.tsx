@@ -83,9 +83,9 @@ function App() {
         <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-3xl px-4 py-6 text-center sm:py-8">
-          {/* 언어 토글 버튼 */}
-          <div className="absolute right-4 top-4 flex items-center gap-2">
+        <div className="relative mx-auto max-w-3xl px-4 py-6 sm:py-8">
+          {/* 상단 버튼 행 */}
+          <div className="mb-3 flex items-center justify-end gap-2">
             {/* 처음으로 버튼 - 이미지가 업로드된 상태에서만 표시 */}
             {uploadedImage && (
               <button
@@ -108,12 +108,14 @@ function App() {
             </button>
           </div>
 
-          <h1 className="text-xl font-bold text-white drop-shadow-sm sm:text-3xl">
-            {t.headerTitle}
-          </h1>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-blue-50 sm:text-base">
-            {t.headerSubtitle}
-          </p>
+          <div className="text-center">
+            <h1 className="text-xl font-bold text-white drop-shadow-sm sm:text-3xl">
+              {t.headerTitle}
+            </h1>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-blue-50 sm:text-base">
+              {t.headerSubtitle}
+            </p>
+          </div>
         </div>
       </header>
 

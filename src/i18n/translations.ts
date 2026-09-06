@@ -57,10 +57,6 @@ export interface Translation {
   seoDescriptionP1: string;
   seoDescriptionP2: string;
 
-  // 방문자 수
-  visitorCountLabel: string;
-  visitorCountAria: string;
-
   // 푸터
   footerText: string;
 }
@@ -118,9 +114,6 @@ const ko: Translation = {
     "간편 이미지 변환기는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG를 PNG로, PNG를 WebP로 변환하는 등 다양한 형식 변환을 지원하며, 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
   seoDescriptionP2:
     "품질 설정을 통해 파일 크기를 줄이면서도 화질을 유지할 수 있어 웹사이트 이미지 최적화에도 유용합니다. 지금 바로 이미지를 업로드해서 간편하게 변환해 보세요.",
-
-  visitorCountLabel: "방문자 수",
-  visitorCountAria: "방문자 수 새로고침",
 
   footerText:
     "간편 이미지 변환기 · 모든 변환은 브라우저에서 안전하게 처리되며 서버에 저장되지 않습니다",
@@ -180,9 +173,6 @@ const en: Translation = {
     "Simple Image Converter is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports converting JPG to PNG, PNG to WebP, and more. All processing happens locally in your browser, so your image files are never sent to an external server.",
   seoDescriptionP2:
     "With adjustable quality settings, you can reduce file size while maintaining image quality, making it perfect for optimizing website images too. Upload an image now and try it for yourself.",
-
-  visitorCountLabel: "Visitors",
-  visitorCountAria: "Refresh visitor count",
 
   footerText:
     "Simple Image Converter · All conversions are processed safely in your browser and are never stored on any server",

@@ -4,7 +4,6 @@ import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
 import AdSlot from "@/components/AdSlot";
-import VisitorCounter from "@/components/VisitorCounter";
 import { convertImage, isSupportedImage, type ImageFormat, type Quality, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
@@ -186,13 +185,8 @@ function App() {
 
       {/* 푸터 */}
       <footer className="border-t border-blue-100/50 bg-white/60 backdrop-blur-sm">
-        <div className="mx-auto max-w-3xl px-4 py-3">
-          <div className="mb-3">
-            <VisitorCounter />
-          </div>
-          <p className="text-center text-sm font-bold text-gray-600">
-            {t.footerText}
-          </p>
+        <div className="mx-auto max-w-3xl px-4 py-3 text-center text-sm font-bold text-gray-600">
+          <p>{t.footerText}</p>
         </div>
       </footer>
     </div>

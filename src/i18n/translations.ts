@@ -64,7 +64,7 @@ export interface Translation {
 
 const ko: Translation = {
   headerTitle: "간편 이미지 변환기",
-  headerSubtitle: "JPG, PNG, WebP 이미지를 브라우저에서 빠르고 간편하게 변환하세요.",
+  headerSubtitle: "JPG, PNG, WebP, AVIF 이미지를 브라우저에서 빠르고 간편하게 변환하세요.",
 
   switchToEnglish: "English",
   switchToKorean: "한국어",
@@ -79,7 +79,7 @@ const ko: Translation = {
   uploadDropHere: "이미지를 여기에 끌어놓거나",
   uploadSelectButton: "이미지 선택하기",
   uploadFileInputAria: "이미지 파일 선택",
-  uploadSupportedFormats: "JPG, PNG, WebP · 최대 50MB",
+  uploadSupportedFormats: "JPG, PNG, WebP, AVIF · 최대 50MB",
 
   uploadedFileSize: "파일 크기",
   uploadedImageSize: "이미지 크기",
@@ -111,10 +111,10 @@ const ko: Translation = {
   errorConversionFailed:
     "이미지를 변환하지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
   errorAvifNotSupported:
-    "현재 브라우저에서는 AVIF 변환을 지원하지 않습니다. (WebP나 PNG/JPG를 이용해주세요)",
+    "AVIF 변환 중 오류가 발생했습니다. 다른 이미지 파일을 사용하거나 WebP, PNG, JPG를 이용해 주세요.",
 
   seoDescriptionP1:
-    "간편 이미지 변환기는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG를 PNG로, PNG를 WebP로 변환하는 등 다양한 형식 변환을 지원하며, 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
+    "간편 이미지 변환기는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG를 PNG로, PNG를 WebP로, WebP를 AVIF로 변환하는 등 JPG, PNG, WebP, AVIF 다양한 포맷 변환을 지원하며, 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
   seoDescriptionP2:
     "품질 설정을 통해 파일 크기를 줄이면서도 화질을 유지할 수 있어 웹사이트 이미지 최적화에도 유용합니다. 지금 바로 이미지를 업로드해서 간편하게 변환해 보세요.",
 
@@ -125,7 +125,7 @@ const ko: Translation = {
 const en: Translation = {
   headerTitle: "Simple Image Converter",
   headerSubtitle:
-    "Convert JPG, PNG, and WebP images right in your browser — fast and easy.",
+    "Convert JPG, PNG, WebP, and AVIF images right in your browser — fast and easy.",
 
   switchToEnglish: "English",
   switchToKorean: "한국어",
@@ -140,7 +140,7 @@ const en: Translation = {
   uploadDropHere: "Drag and drop your image here, or",
   uploadSelectButton: "Select Image",
   uploadFileInputAria: "Select image file",
-  uploadSupportedFormats: "JPG, PNG, WebP · Max 50MB",
+  uploadSupportedFormats: "JPG, PNG, WebP, AVIF · Max 50MB",
 
   uploadedFileSize: "File size",
   uploadedImageSize: "Image size",
@@ -172,10 +172,10 @@ const en: Translation = {
   errorConversionFailed:
     "Could not convert the image. Please try a different image file.",
   errorAvifNotSupported:
-    "AVIF conversion is not supported in your current browser. Please use WebP, PNG, or JPG instead.",
+    "An error occurred during AVIF conversion. Please try a different image file or use WebP, PNG, or JPG instead.",
 
   seoDescriptionP1:
-    "Simple Image Converter is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports converting JPG to PNG, PNG to WebP, and more. All processing happens locally in your browser, so your image files are never sent to an external server.",
+    "Simple Image Converter is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports converting JPG to PNG, PNG to WebP, WebP to AVIF, and more across JPG, PNG, WebP, and AVIF formats. All processing happens locally in your browser, so your image files are never sent to an external server.",
   seoDescriptionP2:
     "With adjustable quality settings, you can reduce file size while maintaining image quality, making it perfect for optimizing website images too. Upload an image now and try it for yourself.",
 

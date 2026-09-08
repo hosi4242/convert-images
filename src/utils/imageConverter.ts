@@ -1,3 +1,6 @@
+// AVIF 인코딩을 위한 WASM 라이브러리 (모든 브라우저/모바일 환경 지원)
+import { encode as encodeAvif } from "@jsquash/avif";
+
 // 지원하는 이미지 형식
 export type ImageFormat = "jpeg" | "png" | "webp" | "avif";
 
@@ -13,21 +16,24 @@ export interface ConversionResult {
 // 이미지 품질 설정값 (0 ~ 1 사이)
 export type Quality = 0.5 | 0.7 | 0.8 | 0.9 | 1;
 
-// AVIF 인코딩 브라우저 지원 여부 확인 (Feature Detection)
-let avifSupportCache: boolean | null = null;
-
-export function isAvifSupported(): boolean {
-  if (avifSupportCache !== null) return avifSupportCache;
-
-  try {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    avifSupportCache = canvas.toDataURL("image/avif").startsWith("data:image/avif");
-  } catch {
-    avifSupportCache = false;
+// AVIF를 WASM 라이브러리로 인코딩하는 함수 (모든 브라우저/모바일 지원)
+async function convertToAvif(
+  canvas: HTMLCanvasElement,
+  quality: Quality
+): Promise<Blob> {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("CANVAS_CONTEXT_FAILED");
   }
-  return avifSupportCache;
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  // 품질값(0~1)을 AVIF 인코더 옵션(0~100)으로 변환
+  const avifQuality = Math.round(quality * 100);
+
+  const avifBuffer = await encodeAvif(imageData, { quality: avifQuality });
+
+  return new Blob([avifBuffer], { type: "image/avif" });
 }
 
 // 이미지 파일을 읽어서 Image 객체로 만드는 함수
@@ -107,8 +113,13 @@ export async function convertImage(
 
   ctx.drawImage(img, 0, 0);
 
-  // Canvas를 선택한 형식의 Blob으로 변환
-  const blob = await canvasToBlob(canvas, format, quality);
+  // AVIF는 WASM 라이브러리로 인코딩, 나머지는 Canvas API 사용
+  let blob: Blob;
+  if (format === "avif") {
+    blob = await convertToAvif(canvas, quality);
+  } else {
+    blob = await canvasToBlob(canvas, format, quality);
+  }
   const dataUrl = await blobToDataUrl(blob);
 
   return {

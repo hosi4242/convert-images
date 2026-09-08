@@ -19,7 +19,7 @@ const QUALITY_OPTIONS: { value: Quality; label: string }[] = [
 ];
 
 function isQualityApplicable(format: ImageFormat): boolean {
-  return format === "jpeg" || format === "webp";
+  return format === "jpeg" || format === "webp" || format === "avif";
 }
 
 export default function ConversionSettings({
@@ -53,6 +53,7 @@ export default function ConversionSettings({
           <option value="webp">WebP</option>
           <option value="jpeg">JPG</option>
           <option value="png">PNG</option>
+          <option value="avif">AVIF (.avif)</option>
         </select>
       </div>
 

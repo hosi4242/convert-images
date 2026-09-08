@@ -31,7 +31,9 @@ export default function ResultComparison({
       ? "jpeg"
       : result.blob.type === "image/png"
         ? "png"
-        : "webp"
+        : result.blob.type === "image/avif"
+          ? "avif"
+          : "webp"
   );
   const downloadName = `${sanitizeFilename(baseName)}.${extension}`;
 

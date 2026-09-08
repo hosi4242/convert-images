@@ -4,7 +4,7 @@ import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
 import AdSlot from "@/components/AdSlot";
-import { convertImage, isSupportedImage, type ImageFormat, type Quality, type ConversionResult } from "@/utils/imageConverter";
+import { convertImage, isSupportedImage, isAvifSupported, type ImageFormat, type Quality, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
 
@@ -57,10 +57,18 @@ function App() {
     setError(null);
 
     try {
+      if (format === "avif" && !isAvifSupported()) {
+        setError(t.errorAvifNotSupported);
+        return;
+      }
       const conversionResult = await convertImage(uploadedImage.file, format, quality);
       setResult(conversionResult);
     } catch {
-      setError(t.errorConversionFailed);
+      if (format === "avif") {
+        setError(t.errorAvifNotSupported);
+      } else {
+        setError(t.errorConversionFailed);
+      }
     } finally {
       setIsConverting(false);
     }

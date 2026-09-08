@@ -1,5 +1,5 @@
 // 지원하는 이미지 형식
-export type ImageFormat = "jpeg" | "png" | "webp";
+export type ImageFormat = "jpeg" | "png" | "webp" | "avif";
 
 // 변환 결과에 들어가는 정보
 export interface ConversionResult {
@@ -12,6 +12,23 @@ export interface ConversionResult {
 
 // 이미지 품질 설정값 (0 ~ 1 사이)
 export type Quality = 0.5 | 0.7 | 0.8 | 0.9 | 1;
+
+// AVIF 인코딩 브라우저 지원 여부 확인 (Feature Detection)
+let avifSupportCache: boolean | null = null;
+
+export function isAvifSupported(): boolean {
+  if (avifSupportCache !== null) return avifSupportCache;
+
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    avifSupportCache = canvas.toDataURL("image/avif").startsWith("data:image/avif");
+  } catch {
+    avifSupportCache = false;
+  }
+  return avifSupportCache;
+}
 
 // 이미지 파일을 읽어서 Image 객체로 만드는 함수
 function loadImage(file: File): Promise<HTMLImageElement> {
@@ -129,5 +146,7 @@ export function getExtensionForFormat(format: ImageFormat): string {
       return "png";
     case "webp":
       return "webp";
+    case "avif":
+      return "avif";
   }
 }

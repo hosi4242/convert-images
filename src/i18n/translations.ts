@@ -52,6 +52,7 @@ export interface Translation {
   errorFileTooLarge: string;
   errorImageLoadFailed: string;
   errorConversionFailed: string;
+  errorAvifNotSupported: string;
 
   // SEO 설명
   seoDescriptionP1: string;
@@ -109,6 +110,8 @@ const ko: Translation = {
     "이미지 파일을 읽지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
   errorConversionFailed:
     "이미지를 변환하지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
+  errorAvifNotSupported:
+    "현재 브라우저에서는 AVIF 변환을 지원하지 않습니다. (WebP나 PNG/JPG를 이용해주세요)",
 
   seoDescriptionP1:
     "간편 이미지 변환기는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG를 PNG로, PNG를 WebP로 변환하는 등 다양한 형식 변환을 지원하며, 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
@@ -168,6 +171,8 @@ const en: Translation = {
     "Could not read the image file. Please try a different image.",
   errorConversionFailed:
     "Could not convert the image. Please try a different image file.",
+  errorAvifNotSupported:
+    "AVIF conversion is not supported in your current browser. Please use WebP, PNG, or JPG instead.",
 
   seoDescriptionP1:
     "Simple Image Converter is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports converting JPG to PNG, PNG to WebP, and more. All processing happens locally in your browser, so your image files are never sent to an external server.",

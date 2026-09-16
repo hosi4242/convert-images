@@ -47,12 +47,30 @@ export interface Translation {
   resultDownloadButton: string;
   resultResetButton: string;
 
+  // 이미지 용량 줄이기
+  compressionTab: string;
+  compressionTitle: string;
+  compressionDescription: string;
+  compressionQuality: string;
+  compressionHigh: string;
+  compressionMedium: string;
+  compressionLow: string;
+  compressionFormatNote: string;
+  compressionButton: string;
+  compressionCompressing: string;
+  compressionComplete: string;
+  compressionOriginal: string;
+  compressionResult: string;
+  compressionFormat: string;
+  compressionDownloadButton: string;
+
   // 오류 메시지
   errorUnsupportedFormat: string;
   errorFileTooLarge: string;
   errorImageLoadFailed: string;
   errorHeicLoadFailed: string;
   errorConversionFailed: string;
+  errorCompressionFailed: string;
   errorAvifNotSupported: string;
 
   // SEO 설명
@@ -65,7 +83,8 @@ export interface Translation {
 
 const ko: Translation = {
   headerTitle: "간편 이미지 변환기",
-  headerSubtitle: "JPG, PNG, WebP, AVIF, HEIC 이미지를 브라우저에서 빠르고 간편하게 변환하세요.",
+  headerSubtitle:
+    "JPG, PNG, WebP, AVIF, HEIC 이미지를 브라우저에서 빠르고 간편하게 변환하세요.",
 
   switchToEnglish: "English",
   switchToKorean: "한국어",
@@ -103,6 +122,25 @@ const ko: Translation = {
   resultDownloadButton: "변환된 이미지 다운로드",
   resultResetButton: "다른 이미지 변환하기",
 
+  // 이미지 용량 줄이기
+  compressionTab: "이미지 용량 줄이기",
+  compressionTitle: "이미지 용량 줄이기",
+  compressionDescription:
+    "이미지의 가로·세로 크기는 그대로 유지하면서 WebP로 다시 압축해 파일 용량을 줄입니다.",
+  compressionQuality: "압축 품질",
+  compressionHigh: "높은 품질 (90%)",
+  compressionMedium: "균형 (70%)",
+  compressionLow: "높은 압축 (50%)",
+  compressionFormatNote:
+    "용량 줄이기 결과는 WebP 형식으로 저장됩니다. 모든 처리는 브라우저에서 이루어집니다.",
+  compressionButton: "이미지 용량 줄이기",
+  compressionCompressing: "용량 줄이는 중...",
+  compressionComplete: "이미지 용량 줄이기가 완료되었습니다.",
+  compressionOriginal: "원본",
+  compressionResult: "압축 후",
+  compressionFormat: "파일 형식",
+  compressionDownloadButton: "압축된 이미지 다운로드",
+
   errorUnsupportedFormat:
     "지원하지 않는 이미지 형식입니다. JPG, PNG, WebP, HEIC 파일을 선택해주세요.",
   errorFileTooLarge:
@@ -113,6 +151,8 @@ const ko: Translation = {
     "HEIC 이미지를 읽지 못했습니다. 파일이 손상되었거나 지원되지 않는 HEIC 형식일 수 있습니다.",
   errorConversionFailed:
     "이미지를 변환하지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
+  errorCompressionFailed:
+    "이미지 용량을 줄이지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
   errorAvifNotSupported:
     "AVIF 변환 중 오류가 발생했습니다. 다른 이미지 파일을 사용하거나 WebP, PNG, JPG를 이용해 주세요.",
 
@@ -166,6 +206,25 @@ const en: Translation = {
   resultDownloadButton: "Download Converted Image",
   resultResetButton: "Convert Another Image",
 
+  // Image compression
+  compressionTab: "Reduce Image Size",
+  compressionTitle: "Reduce Image Size",
+  compressionDescription:
+    "Keep the original image dimensions while recompressing the image as WebP to reduce file size.",
+  compressionQuality: "Compression quality",
+  compressionHigh: "High quality (90%)",
+  compressionMedium: "Balanced (70%)",
+  compressionLow: "High compression (50%)",
+  compressionFormatNote:
+    "The compressed image is saved as WebP. All processing happens in your browser.",
+  compressionButton: "Reduce Image Size",
+  compressionCompressing: "Compressing...",
+  compressionComplete: "Image compression is complete.",
+  compressionOriginal: "Original",
+  compressionResult: "Compressed",
+  compressionFormat: "Format",
+  compressionDownloadButton: "Download Compressed Image",
+
   errorUnsupportedFormat:
     "Unsupported image format. Please select a JPG, PNG, WebP, or HEIC file.",
   errorFileTooLarge:
@@ -176,6 +235,8 @@ const en: Translation = {
     "Could not read the HEIC image. The file may be damaged or use an unsupported HEIC format.",
   errorConversionFailed:
     "Could not convert the image. Please try a different image file.",
+  errorCompressionFailed:
+    "Could not reduce the image size. Please try a different image file.",
   errorAvifNotSupported:
     "An error occurred during AVIF conversion. Please try a different image file or use WebP, PNG, or JPG instead.",
 

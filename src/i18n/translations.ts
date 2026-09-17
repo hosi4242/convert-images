@@ -143,7 +143,7 @@ const en: Translation = {
   resultIncreased: (percent) => `File size increased by ${percent}%.`,
   resultDownloadButton: "Download Converted Image",
   resultResetButton: "Convert Another Image",
-  compressionTab: "Reduce Image Size",
+  compressionTab: "Compress Image",
   compressionTitle: "Reduce Image Size",
   compressionDescription: "Keep the original image dimensions while recompressing the image as WebP to reduce file size.",
   compressionQuality: "Compression quality",

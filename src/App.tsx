@@ -110,7 +110,7 @@ function App() {
         </div>
 
         <div className="mb-4 grid grid-cols-3 gap-2 rounded-2xl border border-white/60 bg-white/70 p-2 shadow-md backdrop-blur-sm">
-          <button type="button" onClick={() => handleModeChange("convert")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "convert" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.headerTitle}</button>
+          <button type="button" onClick={() => handleModeChange("convert")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "convert" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.conversionTab}</button>
           <button type="button" onClick={() => handleModeChange("compress")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "compress" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.compressionTab}</button>
           <button type="button" onClick={() => handleModeChange("resize")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "resize" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.resizeTab}</button>
         </div>
@@ -143,15 +143,10 @@ function App() {
         )}
 
         <AdSlot labelKey="adSlot" />
-        <section className="mt-4 rounded-2xl border border-white/60 bg-white/70 p-4 text-sm leading-relaxed text-gray-600 shadow-md backdrop-blur-sm sm:p-5 sm:text-base">
-          <p>{t.seoDescriptionP1}</p>
-          <p className="mt-3">{t.seoDescriptionP2}</p>
-        </section>
+        <footer className="mt-5 pb-6 text-center text-xs text-gray-500">
+          <p>{t.footerText}</p>
+        </footer>
       </main>
-
-      <footer className="border-t border-blue-100/50 bg-white/60 backdrop-blur-sm">
-        <div className="mx-auto max-w-3xl px-4 py-3 text-center text-sm font-bold text-gray-600"><p>{t.footerText}</p></div>
-      </footer>
     </div>
   );
 }

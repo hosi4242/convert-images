@@ -6,18 +6,18 @@ import ResultComparison from "@/components/ResultComparison";
 import ImageCompressor from "@/components/ImageCompressor";
 import ImageResizer from "@/components/ImageResizer";
 import AdSlot from "@/components/AdSlot";
-import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type Quality, type ConversionResult } from "@/utils/imageConverter";
+import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
+const CONVERSION_QUALITY = 0.9;
 type ToolMode = "convert" | "compress" | "resize";
 
 function App() {
   const { t, language, toggleLanguage } = useI18n();
   const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(null);
   const [format, setFormat] = useState<ImageFormat>("webp");
-  const [quality, setQuality] = useState<Quality>(0.9);
   const [isConverting, setIsConverting] = useState(false);
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -55,14 +55,14 @@ function App() {
     setIsConverting(true);
     setError(null);
     try {
-      const conversionResult = await convertImage(uploadedImage.file, format, quality);
+      const conversionResult = await convertImage(uploadedImage.file, format, CONVERSION_QUALITY);
       setResult(conversionResult);
     } catch {
       setError(format === "avif" ? t.errorAvifNotSupported : t.errorConversionFailed);
     } finally {
       setIsConverting(false);
     }
-  }, [uploadedImage, format, quality, t]);
+  }, [uploadedImage, format, t]);
 
   const handleModeChange = useCallback((nextMode: ToolMode) => {
     setMode(nextMode);
@@ -130,7 +130,7 @@ function App() {
             <AdSlot labelKey="adSlot" />
             {mode === "convert" ? (
               !result ? (
-                <ConversionSettings format={format} quality={quality} onFormatChange={setFormat} onQualityChange={setQuality} onConvert={handleConvert} isConverting={isConverting} />
+                <ConversionSettings format={format} onFormatChange={setFormat} onConvert={handleConvert} isConverting={isConverting} />
               ) : (
                 <ResultComparison originalFile={uploadedImage.file} originalPreviewUrl={uploadedImage.previewUrl} originalWidth={uploadedImage.width} originalHeight={uploadedImage.height} result={result} onDownload={() => {}} onReset={handleReset} />
               )

@@ -29,6 +29,7 @@ export interface Translation {
   resultIncreased: (percent: string) => string;
   resultDownloadButton: string;
   resultResetButton: string;
+  conversionTab: string;
   compressionTab: string;
   compressionTitle: string;
   compressionDescription: string;
@@ -86,6 +87,7 @@ const ko: Translation = {
   resultIncreased: (percent) => `파일 크기가 ${percent}% 증가했습니다.`,
   resultDownloadButton: "변환된 이미지 다운로드",
   resultResetButton: "다른 이미지 변환하기",
+  conversionTab: "이미지 변환",
   compressionTab: "이미지 용량 줄이기",
   compressionTitle: "이미지 용량 줄이기",
   compressionDescription: "이미지의 가로·세로 크기는 그대로 유지하면서 WebP로 다시 압축해 파일 용량을 줄입니다.",
@@ -143,6 +145,7 @@ const en: Translation = {
   resultIncreased: (percent) => `File size increased by ${percent}%.`,
   resultDownloadButton: "Download Converted Image",
   resultResetButton: "Convert Another Image",
+  conversionTab: "Convert Image",
   compressionTab: "Compress Image",
   compressionTitle: "Reduce Image Size",
   compressionDescription: "Keep the original image dimensions while recompressing the image as WebP to reduce file size.",

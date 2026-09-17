@@ -110,9 +110,9 @@ function App() {
         </div>
 
         <div className="mb-4 grid grid-cols-3 gap-2 rounded-2xl border border-white/60 bg-white/70 p-2 shadow-md backdrop-blur-sm">
-          <button type="button" onClick={() => handleModeChange("convert")} className={`rounded-xl px-2 py-2.5 text-sm font-bold transition-colors ${mode === "convert" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.headerTitle}</button>
-          <button type="button" onClick={() => handleModeChange("compress")} className={`rounded-xl px-2 py-2.5 text-sm font-bold transition-colors ${mode === "compress" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.compressionTab}</button>
-          <button type="button" onClick={() => handleModeChange("resize")} className={`rounded-xl px-2 py-2.5 text-sm font-bold transition-colors ${mode === "resize" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.resizeTab}</button>
+          <button type="button" onClick={() => handleModeChange("convert")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "convert" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.headerTitle}</button>
+          <button type="button" onClick={() => handleModeChange("compress")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "compress" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.compressionTab}</button>
+          <button type="button" onClick={() => handleModeChange("resize")} className={`whitespace-nowrap rounded-xl px-2 py-2.5 text-xs font-bold leading-tight transition-colors sm:text-sm ${mode === "resize" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`}>{t.resizeTab}</button>
         </div>
 
         {error && (

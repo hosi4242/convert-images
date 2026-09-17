@@ -84,10 +84,12 @@ function loadImage(file: Blob): Promise<HTMLImageElement> {
   });
 }
 
+// Canvas API는 고정된 Quality 타입이 아니라 0~1 사이의 일반 숫자를 받으므로
+// 크기 조정처럼 0.92 같은 품질값도 사용할 수 있도록 number로 지정합니다.
 function canvasToBlob(
   canvas: HTMLCanvasElement,
   format: ImageFormat,
-  quality: Quality
+  quality: number
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const mimeType = `image/${format}`;

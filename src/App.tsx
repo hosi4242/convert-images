@@ -93,7 +93,7 @@ function App() {
             )}
             <button type="button" onClick={toggleLanguage} className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/40" aria-label={language === "ko" ? t.switchToEnglish : t.switchToKorean}>
               <Languages className="h-4 w-4" />
-              {language === "ko" ? "EN" : "한"}
+              {language === "ko" ? "EN" : "??"}
             </button>
           </div>
           <div className="text-center">

@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {\n  html, body, #root {\n    width: 100%;\n    min-width: 0;\n  }\n\n  body {\n    overflow-x: hidden;\n    -webkit-text-size-adjust: 100%;\n  }
+@layer base {
+  html, body, #root {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   body {
     background-color: #f0f4ff;
     background-image:

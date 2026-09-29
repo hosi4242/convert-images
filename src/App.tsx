@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
@@ -29,6 +29,20 @@ function App() {
   const [isConverting, setIsConverting] = useState(false);
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images/visits")
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (!cancelled && typeof data?.value === "number") setVisitorCount(data.value);
+      })
+      .catch(() => {
+        // Visitor counter is optional; the site remains fully usable if it is unavailable.
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   const handleFileSelect = useCallback(async (file: File) => {
     setError(null);

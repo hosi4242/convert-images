@@ -42,7 +42,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const t = getTranslation(language);
+  const t = getTranslation(language);\n\n  useEffect(() => {\n    document.documentElement.lang = language;\n    document.title = language === "ko" ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator";\n  }, [language]);
 
   return (
     <I18nContext.Provider value={{ language, t, toggleLanguage }}>

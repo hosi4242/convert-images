@@ -7,6 +7,8 @@ import ImageCompressor from "@/components/ImageCompressor";
 import ImageResizer from "@/components/ImageResizer";
 import QRGenerator from "@/components/QRGenerator";
 import CompoundCalculator from "@/components/CompoundCalculator";
+import ImageEditor from "@/components/ImageEditor";
+import BatchConverter from "@/components/BatchConverter";
 import AdSlot from "@/components/AdSlot";
 import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
@@ -15,7 +17,7 @@ import { useI18n } from "@/i18n/I18nContext";
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
 type Category = "image" | "qr" | "calculator";
-type ImageMode = "convert" | "compress" | "resize";
+type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
 
 function App() {
   const { t, language, toggleLanguage } = useI18n();
@@ -100,10 +102,12 @@ function App() {
 
         {category === "image" && (
           <>
-            <div className="mb-4 grid grid-cols-3 gap-2 rounded-2xl border border-white/60 bg-white/70 p-2 shadow-md backdrop-blur-sm">
+            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5 rounded-2xl border border-white/60 bg-white/70 p-2 shadow-md backdrop-blur-sm">
               <button type="button" onClick={() => { setImageMode("convert"); setResult(null); }} className={subButton(imageMode === "convert")}>{t.conversionTab}</button>
               <button type="button" onClick={() => { setImageMode("compress"); setResult(null); }} className={subButton(imageMode === "compress")}>{t.compressionTab}</button>
               <button type="button" onClick={() => { setImageMode("resize"); setResult(null); }} className={subButton(imageMode === "resize")}>{t.resizeTab}</button>
+              <button type="button" onClick={() => { setImageMode("edit"); setResult(null); }} className={subButton(imageMode === "edit")}>{ko ? "편집" : "Edit"}</button>
+              <button type="button" onClick={() => { setImageMode("batch"); setResult(null); }} className={subButton(imageMode === "batch")}>{ko ? "일괄 변환" : "Batch"}</button>
             </div>
           </>
         )}

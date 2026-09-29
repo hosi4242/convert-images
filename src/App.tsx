@@ -116,6 +116,7 @@ function App() {
 
         {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
+         imageMode === "batch" ? <BatchConverter /> :
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
            <UploadBox onFileSelect={handleFileSelect} uploadedImage={uploadedImage} />
@@ -123,7 +124,9 @@ function App() {
            {imageMode === "convert" ? (!result
              ? <ConversionSettings format={format} onFormatChange={setFormat} onConvert={handleConvert} isConverting={isConverting} />
              : <ResultComparison originalFile={uploadedImage.file} originalPreviewUrl={uploadedImage.previewUrl} originalWidth={uploadedImage.width} originalHeight={uploadedImage.height} result={result} onDownload={() => {}} onReset={resetImage} />)
-             : imageMode === "compress" ? <ImageCompressor uploadedImage={uploadedImage} onReset={resetImage} /> : <ImageResizer uploadedImage={uploadedImage} onReset={resetImage} />}
+             : imageMode === "compress" ? <ImageCompressor uploadedImage={uploadedImage} onReset={resetImage} />
+             : imageMode === "resize" ? <ImageResizer uploadedImage={uploadedImage} onReset={resetImage} />
+             : <ImageEditor uploadedImage={uploadedImage} onReset={resetImage} />}
          </div>}
 
         <AdSlot labelKey="adSlot" />

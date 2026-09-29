@@ -101,7 +101,17 @@ export default function ImageEditor({ uploadedImage, onReset }: Props) {
       </div>
       <button type="button" onClick={()=>setCrop(v=>!v)} className={`mt-3 w-full rounded-xl border px-3 py-2.5 text-sm font-semibold ${crop?"border-blue-400 bg-blue-50 text-blue-700":"bg-white text-gray-700"}`}>{crop ? (ko?"자르기 입력 닫기":"Hide crop settings") : (ko?"자르기 설정":"Crop settings")}</button>
       {crop && <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {[[ko?"X":"X",x,setX,0,uploadedImage.width],[ko?"Y":"Y",y,setY,0,uploadedImage.height],[ko?"가로":"Width",width,setWidth,1,uploadedImage.width],[ko?"세로":"Height",height,setHeight,1,uploadedImage.height]].map(([label,value,setter,min,max])=><label key={String(label)} className="text-xs font-semibold text-gray-600">{label}<input type="number" min={min as number} max={max as number} value={value as number} onChange={e=>(setter as (v:number)=>void)(Number(e.target.value))} className="mt-1 w-full rounded-xl border px-3 py-2 text-sm"/></label>)}
+        {[
+          { label: "X", value: x, setValue: setX, min: 0, max: uploadedImage.width },
+          { label: "Y", value: y, setValue: setY, min: 0, max: uploadedImage.height },
+          { label: ko ? "가로" : "Width", value: width, setValue: setWidth, min: 1, max: uploadedImage.width },
+          { label: ko ? "세로" : "Height", value: height, setValue: setHeight, min: 1, max: uploadedImage.height }
+        ].map(({ label, value, setValue, min, max }) => (
+          <label key={label} className="text-xs font-semibold text-gray-600">
+            {label}
+            <input type="number" min={min} max={max} value={value} onChange={e => setValue(Number(e.target.value))} className="mt-1 w-full rounded-xl border px-3 py-2 text-sm" />
+          </label>
+        ))}
       </div>}
       {error && <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       <button type="button" onClick={apply} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 px-4 py-3 font-bold text-white"><Crop className="h-5 w-5"/>{ko?"편집 적용하기":"Apply Edits"}</button>

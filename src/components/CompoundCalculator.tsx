@@ -55,9 +55,9 @@ export default function CompoundCalculator() {
     return days >= 0 ? String(days) : "";
   }, [start, end]);
 
-  const unitResult = useMemo(() => {
+  const unitResult = useMemo<string[]>(() => {
     const x = Number(unitValue);
-    if (!unitValue || !Number.isFinite(x)) return "";
+    if (!unitValue || !Number.isFinite(x)) return [];
     const factors: Record<string, number> = { mm: 0.001, cm: 0.01, m: 1, km: 1000 };
     const meters = x * factors[unit];
     return [

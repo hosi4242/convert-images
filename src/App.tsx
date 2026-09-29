@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image, QrCode, Calculator } from "lucide-react";
+import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -93,7 +93,7 @@ function App() {
         </div>
 
         <nav className="mb-4 grid grid-cols-3 gap-2 rounded-2xl border border-white/60 bg-white/70 p-2 shadow-md backdrop-blur-sm">
-          <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}><Image className="h-5 w-5" />{ko ? "이미지 도구" : "Image Tools"}</button>
+          <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}><ImageIcon className="h-5 w-5" />{ko ? "이미지 도구" : "Image Tools"}</button>
           <button type="button" onClick={() => selectCategory("qr")} className={categoryButton(category === "qr")}><QrCode className="h-5 w-5" />{ko ? "QR 코드" : "QR Code"}</button>
           <button type="button" onClick={() => selectCategory("calculator")} className={categoryButton(category === "calculator")}><Calculator className="h-5 w-5" />{ko ? "복합 계산기" : "Calculator"}</button>
         </nav>

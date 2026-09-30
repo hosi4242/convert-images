@@ -20,9 +20,18 @@ export default function PDFTools() {
 
   const addImages = (files: FileList | null) => {
     if (!files) return;
-    const next = Array.from(files).filter((file) => file.type.startsWith("image/"));
-    setImages(next);
-    setMessage(next.length ? `${next.length}개의 이미지를 선택했습니다.` : "이미지 파일을 선택해 주세요.");
+
+    const next = Array.from(files).filter(
+      (file) => file.type === "image/jpeg" || file.type === "image/png"
+    );
+
+    if (!next.length) {
+      setMessage("JPG 또는 PNG 이미지 파일을 선택해 주세요.");
+      return;
+    }
+
+    setImages((current) => [...current, ...next]);
+    setMessage(next.length + "개의 이미지를 추가했습니다.");
   };
 
   const makePdf = async () => {
@@ -129,11 +138,29 @@ export default function PDFTools() {
     if (!pdfFile) return;
     setBusy(true);
     setMessage("");
+
     try {
-      const text = await pdfFile.text();
+      const bytes = new Uint8Array(await pdfFile.arrayBuffer());
+      const header = new TextDecoder().decode(bytes.slice(0, 8));
+
+      if (!header.startsWith("%PDF-")) {
+        throw new Error("not-pdf");
+      }
+
+      const text = new TextDecoder("latin1").decode(bytes);
       const matches = text.match(/\/Type\s*\/Page(?:\s|>|<)/g);
-      setInfo({ pages: matches?.length ?? 0, size: `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` });
-      setMessage(matches?.length ? "PDF 기본 정보를 확인했습니다." : "페이지 정보를 확인하지 못했습니다.");
+      const pages = matches?.length ?? 0;
+
+      setInfo({
+        pages,
+        size: (pdfFile.size / 1024 / 1024).toFixed(2) + " MB",
+      });
+
+      setMessage(
+        pages > 0
+          ? "PDF 기본 정보를 확인했습니다. 총 " + pages + "페이지입니다."
+          : "PDF 파일은 확인했지만 페이지 수를 읽지 못했습니다."
+      );
     } catch {
       setInfo(null);
       setMessage("PDF 파일을 읽을 수 없습니다.");
@@ -169,6 +196,9 @@ export default function PDFTools() {
             </div>
           )}
           <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => document.getElementById("pdf-image-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50">
+              <ImagePlus className="h-4 w-4" /> 이미지 추가
+            </button>
             <button type="button" disabled={!images.length || busy} onClick={makePdf} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
               <Download className="h-4 w-4" /> PDF 만들기
             </button>

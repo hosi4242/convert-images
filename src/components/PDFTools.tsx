@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FileText, ImagePlus, Download, RotateCcw, Info } from "lucide-react";
-import { PDFDocument } from "pdf-lib";
 
 type Mode = "image-to-pdf" | "pdf-info";
 
@@ -31,21 +30,44 @@ export default function PDFTools() {
     setBusy(true);
     setMessage("");
     try {
-      const pdf = await PDFDocument.create();
+      const parts: string[] = [];
+      const objects: string[] = [];
+      let offset = 0;
+      const add = (value: string) => { objects.push(value); offset += value.length; };
+      add("%PDF-1.4\n");
+      let nextId = 3;
+      const pageIds: number[] = [];
       for (const file of images) {
-        const bytes = await file.arrayBuffer();
-        const image = file.type === "image/png"
-          ? await pdf.embedPng(bytes)
-          : await pdf.embedJpg(bytes);
-        const maxWidth = 595;
-        const maxHeight = 842;
-        const scale = Math.min(maxWidth / image.width, maxHeight / image.height, 1);
-        const width = image.width * scale;
-        const height = image.height * scale;
-        const page = pdf.addPage([width, height]);
-        page.drawImage(image, { x: 0, y: 0, width, height });
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        const imgData = dataUrl.split(",")[1];
+        const binary = atob(imgData);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        const imgId = nextId++;
+        const pageId = nextId++;
+        const contentId = nextId++;
+        const imageName = `Im${imgId}`;
+        const width = 595, height = 842;
+        const stream = `q\\n${width} 0 0 ${height} 0 0 cm\\n/${imageName} Do\\nQ`;
+        const header = `\n${contentId} 0 obj\n<< /Length ${stream.length} >>\nstream\n${stream}\nendstream\nendobj\n`;
+        parts.push(header);
+        const imageHeader = `\n${imgId} 0 obj\n<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`;
+        const imageFooter = "\nendstream\nendobj\n";
+        const imageBinary = String.fromCharCode(...bytes);
+        parts.push(imageHeader + imageBinary + imageFooter);
+        parts.push(`\n${pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Resources << /XObject << /${imageName} ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>\nendobj\n`);
+        pageIds.push(pageId);
       }
-      const blob = new Blob([await pdf.save()], { type: "application/pdf" });
+      const pagesId = 2;
+      const catalogId = 1;
+      const kids = pageIds.map(id => `${id} 0 R`).join(" ");
+      const prefix = `1 0 obj\n<< /Type /Catalog /Pages ${pagesId} 0 R >>\nendobj\n${pagesId} 0 obj\n<< /Type /Pages /Kids [${kids}] /Count ${pageIds.length} >>\nendobj\n`;
+      const blob = new Blob([prefix, ...parts, `xref\n0 ${nextId}\n0000000000 65535 f \ntrailer\n<< /Size ${nextId} /Root ${catalogId} 0 R >>\nstartxref\n0\n%%EOF`], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -54,7 +76,7 @@ export default function PDFTools() {
       URL.revokeObjectURL(url);
       setMessage("PDF 파일이 생성되었습니다.");
     } catch {
-      setMessage("PDF 변환 중 문제가 발생했습니다. JPG 또는 PNG 이미지를 사용해 주세요.");
+      setMessage("PDF 변환 중 문제가 발생했습니다.");
     } finally {
       setBusy(false);
     }
@@ -65,8 +87,10 @@ export default function PDFTools() {
     setBusy(true);
     setMessage("");
     try {
-      const pdf = await PDFDocument.load(await pdfFile.arrayBuffer());
-      setInfo({ pages: pdf.getPageCount(), size: `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` });
+      const text = await pdfFile.text();
+      const matches = text.match(/\\/Type\\s*\\/Page(?:\\s|>|<)/g);
+      setInfo({ pages: matches?.length ?? 0, size: `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` });
+      setMessage(matches?.length ? "PDF 기본 정보를 확인했습니다." : "페이지 정보를 확인하지 못했습니다.");
     } catch {
       setInfo(null);
       setMessage("PDF 파일을 읽을 수 없습니다.");

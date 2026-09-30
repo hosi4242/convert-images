@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -21,7 +21,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
 const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
 
-type Category = "image" | "qr" | "calculator" | "text";
+type Category = "image" | "qr" | "calculator" | "text" | "pdf";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
 
 function App() {
@@ -92,7 +92,7 @@ function App() {
   };
 
   const categoryButton = (active: boolean) =>
-    `group flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-2xl px-3 py-3 text-xs font-bold transition-all sm:min-h-24 sm:text-sm ${active ? "bg-white text-blue-700 shadow-lg ring-1 ring-blue-100" : "text-gray-500 hover:-translate-y-0.5 hover:bg-white/90 hover:text-gray-700"}`;
+    `group flex min-h-[4.5rem] flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-bold transition-all sm:min-h-24 sm:px-3 sm:py-3 sm:text-sm ${active ? "bg-white text-blue-700 shadow-lg ring-1 ring-blue-100" : "text-gray-500 hover:-translate-y-0.5 hover:bg-white/90 hover:text-gray-700"}`;
 
   const subButton = (active: boolean) =>
     `group flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition-all sm:text-sm ${active ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`;
@@ -151,7 +151,7 @@ function App() {
             <span className="hidden text-xs text-slate-400 sm:block">{ko ? "원하는 도구를 선택하세요" : "Choose a tool to get started"}</span>
           </div>
 
-          <nav className="grid grid-cols-2 gap-2.5 rounded-2xl sm:grid-cols-4 border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
+          <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-5 sm:gap-2.5 sm:p-2.5">
             <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}>
               <ImageIcon className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "image" ? "text-blue-600" : "text-slate-400"}`} />
               <span>{ko ? "이미지 도구" : "Image Tools"}</span>
@@ -171,6 +171,11 @@ function App() {
               <Type className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "text" ? "text-blue-600" : "text-slate-400"}`} />
               <span>{ko ? "텍스트 도구" : "Text Tools"}</span>
               <span className={`text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
+            </button>
+            <button type="button" onClick={() => selectCategory("pdf")} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
+              <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
+              <span>{ko ? "PDF 변환" : "PDF Tools"}</span>
+              <span className={`text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>
             </button>
           </nav>
         </section>
@@ -201,6 +206,7 @@ function App() {
         {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
          category === "text" ? <TextCounter /> :
+         category === "pdf" ? <div className="rounded-2xl border border-slate-200/70 bg-white/80 p-6 text-center shadow-sm"><FileText className="mx-auto h-10 w-10 text-slate-300" /><h3 className="mt-3 text-base font-extrabold text-slate-800">{ko ? "PDF 도구" : "PDF Tools"}</h3><p className="mt-1 text-sm leading-6 text-slate-500">{ko ? "PDF 변환 기능을 준비하고 있습니다." : "PDF conversion tools are being prepared."}</p></div> :
          imageMode === "batch" ? <BatchConverter /> :
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
@@ -238,7 +244,7 @@ function App() {
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
-          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
+          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
           <InfoPageNav active={infoPage} onChange={setInfoPage} />
           {visitorCount !== null && (
             <p className="mt-2 text-[11px] font-medium text-slate-400">

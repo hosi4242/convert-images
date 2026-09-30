@@ -30,45 +30,117 @@ export default function PDFTools() {
     setBusy(true);
     setMessage("");
     try {
-      const parts: string[] = [];
-      const objects: string[] = [];
-      let offset = 0;
-      const add = (value: string) => { objects.push(value); offset += value.length; };
-      add("%PDF-1.4\n");
-      let nextId = 3;
+      const encoder = new TextEncoder();
+      const chunks: Uint8Array[] = [];
+      const offsets: number[] = [0];
+      let total = 0;
+      const push = (chunk: Uint8Array) => { chunks.push(chunk); total += chunk.length; };
+      const pushText = (text: string) => push(encoder.encode(text));
+      const object = (id: number, body: Uint8Array) => {
+        offsets[id] = total;
+        pushText(`${id} 0 obj\\n`);
+        push(body);
+        pushText("\\nendobj\\n");
+      };
+
+      pushText("%PDF-1.4\\n%âãÏÓ\\n");
       const pageIds: number[] = [];
+      let nextId = 3;
+
       for (const file of images) {
-        const dataUrl = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(String(reader.result));
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
+        const imageUrl = URL.createObjectURL(file);
+        const image = new Image();
+        image.src = imageUrl;
+        await new Promise<void>((resolve, reject) => {
+          image.onload = () => resolve();
+          image.onerror = () => reject(new Error("image"));
         });
-        const imgData = dataUrl.split(",")[1];
-        const binary = atob(imgData);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        const imgId = nextId++;
-        const pageId = nextId++;
+
+        const canvas = document.createElement("canvas");
+        const maxW = 595;
+        const maxH = 842;
+        const scale = Math.min(maxW / image.naturalWidth, maxH / image.naturalHeight, 1);
+        canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("canvas");
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(imageUrl);
+
+        const jpegBlob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+        if (!jpegBlob) throw new Error("jpeg");
+        const jpeg = new Uint8Array(await jpegBlob.arrayBuffer());
+
+        const imageId = nextId++;
         const contentId = nextId++;
-        const imageName = `Im${imgId}`;
-        const width = 595, height = 842;
-        const stream = `q\\n${width} 0 0 ${height} 0 0 cm\\n/${imageName} Do\\nQ`;
-        const header = `\n${contentId} 0 obj\n<< /Length ${stream.length} >>\nstream\n${stream}\nendstream\nendobj\n`;
-        parts.push(header);
-        const imageHeader = `\n${imgId} 0 obj\n<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`;
-        const imageFooter = "\nendstream\nendobj\n";
-        const imageBinary = String.fromCharCode(...bytes);
-        parts.push(imageHeader + imageBinary + imageFooter);
-        parts.push(`\n${pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Resources << /XObject << /${imageName} ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>\nendobj\n`);
+        const pageId = nextId++;
+        const pageW = canvas.width;
+        const pageH = canvas.height;
+
+        const imageHeader = encoder.encode(`<< /Type /XObject /Subtype /Image /Width ${pageW} /Height ${pageH} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\\nstream\\n`);
+        const imageBody = new Uint8Array(imageHeader.length + jpeg.length);
+        imageBody.set(imageHeader);
+        imageBody.set(jpeg, imageHeader.length);
+        object(imageId, imageBody);
+
+        const stream = encoder.encode(`q\\n${pageW} 0 0 ${pageH} 0 0 cm\\n/Im${imageId} Do\\nQ`);
+        object(contentId, encoder.encode(`<< /Length ${stream.length} >>\\nstream\\n${new TextDecoder().decode(stream)}\\nendstream`));
+
+        object(pageId, encoder.encode(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /XObject << /Im${imageId} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`));
         pageIds.push(pageId);
       }
-      const pagesId = 2;
-      const catalogId = 1;
-      const kids = pageIds.map(id => `${id} 0 R`).join(" ");
-      const prefix = `1 0 obj\n<< /Type /Catalog /Pages ${pagesId} 0 R >>\nendobj\n${pagesId} 0 obj\n<< /Type /Pages /Kids [${kids}] /Count ${pageIds.length} >>\nendobj\n`;
-      const blob = new Blob([prefix, ...parts, `xref\n0 ${nextId}\n0000000000 65535 f \ntrailer\n<< /Size ${nextId} /Root ${catalogId} 0 R >>\nstartxref\n0\n%%EOF`], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+
+      const kids = pageIds.map((id) => `${id} 0 R`).join(" ");
+      const catalogBody = encoder.encode("<< /Type /Catalog /Pages 2 0 R >>");
+      const pagesBody = encoder.encode(`<< /Type /Pages /Kids [${kids}] /Count ${pageIds.length} >>`);
+
+      const allObjects = chunks.slice(1);
+      const header = encoder.encode("%PDF-1.4\\n%âãÏÓ\\n");
+      const objectChunks = chunks.slice(1);
+      const currentObjects = objectChunks;
+      const rebuild: Uint8Array[] = [header];
+      const rebuildOffsets: number[] = [0];
+      let pos = header.length;
+
+      // Rebuild with catalog and pages first so the cross-reference offsets are exact.
+      const appendObject = (id: number, body: Uint8Array) => {
+        rebuildOffsets[id] = pos;
+        const pre = encoder.encode(`${id} 0 obj\\n`);
+        const post = encoder.encode("\\nendobj\\n");
+        rebuild.push(pre, body, post);
+        pos += pre.length + body.length + post.length;
+      };
+      appendObject(1, catalogBody);
+      appendObject(2, pagesBody);
+
+      let cursor = 1;
+      for (let i = 0; i < currentObjects.length; i++) {
+        const chunk = currentObjects[i];
+        const text = new TextDecoder().decode(chunk);
+        const match = text.match(/^(\\d+) 0 obj\\n/);
+        if (match) {
+          const id = Number(match[1]);
+          appendObject(id, chunk.slice(match[0].length, chunk.length - "\\nendobj\\n".length));
+        } else if (cursor) {
+          cursor++;
+        }
+      }
+
+      const xrefStart = pos;
+      const size = Math.max(...rebuildOffsets.keys()) + 1;
+      let xref = `xref\\n0 ${size}\\n0000000000 65535 f \\n`;
+      for (let id = 1; id < size; id++) xref += `${String(rebuildOffsets[id] || 0).padStart(10, "0")} 00000 n \\n`;
+      xref += `trailer\\n<< /Size ${size} /Root 1 0 R >>\\nstartxref\\n${xrefStart}\\n%%EOF`;
+      rebuild.push(encoder.encode(xref));
+
+      const pdfBytes = new Uint8Array(rebuild.reduce((sum, part) => sum + part.length, 0));
+      let writeAt = 0;
+      for (const part of rebuild) {
+        pdfBytes.set(part, writeAt);
+        writeAt += part.length;
+      }
+
+      const url = URL.createObjectURL(new Blob([pdfBytes], { type: "application/pdf" }));
       const link = document.createElement("a");
       link.href = url;
       link.download = "converted-images.pdf";
@@ -76,7 +148,7 @@ export default function PDFTools() {
       URL.revokeObjectURL(url);
       setMessage("PDF 파일이 생성되었습니다.");
     } catch {
-      setMessage("PDF 변환 중 문제가 발생했습니다.");
+      setMessage("PDF 변환 중 문제가 발생했습니다. JPG 또는 PNG 이미지를 사용해 주세요.");
     } finally {
       setBusy(false);
     }

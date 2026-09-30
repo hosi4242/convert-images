@@ -383,15 +383,19 @@ export default function PDFTools() {
           </label>
           {pageFile && pageDoc && <div className="rounded-xl bg-slate-50 p-4">
             <p className="break-all text-sm font-bold text-slate-700">{pageFile.name}</p>
-            <p className="mt-1 text-xs text-slate-500">{ko ? "페이지를 눌러 삭제 대상으로 선택하세요." : "Select pages to mark them for deletion."}</p>
+            <p className="mt-1 text-xs text-slate-500">{ko ? "삭제할 페이지는 번호를 눌러 선택하고, 순서를 바꿀 페이지는 번호를 눌러 선택한 뒤 위/아래 버튼을 사용하세요." : "Select pages to delete, or select one page and use the up/down buttons to reorder it."}</p>
             <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
-              {Array.from({ length: pageDoc.getPageCount() }, (_, index) => <button key={index} type="button" onClick={() => setSelectedPages((current) => current.includes(index) ? current.filter((p) => p !== index) : [...current, index])} className={"rounded-lg border px-2 py-3 text-sm font-bold " + (selectedPages.includes(index) ? "border-red-300 bg-red-50 text-red-600" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100")}>{index + 1}</button>)}
+              {pageOrder.map((pageIndex, position) => <button key={pageIndex} type="button" onClick={() => { setOrderSelected(pageIndex); setSelectedPages((current) => current.includes(pageIndex) ? current.filter((p) => p !== pageIndex) : [...current, pageIndex]); }} className={"rounded-lg border px-2 py-3 text-sm font-bold " + (orderSelected === pageIndex ? "border-blue-400 bg-blue-50 text-blue-700" : selectedPages.includes(pageIndex) ? "border-red-300 bg-red-50 text-red-600" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100")}>{position + 1}<span className="block text-[10px] font-normal opacity-70">P{pageIndex + 1}</span></button>)}
             </div>
-            <p className="mt-3 text-xs text-slate-500">{ko ? "삭제 선택:" : "Selected for deletion:"} {selectedPages.length}{ko ? "페이지" : " page(s)"}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" onClick={() => movePage(-1)} disabled={orderSelected === null || pageOrder.indexOf(orderSelected) === 0 || busy} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 disabled:opacity-40">{ko ? "↑ 위로" : "↑ Move up"}</button>
+              <button type="button" onClick={() => movePage(1)} disabled={orderSelected === null || pageOrder.indexOf(orderSelected) === pageOrder.length - 1 || busy} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 disabled:opacity-40">{ko ? "↓ 아래로" : "↓ Move down"}</button>
+            </div>
+            <p className="mt-3 text-xs text-slate-500">{ko ? "삭제 선택:" : "Selected for deletion:"} {selectedPages.length}{ko ? "페이지" : " page(s)"}{orderSelected !== null ? (ko ? " · 순서 변경 선택: " + (pageOrder.indexOf(orderSelected) + 1) + "번째" : " · Reorder selected: " + (pageOrder.indexOf(orderSelected) + 1)) : ""}</p>
           </div>}
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => document.getElementById("pdf-page-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 선택" : "Select PDF"}</button>
-            <button type="button" disabled={orderSelected === null || busy} onClick={reorderPages} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "순서 변경 PDF 만들기" : "Create reordered PDF"}</button>
+            <button type="button" disabled={!pageDoc || pageOrder.length < 2 || busy} onClick={reorderPages} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "순서 변경 PDF 만들기" : "Create reordered PDF"}</button>
             <button type="button" disabled={!selectedPages.length || busy} onClick={deletePages} className="rounded-xl bg-slate-700 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-slate-800 disabled:opacity-50">{ko ? "선택 페이지 삭제" : "Delete selected pages"}</button>
             <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
           </div>

@@ -258,21 +258,6 @@ export default function PDFTools() {
         </div>
       ) : (
         <div className="space-y-4">
-          <label htmlFor="pdf-image-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
-            <ImagePlus className="h-9 w-9 text-blue-500" />
-            <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "JPG 또는 PNG 이미지 선택" : "Select JPG or PNG images"}</span>
-            <span className="mt-1 text-xs text-slate-500">{ko ? "여러 장을 한 번에 선택하거나 파일을 여러 번 추가할 수 있습니다." : "Select multiple images at once or add files multiple times."}</span>
-            <input id="pdf-image-input" type="file" accept="image/*" multiple className="hidden" onChange={(e) => { addImages(e.target.files); e.currentTarget.value = ""; }} />
-          </label>
-          {images.length > 0 && <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">{ko ? "선택된 이미지:" : "Selected images:"} <strong>{images.length}{ko ? "개" : ""}</strong></div>}
-          <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => document.getElementById("pdf-image-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><ImagePlus className="h-4 w-4" /> {ko ? "이미지 추가" : "Add images"}</button>
-            <button type="button" disabled={!images.length || busy} onClick={makePdf} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"><Download className="h-4 w-4" /> {ko ? "PDF 만들기" : "Create PDF"}</button>
-            <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-4">
           <label className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/70 px-4 text-center transition hover:bg-slate-100">
             <Info className="h-9 w-9 text-slate-400" />
             <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "PDF 파일 선택" : "Select PDF file"}</span>

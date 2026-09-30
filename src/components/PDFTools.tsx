@@ -30,7 +30,7 @@ export default function PDFTools() {
       return;
     }
     setImages((current) => [...current, ...next]);
-    setMessage(ko ? next.length + "{ko ? "개" : ""}의 이미지를 추가했습니다." : next.length + " image(s) added.");
+    setMessage(ko ? next.length + "개의 이미지를 추가했습니다." : next.length + " image(s) added.");
   };
 
   const makePdf = async () => {
@@ -160,7 +160,7 @@ export default function PDFTools() {
       const pdfDoc = await PDFDocument.load(bytes);
       const pages = pdfDoc.getPageCount();
       setInfo({ pages, size: (pdfFile.size / 1024 / 1024).toFixed(2) + " MB" });
-      setMessage(ko ? "PDF 정보를 확인했습니다. 총 " + pages + "{ko ? "페이지" : "Pages"}입니다." : "PDF information checked. Total: " + pages + " page(s).");
+      setMessage(ko ? "PDF 정보를 확인했습니다. 총 " + pages + "페이지입니다." : "PDF information checked. Total: " + pages + " page(s).");
     } catch {
       setInfo(null);
       setMessage(ko ? "PDF 파일을 읽을 수 없습니다." : "The PDF file could not be read.");
@@ -173,7 +173,7 @@ export default function PDFTools() {
     <section className="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm sm:p-6">
       <div className="mb-5 flex flex-wrap gap-2">
         <button type="button" onClick={() => { setMode("image-to-pdf"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "image-to-pdf" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "이미지 → PDF" : "Images → PDF"}</button>
-        <button type="button" onClick={() => { setMode("pdf-info"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-info" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF {ko ? "정보 확인" : "Check info"}" : "PDF Info"}</button>
+        <button type="button" onClick={() => { setMode("pdf-info"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-info" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 정보 확인" : "PDF Info"}</button>
       </div>
 
       {mode === "image-to-pdf" ? (

@@ -131,7 +131,7 @@ export default function PDFTools() {
     setMessage("");
     try {
       const text = await pdfFile.text();
-      const matches = text.match(/\\/Type\\s*\\/Page(?:\\s|>|<)/g);
+      const matches = text.match(/\/Type\s*\/Page(?:\s|>|<)/g);
       setInfo({ pages: matches?.length ?? 0, size: `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` });
       setMessage(matches?.length ? "PDF 기본 정보를 확인했습니다." : "페이지 정보를 확인하지 못했습니다.");
     } catch {

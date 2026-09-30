@@ -228,6 +228,17 @@ function App() {
               <h2 className="mt-1 text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "필요한 작업에 맞는 도구를 간편하게 선택하세요" : "Choose the right tool for your task"}</h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 PDF, QR 코드, 생활 계산, 텍스트 확인까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, QR generation, everyday calculations, and text utilities directly in your browser without installing software."}</p>
             </div>
+            <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4">
+              <h3 className="font-bold text-slate-800">{ko ? "도구별 빠른 안내" : "Quick guide by tool"}</h3>
+              <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-2">
+                <p><strong>{ko ? "이미지 변환:" : "Image conversion:"}</strong> {ko ? "JPG, PNG, WebP, AVIF, HEIC 등 이미지 형식을 바꿀 때 사용하세요." : "Change image formats such as JPG, PNG, WebP, AVIF, and HEIC."}</p>
+                <p><strong>{ko ? "이미지 압축:" : "Image compression:"}</strong> {ko ? "이미지 크기를 유지하면서 파일 용량을 줄일 때 사용하세요." : "Reduce image file size while keeping image dimensions."}</p>
+                <p><strong>{ko ? "이미지 크기 조정:" : "Image resizing:"}</strong> {ko ? "가로·세로 크기를 원하는 크기로 변경할 때 사용하세요." : "Change image width and height to your preferred dimensions."}</p>
+                <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
+                <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
+                <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
+              </div>
+            </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG·WebP 등 이미지 형식을 변환하고, 파일 용량을 줄이거나 크기를 조정할 수 있습니다. 간단한 편집과 여러 이미지의 일괄 변환도 지원합니다." : "Convert common image formats, reduce file size, resize images, make simple edits, and process multiple images in one batch."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>

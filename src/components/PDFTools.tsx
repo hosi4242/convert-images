@@ -3,13 +3,16 @@ import { ImagePlus, Download, RotateCcw, Info, FilePlus2 } from "lucide-react";
 import { PDFDocument } from "pdf-lib";
 import { useI18n } from "@/i18n/I18nContext";
 
-type Mode = "image-to-pdf" | "pdf-merge" | "pdf-info";
+type Mode = "image-to-pdf" | "pdf-merge" | "pdf-pages" | "pdf-info";
 
 export default function PDFTools() {
   const [mode, setMode] = useState<Mode>("image-to-pdf");
   const [images, setImages] = useState<File[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [mergeFiles, setMergeFiles] = useState<File[]>([]);
+  const [pageFile, setPageFile] = useState<File | null>(null);
+  const [pageDoc, setPageDoc] = useState<PDFDocument | null>(null);
+  const [selectedPages, setSelectedPages] = useState<number[]>([]);
   const [info, setInfo] = useState<{ pages: number; size: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -20,6 +23,9 @@ export default function PDFTools() {
     setImages([]);
     setPdfFile(null);
     setMergeFiles([]);
+    setPageFile(null);
+    setPageDoc(null);
+    setSelectedPages([]);
     setInfo(null);
     setMessage("");
   };
@@ -195,6 +201,59 @@ export default function PDFTools() {
     }
   };
 
+  const loadPagePdf = async (file: File | null) => {
+    if (!file) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const doc = await PDFDocument.load(bytes);
+      setPageFile(file);
+      setPageDoc(doc);
+      setSelectedPages([]);
+      setMessage(ko ? "PDF를 불러왔습니다. 삭제할 페이지를 선택해 주세요." : "PDF loaded. Select pages to delete.");
+    } catch {
+      setPageFile(null);
+      setPageDoc(null);
+      setSelectedPages([]);
+      setMessage(ko ? "PDF 파일을 읽을 수 없습니다." : "The PDF file could not be read.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const deletePages = async () => {
+    if (!pageDoc || !pageFile || !selectedPages.length) return;
+    if (selectedPages.length >= pageDoc.getPageCount()) {
+      setMessage(ko ? "모든 페이지를 삭제할 수 없습니다. 최소 1페이지는 남겨 주세요." : "You cannot delete all pages. Keep at least one page.");
+      return;
+    }
+    setBusy(true);
+    setMessage("");
+    try {
+      const keep = Array.from({ length: pageDoc.getPageCount() }, (_, i) => i).filter((i) => !selectedPages.includes(i));
+      const output = await PDFDocument.create();
+      const pages = await output.copyPages(pageDoc, keep);
+      pages.forEach((page) => output.addPage(page));
+      const pdfBytes = await output.save();
+      const pdfBuffer = new ArrayBuffer(pdfBytes.byteLength);
+      new Uint8Array(pdfBuffer).set(pdfBytes);
+      const url = URL.createObjectURL(new Blob([pdfBuffer], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "edited-pages.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage(ko ? selectedPages.length + "페이지를 삭제한 PDF를 생성했습니다." : "Created a PDF with " + selectedPages.length + " page(s) deleted.");
+    } catch {
+      setMessage(ko ? "페이지 삭제 중 문제가 발생했습니다." : "Something went wrong while deleting pages.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const readPdfInfo = async () => {
     if (!pdfFile) return;
     setBusy(true);
@@ -220,6 +279,7 @@ export default function PDFTools() {
       <div className="mb-5 flex flex-wrap gap-2">
         <button type="button" onClick={() => { setMode("image-to-pdf"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "image-to-pdf" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "이미지 → PDF" : "Images → PDF"}</button>
         <button type="button" onClick={() => { setMode("pdf-merge"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-merge" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 합치기" : "Merge PDFs"}</button>
+        <button type="button" onClick={() => { setMode("pdf-pages"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-pages" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "페이지 관리" : "Page Manager"}</button>
         <button type="button" onClick={() => { setMode("pdf-info"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-info" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 정보 확인" : "PDF Info"}</button>
       </div>
 
@@ -257,6 +317,27 @@ export default function PDFTools() {
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => document.getElementById("pdf-merge-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 추가" : "Add PDFs"}</button>
             <button type="button" disabled={mergeFiles.length < 2 || busy} onClick={mergePdfs} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"><Download className="h-4 w-4" /> {ko ? "PDF 합치기" : "Merge PDFs"}</button>
+            <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
+          </div>
+        </div>
+      ) : mode === "pdf-pages" ? (
+        <div className="space-y-4">
+          <label htmlFor="pdf-page-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
+            <FilePlus2 className="h-9 w-9 text-blue-500" />
+            <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "페이지를 관리할 PDF 선택" : "Select a PDF to manage pages"}</span>
+            <input id="pdf-page-input" type="file" accept="application/pdf,.pdf" className="hidden" onChange={(e) => { loadPagePdf(e.target.files?.[0] ?? null); e.currentTarget.value = ""; }} />
+          </label>
+          {pageFile && pageDoc && <div className="rounded-xl bg-slate-50 p-4">
+            <p className="break-all text-sm font-bold text-slate-700">{pageFile.name}</p>
+            <p className="mt-1 text-xs text-slate-500">{ko ? "페이지를 눌러 삭제 대상으로 선택하세요." : "Select pages to mark them for deletion."}</p>
+            <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
+              {Array.from({ length: pageDoc.getPageCount() }, (_, index) => <button key={index} type="button" onClick={() => setSelectedPages((current) => current.includes(index) ? current.filter((p) => p !== index) : [...current, index])} className={"rounded-lg border px-2 py-3 text-sm font-bold " + (selectedPages.includes(index) ? "border-red-300 bg-red-50 text-red-600" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100")}>{index + 1}</button>)}
+            </div>
+            <p className="mt-3 text-xs text-slate-500">{ko ? "삭제 선택:" : "Selected for deletion:"} {selectedPages.length}{ko ? "페이지" : " page(s)"}</p>
+          </div>}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => document.getElementById("pdf-page-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 선택" : "Select PDF"}</button>
+            <button type="button" disabled={!selectedPages.length || busy} onClick={deletePages} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "선택 페이지 삭제" : "Delete selected pages"}</button>
             <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
           </div>
         </div>

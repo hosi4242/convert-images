@@ -175,7 +175,9 @@ export default function PDFTools() {
         pages.forEach((page) => mergedPdf.addPage(page));
       }
       const pdfBytes = await mergedPdf.save();
-      const url = URL.createObjectURL(new Blob([pdfBytes], { type: "application/pdf" }));
+      const pdfBuffer = new ArrayBuffer(pdfBytes.byteLength);
+      new Uint8Array(pdfBuffer).set(pdfBytes);
+      const url = URL.createObjectURL(new Blob([pdfBuffer], { type: "application/pdf" }));
       const link = document.createElement("a");
       link.href = url;
       link.download = "merged.pdf";

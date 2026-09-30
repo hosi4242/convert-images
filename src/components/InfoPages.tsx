@@ -3,7 +3,7 @@ import { useI18n } from "@/i18n/I18nContext";
 
 type Page = "about" | "privacy" | "terms" | "contact";
 
-export default function InfoPages({ page }: { page: Page }) {
+export default function InfoPages({ page, onBack }: { page: Page; onBack: () => void }) {
   const { language } = useI18n();
   const ko = language === "ko";
   const data = {
@@ -54,6 +54,6 @@ export default function InfoPages({ page }: { page: Page }) {
       <div><h2 className="text-xl font-extrabold text-slate-800">{selected.title}</h2><p className="mt-1 text-sm leading-6 text-slate-500">{selected.intro}</p></div>
     </div>
     {selected.sections.map(([title, body]) => <div key={title} className="border-t border-slate-100 py-4"><h3 className="text-sm font-bold text-slate-800">{title}</h3><p className="mt-1.5 text-sm leading-6 text-slate-600">{body}</p></div>)}
-    <button type="button" onClick={() => window.scrollTo({top:0, behavior:"smooth"})} className="mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowLeft className="h-4 w-4" />{ko ? "위로 이동" : "Back to top"}</button>
+    <button type="button" onClick={onBack} className="mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowLeft className="h-4 w-4" />{ko ? "도구로 돌아가기" : "Back to tools"}</button>
   </section>;
 }

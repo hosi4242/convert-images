@@ -179,7 +179,7 @@ export default function PDFTools() {
             <ImagePlus className="h-9 w-9 text-blue-500" />
             <span className="mt-3 text-sm font-bold text-slate-700">JPG 또는 PNG 이미지 선택</span>
             <span className="mt-1 text-xs text-slate-500">여러 장을 한 번에 선택하거나 파일을 여러 번 추가할 수 있습니다.</span>
-            <input id="pdf-image-input" type="file" accept="image/jpeg,image/png" multiple className="hidden" onChange={(e) => { addImages(e.target.files); e.currentTarget.value = ""; }} />
+            <input id="pdf-image-input" type="file" accept="image/*" multiple className="hidden" onChange={(e) => { addImages(e.target.files); e.currentTarget.value = ""; }} />
           </label>
           {images.length > 0 && <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">선택된 이미지: <strong>{images.length}개</strong></div>}
           <div className="flex flex-wrap gap-2">

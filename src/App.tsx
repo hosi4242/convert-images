@@ -214,6 +214,25 @@ function App() {
              : <ImageEditor uploadedImage={uploadedImage} onReset={resetImage} />}
          </div>}
 
+        {!infoPage && (
+          <section className="mt-6 rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm sm:p-6">
+            <div className="mb-5">
+              <p className="text-xs font-bold uppercase tracking-wider text-blue-600">{ko ? "서비스 안내" : "ABOUT THE TOOLS"}</p>
+              <h2 className="mt-1 text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "필요한 작업에 맞는 도구를 간편하게 선택하세요" : "Choose the right tool for your task"}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 QR 코드, 생활 계산, 텍스트 확인까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, QR generation, everyday calculations, and text utilities directly in your browser without installing software."}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG·WebP 등 이미지 형식을 변환하고, 파일 용량을 줄이거나 크기를 조정할 수 있습니다. 간단한 편집과 여러 이미지의 일괄 변환도 지원합니다." : "Convert common image formats, reduce file size, resize images, make simple edits, and process multiple images in one batch."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, and other everyday values in one place."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수, 공백 제외 글자 수, 줄 수, 단어 수와 UTF-8 바이트 수를 바로 확인할 수 있습니다." : "Check character count, characters without spaces, line count, word count, and UTF-8 byte size instantly."}</p></div>
+            </div>
+            <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
+              <p className="text-xs leading-5 text-blue-700">{ko ? "파일 기반 이미지 작업은 브라우저에서 처리되며, 사이트는 변환을 위해 사용자의 이미지 파일을 외부 서버에 업로드하지 않습니다." : "Image file operations are processed in the browser, and the site does not upload your image files to an external server for conversion."}</p>
+            </div>
+          </section>
+        )}
+
         <AdSlot labelKey="adSlot" />
         </>}
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">

@@ -10,6 +10,7 @@ import CompoundCalculator from "@/components/CompoundCalculator";
 import TextCounter from "@/components/TextCounter";
 import ImageEditor from "@/components/ImageEditor";
 import BatchConverter from "@/components/BatchConverter";
+import PDFTools from "@/components/PDFTools";
 import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
 import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
@@ -128,7 +129,7 @@ function App() {
               {ko ? "필요한 도구를 한곳에서" : "All the tools you need, in one place"}
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-blue-50 sm:text-base">
-              {ko ? "이미지부터 QR 코드, 생활 계산까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, QR codes, and everyday calculations — all in your browser, with no installation or sign-up."}
+              {ko ? "이미지부터 PDF, QR 코드, 생활 계산까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, QR codes, and everyday calculations — all in your browser, with no installation or sign-up."}
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-2">
               {featurePill(<Zap className="h-3.5 w-3.5 text-amber-500" />, ko ? "빠른 처리" : "Fast")}
@@ -206,7 +207,7 @@ function App() {
         {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
          category === "text" ? <TextCounter /> :
-         category === "pdf" ? <div className="rounded-2xl border border-slate-200/70 bg-white/80 p-6 text-center shadow-sm"><FileText className="mx-auto h-10 w-10 text-slate-300" /><h3 className="mt-3 text-base font-extrabold text-slate-800">{ko ? "PDF 도구" : "PDF Tools"}</h3><p className="mt-1 text-sm leading-6 text-slate-500">{ko ? "PDF 변환 기능을 준비하고 있습니다." : "PDF conversion tools are being prepared."}</p></div> :
+         category === "pdf" ? <PDFTools /> :
          imageMode === "batch" ? <BatchConverter /> :
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
@@ -225,12 +226,13 @@ function App() {
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-wider text-blue-600">{ko ? "서비스 안내" : "ABOUT THE TOOLS"}</p>
               <h2 className="mt-1 text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "필요한 작업에 맞는 도구를 간편하게 선택하세요" : "Choose the right tool for your task"}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 QR 코드, 생활 계산, 텍스트 확인까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, QR generation, everyday calculations, and text utilities directly in your browser without installing software."}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 PDF, QR 코드, 생활 계산, 텍스트 확인까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, QR generation, everyday calculations, and text utilities directly in your browser without installing software."}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG·WebP 등 이미지 형식을 변환하고, 파일 용량을 줄이거나 크기를 조정할 수 있습니다. 간단한 편집과 여러 이미지의 일괄 변환도 지원합니다." : "Convert common image formats, reduce file size, resize images, make simple edits, and process multiple images in one batch."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, and other everyday values in one place."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "여러 JPG·PNG 이미지를 하나의 PDF로 묶고, PDF 파일의 페이지 수와 기본 파일 정보를 브라우저에서 확인할 수 있습니다." : "Combine JPG and PNG images into one PDF and check basic PDF file information directly in your browser."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수, 공백 제외 글자 수, 줄 수, 단어 수와 UTF-8 바이트 수를 바로 확인할 수 있습니다." : "Check character count, characters without spaces, line count, word count, and UTF-8 byte size instantly."}</p></div>
             </div>
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">

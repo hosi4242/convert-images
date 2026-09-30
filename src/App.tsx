@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -7,6 +7,7 @@ import ImageCompressor from "@/components/ImageCompressor";
 import ImageResizer from "@/components/ImageResizer";
 import QRGenerator from "@/components/QRGenerator";
 import CompoundCalculator from "@/components/CompoundCalculator";
+import TextCounter from "@/components/TextCounter";
 import ImageEditor from "@/components/ImageEditor";
 import BatchConverter from "@/components/BatchConverter";
 import AdSlot from "@/components/AdSlot";
@@ -18,7 +19,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
 const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
 
-type Category = "image" | "qr" | "calculator";
+type Category = "image" | "qr" | "calculator" | "text";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
 
 function App() {
@@ -146,7 +147,7 @@ function App() {
             <span className="hidden text-xs text-slate-400 sm:block">{ko ? "원하는 도구를 선택하세요" : "Choose a tool to get started"}</span>
           </div>
 
-          <nav className="grid grid-cols-3 gap-2.5 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
+          <nav className="grid grid-cols-2 gap-2.5 rounded-2xl sm:grid-cols-4 border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
             <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}>
               <ImageIcon className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "image" ? "text-blue-600" : "text-slate-400"}`} />
               <span>{ko ? "이미지 도구" : "Image Tools"}</span>
@@ -161,6 +162,11 @@ function App() {
               <Calculator className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "calculator" ? "text-blue-600" : "text-slate-400"}`} />
               <span>{ko ? "복합 계산기" : "Calculator"}</span>
               <span className={`text-[10px] font-medium ${category === "calculator" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "비율 · 할인 · 부가세" : "Percent · Discount · VAT"}</span>
+            </button>
+            <button type="button" onClick={() => selectCategory("text")} className={categoryButton(category === "text")}>
+              <Type className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "text" ? "text-blue-600" : "text-slate-400"}`} />
+              <span>{ko ? "텍스트 도구" : "Text Tools"}</span>
+              <span className={`text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
             </button>
           </nav>
         </section>
@@ -181,15 +187,16 @@ function App() {
           </section>
         )}
 
-        <div className="mb-4 flex items-start gap-2 rounded-xl border border-blue-100/70 bg-blue-50/70 px-4 py-2.5 backdrop-blur-sm">
+        {category === "image" && <div className="mb-4 flex items-start gap-2 rounded-xl border border-blue-100/70 bg-blue-50/70 px-4 py-2.5 backdrop-blur-sm">
           <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
-          <p className="text-sm leading-5 text-blue-700">{ko ? "이미지 처리는 브라우저에서 이루어지며 이미지 파일을 외부 서버로 전송하지 않습니다." : "Image processing happens in your browser and files are not uploaded to an external server."}</p>
-        </div>
+          <p className="text-sm leading-5 text-blue-700">{ko ? "이미지 파일은 브라우저에서 처리되며 외부 서버로 업로드하지 않습니다." : "Image files are processed in your browser and are not uploaded to an external server."}</p>
+        </div>}
 
         {error && <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-100/50 bg-red-50/80 px-4 py-2.5"><AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" /><p className="text-sm text-red-700">{error}</p></div>}
 
         {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
+         category === "text" ? <TextCounter /> :
          imageMode === "batch" ? <BatchConverter /> :
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
@@ -207,6 +214,7 @@ function App() {
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
+          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
           {visitorCount !== null && (
             <p className="mt-2 text-[11px] font-medium text-slate-400">
               {ko ? "누적 방문자" : "Total visitors"} <span className="font-bold text-slate-500">{visitorCount.toLocaleString()}</span>

@@ -16,6 +16,8 @@ import { useI18n } from "@/i18n/I18nContext";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
+const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
+
 type Category = "image" | "qr" | "calculator";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
 
@@ -33,7 +35,8 @@ function App() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images/visits")
+
+    fetch(VISITOR_COUNTER_URL)
       .then((response) => response.ok ? response.json() : null)
       .then((data) => {
         if (!cancelled && (typeof data?.value === "number" || typeof data?.value === "string")) {
@@ -44,6 +47,7 @@ function App() {
       .catch(() => {
         // Visitor counter is optional; the site remains fully usable if it is unavailable.
       });
+
     return () => { cancelled = true; };
   }, []);
 

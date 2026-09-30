@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ImagePlus, Download, RotateCcw, Info } from "lucide-react";
+import { PDFDocument } from "pdf-lib";
 
 type Mode = "image-to-pdf" | "pdf-info";
 
@@ -153,11 +154,10 @@ export default function PDFTools() {
       const bytes = new Uint8Array(await pdfFile.arrayBuffer());
       const header = new TextDecoder().decode(bytes.slice(0, 8));
       if (!header.startsWith("%PDF-")) throw new Error("not-pdf");
-      const text = new TextDecoder("latin1").decode(bytes);
-      const matches = text.match(/\/Type\s*\/Page(?:\s|>|<)/g);
-      const pages = matches?.length ?? 0;
+      const pdfDoc = await PDFDocument.load(bytes);
+      const pages = pdfDoc.getPageCount();
       setInfo({ pages, size: (pdfFile.size / 1024 / 1024).toFixed(2) + " MB" });
-      setMessage(pages > 0 ? "PDF 기본 정보를 확인했습니다. 총 " + pages + "페이지입니다." : "PDF 파일은 확인했지만 페이지 수를 읽지 못했습니다.");
+      setMessage("PDF 정보를 확인했습니다. 총 " + pages + "페이지입니다.");
     } catch {
       setInfo(null);
       setMessage("PDF 파일을 읽을 수 없습니다.");

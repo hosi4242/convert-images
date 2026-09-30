@@ -3,7 +3,7 @@ import { ImagePlus, Download, RotateCcw, Info, FilePlus2 } from "lucide-react";
 import { PDFDocument } from "pdf-lib";
 import { useI18n } from "@/i18n/I18nContext";
 
-type Mode = "image-to-pdf" | "pdf-merge" | "pdf-pages" | "pdf-info";
+type Mode = "image-to-pdf" | "pdf-merge" | "pdf-pages" | "pdf-split" | "pdf-info";
 
 export default function PDFTools() {
   const [mode, setMode] = useState<Mode>("image-to-pdf");
@@ -15,6 +15,8 @@ export default function PDFTools() {
   const [selectedPages, setSelectedPages] = useState<number[]>([]);
   const [pageOrder, setPageOrder] = useState<number[]>([]);
   const [orderSelected, setOrderSelected] = useState<number | null>(null);
+  const [splitStart, setSplitStart] = useState("1");
+  const [splitEnd, setSplitEnd] = useState("1");
   const [info, setInfo] = useState<{ pages: number; size: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -30,6 +32,8 @@ export default function PDFTools() {
     setSelectedPages([]);
     setPageOrder([]);
     setOrderSelected(null);
+    setSplitStart("1");
+    setSplitEnd("1");
     setInfo(null);
     setMessage("");
   };
@@ -308,6 +312,41 @@ export default function PDFTools() {
     }
   };
 
+  const splitPdf = async () => {
+    if (!pageDoc || !pageFile) return;
+    const totalPages = pageDoc.getPageCount();
+    const start = Number.parseInt(splitStart, 10);
+    const end = Number.parseInt(splitEnd, 10);
+    if (!Number.isInteger(start) || !Number.isInteger(end) || start < 1 || end > totalPages || start > end) {
+      setMessage(ko ? "페이지 범위를 올바르게 입력해 주세요." : "Please enter a valid page range.");
+      return;
+    }
+    setBusy(true);
+    setMessage("");
+    try {
+      const output = await PDFDocument.create();
+      const indices = Array.from({ length: end - start + 1 }, (_, i) => start - 1 + i);
+      const pages = await output.copyPages(pageDoc, indices);
+      pages.forEach((page) => output.addPage(page));
+      const pdfBytes = await output.save();
+      const pdfBuffer = new ArrayBuffer(pdfBytes.byteLength);
+      new Uint8Array(pdfBuffer).set(pdfBytes);
+      const url = URL.createObjectURL(new Blob([pdfBuffer], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "split-pages-" + start + "-" + end + ".pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage(ko ? start + "~" + end + "페이지를 분리한 PDF를 생성했습니다." : "Created a PDF containing pages " + start + " to " + end + ".");
+    } catch {
+      setMessage(ko ? "PDF 분할 중 문제가 발생했습니다." : "Something went wrong while splitting the PDF.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const readPdfInfo = async () => {
     if (!pdfFile) return;
     setBusy(true);
@@ -334,6 +373,7 @@ export default function PDFTools() {
         <button type="button" onClick={() => { setMode("image-to-pdf"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "image-to-pdf" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "이미지 → PDF" : "Images → PDF"}</button>
         <button type="button" onClick={() => { setMode("pdf-merge"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-merge" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 합치기" : "Merge PDFs"}</button>
         <button type="button" onClick={() => { setMode("pdf-pages"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-pages" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "페이지 관리" : "Page Manager"}</button>
+        <button type="button" onClick={() => { setMode("pdf-split"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-split" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 분할" : "Split PDF"}</button>
         <button type="button" onClick={() => { setMode("pdf-info"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-info" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 정보 확인" : "PDF Info"}</button>
       </div>
 
@@ -371,6 +411,33 @@ export default function PDFTools() {
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => document.getElementById("pdf-merge-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 추가" : "Add PDFs"}</button>
             <button type="button" disabled={mergeFiles.length < 2 || busy} onClick={mergePdfs} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"><Download className="h-4 w-4" /> {ko ? "PDF 합치기" : "Merge PDFs"}</button>
+            <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
+          </div>
+        </div>
+      ) : mode === "pdf-split" ? (
+        <div className="space-y-4">
+          <label htmlFor="pdf-split-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
+            <FilePlus2 className="h-9 w-9 text-blue-500" />
+            <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "분할할 PDF 선택" : "Select a PDF to split"}</span>
+            <span className="mt-1 text-xs text-slate-500">{ko ? "원하는 페이지 범위를 입력해 새 PDF로 저장합니다." : "Enter a page range and save it as a new PDF."}</span>
+            <input id="pdf-split-input" type="file" accept="application/pdf,.pdf" className="hidden" onChange={(e) => { loadPagePdf(e.target.files?.[0] ?? null); e.currentTarget.value = ""; }} />
+          </label>
+          {pageFile && pageDoc && <div className="rounded-xl bg-slate-50 p-4">
+            <p className="break-all text-sm font-bold text-slate-700">{pageFile.name}</p>
+            <p className="mt-1 text-xs text-slate-500">{ko ? "전체 " + pageDoc.getPageCount() + "페이지 중 저장할 범위를 입력하세요." : "Enter the range to save from " + pageDoc.getPageCount() + " total pages."}</p>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <label className="text-sm font-bold text-slate-600">{ko ? "시작 페이지" : "Start page"}
+                <input type="number" min="1" max={pageDoc.getPageCount()} value={splitStart} onChange={(e) => setSplitStart(e.target.value)} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold text-slate-700 outline-none focus:border-blue-400" />
+              </label>
+              <label className="text-sm font-bold text-slate-600">{ko ? "끝 페이지" : "End page"}
+                <input type="number" min="1" max={pageDoc.getPageCount()} value={splitEnd} onChange={(e) => setSplitEnd(e.target.value)} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold text-slate-700 outline-none focus:border-blue-400" />
+              </label>
+            </div>
+            <p className="mt-3 text-xs text-slate-500">{ko ? "예: 2~5를 입력하면 2, 3, 4, 5페이지로 새 PDF를 만듭니다." : "Example: enter 2 to 5 to create a new PDF with pages 2, 3, 4, and 5."}</p>
+          </div>}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => document.getElementById("pdf-split-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 선택" : "Select PDF"}</button>
+            <button type="button" disabled={!pageDoc || busy} onClick={splitPdf} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "PDF 분할하기" : "Split PDF"}</button>
             <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
           </div>
         </div>

@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { ImagePlus, Download, RotateCcw, Info } from "lucide-react";
+import { ImagePlus, Download, RotateCcw, Info, FilePlus2 } from "lucide-react";
 import { PDFDocument } from "pdf-lib";
 import { useI18n } from "@/i18n/I18nContext";
 
-type Mode = "image-to-pdf" | "pdf-info";
+type Mode = "image-to-pdf" | "pdf-merge" | "pdf-info";
 
 export default function PDFTools() {
   const [mode, setMode] = useState<Mode>("image-to-pdf");
   const [images, setImages] = useState<File[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [mergeFiles, setMergeFiles] = useState<File[]>([]);
   const [info, setInfo] = useState<{ pages: number; size: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -18,6 +19,7 @@ export default function PDFTools() {
   const reset = () => {
     setImages([]);
     setPdfFile(null);
+    setMergeFiles([]);
     setInfo(null);
     setMessage("");
   };
@@ -149,6 +151,46 @@ export default function PDFTools() {
     }
   };
 
+  const addMergeFiles = (files: FileList | null) => {
+    if (!files) return;
+    const next = Array.from(files).filter((file) => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf"));
+    if (!next.length) {
+      setMessage(ko ? "PDF 파일을 선택해 주세요." : "Please select PDF files.");
+      return;
+    }
+    setMergeFiles((current) => [...current, ...next]);
+    setMessage(ko ? next.length + "개의 PDF 파일을 추가했습니다." : next.length + " PDF file(s) added.");
+  };
+
+  const mergePdfs = async () => {
+    if (mergeFiles.length < 2) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const mergedPdf = await PDFDocument.create();
+      for (const file of mergeFiles) {
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        const sourcePdf = await PDFDocument.load(bytes);
+        const pages = await mergedPdf.copyPages(sourcePdf, sourcePdf.getPageIndices());
+        pages.forEach((page) => mergedPdf.addPage(page));
+      }
+      const pdfBytes = await mergedPdf.save();
+      const url = URL.createObjectURL(new Blob([pdfBytes], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "merged.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage(ko ? mergeFiles.length + "개의 PDF를 하나로 합쳤습니다." : "Merged " + mergeFiles.length + " PDF files into one.");
+    } catch {
+      setMessage(ko ? "PDF 합치기 중 문제가 발생했습니다. 정상적인 PDF 파일을 사용해 주세요." : "Something went wrong while merging the PDFs. Please use valid PDF files.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const readPdfInfo = async () => {
     if (!pdfFile) return;
     setBusy(true);
@@ -173,10 +215,48 @@ export default function PDFTools() {
     <section className="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm sm:p-6">
       <div className="mb-5 flex flex-wrap gap-2">
         <button type="button" onClick={() => { setMode("image-to-pdf"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "image-to-pdf" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "이미지 → PDF" : "Images → PDF"}</button>
+        <button type="button" onClick={() => { setMode("pdf-merge"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-merge" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 합치기" : "Merge PDFs"}</button>
         <button type="button" onClick={() => { setMode("pdf-info"); setMessage(""); }} className={"rounded-xl px-4 py-2.5 text-sm font-bold transition " + (mode === "pdf-info" ? "bg-blue-600 text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200")}>{ko ? "PDF 정보 확인" : "PDF Info"}</button>
       </div>
 
       {mode === "image-to-pdf" ? (
+        <div className="space-y-4">
+          <label htmlFor="pdf-image-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
+            <ImagePlus className="h-9 w-9 text-blue-500" />
+            <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "JPG 또는 PNG 이미지 선택" : "Select JPG or PNG images"}</span>
+            <span className="mt-1 text-xs text-slate-500">{ko ? "여러 장을 한 번에 선택하거나 파일을 여러 번 추가할 수 있습니다." : "Select multiple images at once or add files multiple times."}</span>
+            <input id="pdf-image-input" type="file" accept="image/*" multiple className="hidden" onChange={(e) => { addImages(e.target.files); e.currentTarget.value = ""; }} />
+          </label>
+          {images.length > 0 && <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">{ko ? "선택된 이미지:" : "Selected images:"} <strong>{images.length}{ko ? "개" : ""}</strong></div>}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => document.getElementById("pdf-image-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><ImagePlus className="h-4 w-4" /> {ko ? "이미지 추가" : "Add images"}</button>
+            <button type="button" disabled={!images.length || busy} onClick={makePdf} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"><Download className="h-4 w-4" /> {ko ? "PDF 만들기" : "Create PDF"}</button>
+            <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
+          </div>
+        </div>
+      ) : mode === "pdf-merge" ? (
+        <div className="space-y-4">
+          <label htmlFor="pdf-merge-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
+            <FilePlus2 className="h-9 w-9 text-blue-500" />
+            <span className="mt-3 text-sm font-bold text-slate-700">{ko ? "합칠 PDF 파일 선택" : "Select PDF files to merge"}</span>
+            <span className="mt-1 text-xs text-slate-500">{ko ? "여러 개의 PDF를 선택하면 선택한 순서대로 하나의 PDF로 합칩니다." : "Select multiple PDFs and merge them into one file in the selected order."}</span>
+            <input id="pdf-merge-input" type="file" accept="application/pdf,.pdf" multiple className="hidden" onChange={(e) => { addMergeFiles(e.target.files); e.currentTarget.value = ""; }} />
+          </label>
+          {mergeFiles.length > 0 && (
+            <div className="rounded-xl bg-slate-50 p-4">
+              <p className="text-sm font-bold text-slate-700">{ko ? "선택된 PDF:" : "Selected PDFs:"} {mergeFiles.length}{ko ? "개" : ""}</p>
+              <ol className="mt-2 space-y-1 text-sm text-slate-600">
+                {mergeFiles.map((file, index) => <li key={index} className="break-all">{index + 1}. {file.name}</li>)}
+              </ol>
+            </div>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => document.getElementById("pdf-merge-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 추가" : "Add PDFs"}</button>
+            <button type="button" disabled={mergeFiles.length < 2 || busy} onClick={mergePdfs} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"><Download className="h-4 w-4" /> {ko ? "PDF 합치기" : "Merge PDFs"}</button>
+            <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
+          </div>
+        </div>
+      ) : (
         <div className="space-y-4">
           <label htmlFor="pdf-image-input" className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 text-center transition hover:bg-blue-50">
             <ImagePlus className="h-9 w-9 text-blue-500" />

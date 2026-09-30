@@ -175,7 +175,7 @@ function App() {
           </nav>
         </section>
 
-        {infoPage ? <InfoPages page={infoPage} /> : <>{category === "image" && (
+        {infoPage ? <InfoPages page={infoPage} onBack={() => setInfoPage(null)} /> : <>{category === "image" && (
           <section className="mb-5">
             <div className="mb-2 flex items-center justify-between px-1">
               <h3 className="text-sm font-bold text-slate-700">{ko ? "이미지 도구" : "Image tools"}</h3>

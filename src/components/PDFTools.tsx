@@ -13,6 +13,8 @@ export default function PDFTools() {
   const [pageFile, setPageFile] = useState<File | null>(null);
   const [pageDoc, setPageDoc] = useState<PDFDocument | null>(null);
   const [selectedPages, setSelectedPages] = useState<number[]>([]);
+  const [pageOrder, setPageOrder] = useState<number[]>([]);
+  const [orderSelected, setOrderSelected] = useState<number | null>(null);
   const [info, setInfo] = useState<{ pages: number; size: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -26,6 +28,8 @@ export default function PDFTools() {
     setPageFile(null);
     setPageDoc(null);
     setSelectedPages([]);
+    setPageOrder([]);
+    setOrderSelected(null);
     setInfo(null);
     setMessage("");
   };
@@ -211,12 +215,59 @@ export default function PDFTools() {
       setPageFile(file);
       setPageDoc(doc);
       setSelectedPages([]);
-      setMessage(ko ? "PDF를 불러왔습니다. 삭제할 페이지를 선택해 주세요." : "PDF loaded. Select pages to delete.");
+      setPageOrder(Array.from({ length: doc.getPageCount() }, (_, i) => i));
+      setOrderSelected(null);
+      setMessage(ko ? "PDF를 불러왔습니다. 삭제하거나 페이지 순서를 변경할 수 있습니다." : "PDF loaded. You can delete pages or change their order.");
     } catch {
       setPageFile(null);
       setPageDoc(null);
       setSelectedPages([]);
+      setPageOrder([]);
+      setOrderSelected(null);
       setMessage(ko ? "PDF 파일을 읽을 수 없습니다." : "The PDF file could not be read.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const movePage = (direction: -1 | 1) => {
+    if (orderSelected === null) return;
+    setPageOrder((current) => {
+      const index = current.indexOf(orderSelected);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= current.length) return current;
+      const next = [...current];
+      [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+      return next;
+    });
+  };
+
+  const reorderPages = async () => {
+    if (!pageDoc || !pageFile || pageOrder.length < 2) return;
+    if (pageOrder.every((page, index) => page === index)) {
+      setMessage(ko ? "페이지 순서가 변경되지 않았습니다." : "The page order has not changed.");
+      return;
+    }
+    setBusy(true);
+    setMessage("");
+    try {
+      const output = await PDFDocument.create();
+      const pages = await output.copyPages(pageDoc, pageOrder);
+      pages.forEach((page) => output.addPage(page));
+      const pdfBytes = await output.save();
+      const pdfBuffer = new ArrayBuffer(pdfBytes.byteLength);
+      new Uint8Array(pdfBuffer).set(pdfBytes);
+      const url = URL.createObjectURL(new Blob([pdfBuffer], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "reordered-pages.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage(ko ? "페이지 순서를 변경한 PDF를 생성했습니다." : "Created a PDF with the reordered pages.");
+    } catch {
+      setMessage(ko ? "페이지 순서 변경 중 문제가 발생했습니다." : "Something went wrong while reordering pages.");
     } finally {
       setBusy(false);
     }
@@ -231,7 +282,7 @@ export default function PDFTools() {
     setBusy(true);
     setMessage("");
     try {
-      const keep = Array.from({ length: pageDoc.getPageCount() }, (_, i) => i).filter((i) => !selectedPages.includes(i));
+      const keep = pageOrder.filter((i) => !selectedPages.includes(i));
       const output = await PDFDocument.create();
       const pages = await output.copyPages(pageDoc, keep);
       pages.forEach((page) => output.addPage(page));
@@ -246,6 +297,9 @@ export default function PDFTools() {
       link.click();
       link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setPageOrder(keep);
+      setSelectedPages([]);
+      setOrderSelected(null);
       setMessage(ko ? selectedPages.length + "페이지를 삭제한 PDF를 생성했습니다." : "Created a PDF with " + selectedPages.length + " page(s) deleted.");
     } catch {
       setMessage(ko ? "페이지 삭제 중 문제가 발생했습니다." : "Something went wrong while deleting pages.");
@@ -337,7 +391,8 @@ export default function PDFTools() {
           </div>}
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => document.getElementById("pdf-page-input")?.click()} disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"><FilePlus2 className="h-4 w-4" /> {ko ? "PDF 선택" : "Select PDF"}</button>
-            <button type="button" disabled={!selectedPages.length || busy} onClick={deletePages} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "선택 페이지 삭제" : "Delete selected pages"}</button>
+            <button type="button" disabled={orderSelected === null || busy} onClick={reorderPages} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50">{ko ? "순서 변경 PDF 만들기" : "Create reordered PDF"}</button>
+            <button type="button" disabled={!selectedPages.length || busy} onClick={deletePages} className="rounded-xl bg-slate-700 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-slate-800 disabled:opacity-50">{ko ? "선택 페이지 삭제" : "Delete selected pages"}</button>
             <button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200"><RotateCcw className="h-4 w-4" /> {ko ? "초기화" : "Reset"}</button>
           </div>
         </div>

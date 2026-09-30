@@ -36,7 +36,10 @@ function App() {
     fetch("https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images/visits")
       .then((response) => response.ok ? response.json() : null)
       .then((data) => {
-        if (!cancelled && typeof data?.value === "number") setVisitorCount(data.value);
+        if (!cancelled && (typeof data?.value === "number" || typeof data?.value === "string")) {
+          const count = Number(data.value);
+          if (Number.isFinite(count)) setVisitorCount(count);
+        }
       })
       .catch(() => {
         // Visitor counter is optional; the site remains fully usable if it is unavailable.
@@ -200,6 +203,11 @@ function App() {
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
+          {visitorCount !== null && (
+            <p className="mt-2 text-[11px] font-medium text-slate-400">
+              {ko ? "누적 방문자" : "Total visitors"} <span className="font-bold text-slate-500">{visitorCount.toLocaleString()}</span>
+            </p>
+          )}
         </footer>
       </main>
     </div>

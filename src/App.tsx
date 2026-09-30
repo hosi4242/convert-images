@@ -93,10 +93,10 @@ function App() {
   };
 
   const categoryButton = (active: boolean) =>
-    `group flex min-h-[4.5rem] flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-bold transition-all sm:min-h-24 sm:px-3 sm:py-3 sm:text-sm ${active ? "bg-white text-blue-700 shadow-lg ring-1 ring-blue-100" : "text-gray-500 hover:-translate-y-0.5 hover:bg-white/90 hover:text-gray-700"}`;
+    `group flex min-h-[4.75rem] flex-col items-center justify-center gap-1 rounded-2xl px-1.5 py-2 text-[11px] font-bold leading-tight transition-all sm:min-h-24 sm:px-2.5 sm:py-3 sm:text-sm ${active ? "bg-white text-blue-700 shadow-lg ring-1 ring-blue-100" : "text-gray-500 hover:-translate-y-0.5 hover:bg-white/90 hover:text-gray-700"}`;
 
   const subButton = (active: boolean) =>
-    `group flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition-all sm:text-sm ${active ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`;
+    `group flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-center text-xs font-bold leading-tight transition-all sm:px-3 sm:text-sm ${active ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`;
 
   const featurePill = (icon: React.ReactNode, text: string) => (
     <div className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/55 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm">
@@ -155,28 +155,28 @@ function App() {
           <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-5 sm:gap-2.5 sm:p-2.5">
             <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}>
               <ImageIcon className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "image" ? "text-blue-600" : "text-slate-400"}`} />
-              <span>{ko ? "이미지 도구" : "Image Tools"}</span>
-              <span className={`text-[10px] font-medium ${category === "image" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "변환 · 압축 · 편집" : "Convert · Compress · Edit"}</span>
+              <span className="whitespace-nowrap">{ko ? "이미지 도구" : "Image Tools"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "image" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "변환 · 압축 · 편집" : "Convert · Compress · Edit"}</span>
             </button>
             <button type="button" onClick={() => selectCategory("qr")} className={categoryButton(category === "qr")}>
               <QrCode className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "qr" ? "text-blue-600" : "text-slate-400"}`} />
-              <span>{ko ? "QR 코드" : "QR Code"}</span>
-              <span className={`text-[10px] font-medium ${category === "qr" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "URL · 텍스트 · Wi-Fi" : "URL · Text · Wi-Fi"}</span>
+              <span className="whitespace-nowrap">{ko ? "QR 코드" : "QR Code"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "qr" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "URL · 텍스트 · Wi-Fi" : "URL · Text · Wi-Fi"}</span>
             </button>
             <button type="button" onClick={() => selectCategory("calculator")} className={categoryButton(category === "calculator")}>
               <Calculator className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "calculator" ? "text-blue-600" : "text-slate-400"}`} />
-              <span>{ko ? "복합 계산기" : "Calculator"}</span>
-              <span className={`text-[10px] font-medium ${category === "calculator" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "비율 · 할인 · 부가세" : "Percent · Discount · VAT"}</span>
+              <span className="whitespace-nowrap">{ko ? "복합 계산기" : "Calculator"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "calculator" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "비율 · 할인 · 부가세" : "Percent · Discount · VAT"}</span>
             </button>
             <button type="button" onClick={() => selectCategory("text")} className={categoryButton(category === "text")}>
               <Type className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "text" ? "text-blue-600" : "text-slate-400"}`} />
-              <span>{ko ? "텍스트 도구" : "Text Tools"}</span>
-              <span className={`text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
+              <span className="whitespace-nowrap">{ko ? "텍스트 도구" : "Text Tools"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
             </button>
             <button type="button" onClick={() => selectCategory("pdf")} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
-              <span>{ko ? "PDF 변환" : "PDF Tools"}</span>
-              <span className={`text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>
+              <span className="whitespace-nowrap">{ko ? "PDF 변환" : "PDF Tools"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>
             </button>
           </nav>
         </section>

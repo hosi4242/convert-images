@@ -11,6 +11,8 @@ import TextCounter from "@/components/TextCounter";
 import ImageEditor from "@/components/ImageEditor";
 import BatchConverter from "@/components/BatchConverter";
 import AdSlot from "@/components/AdSlot";
+import InfoPages from "@/components/InfoPages";
+import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
 import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
@@ -33,6 +35,7 @@ function App() {
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
+  const [infoPage, setInfoPage] = useState<InfoPageKey | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -83,6 +86,7 @@ function App() {
 
   const selectCategory = (next: Category) => {
     setCategory(next);
+    setInfoPage(null);
     setError(null);
     if (next !== "image") resetImage();
   };
@@ -171,7 +175,7 @@ function App() {
           </nav>
         </section>
 
-        {category === "image" && (
+        {infoPage ? <InfoPages page={infoPage} /> : <>{category === "image" && (
           <section className="mb-5">
             <div className="mb-2 flex items-center justify-between px-1">
               <h3 className="text-sm font-bold text-slate-700">{ko ? "이미지 도구" : "Image tools"}</h3>
@@ -211,10 +215,12 @@ function App() {
          </div>}
 
         <AdSlot labelKey="adSlot" />
+        </>}
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
           <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
+          <InfoPageNav active={infoPage} onChange={setInfoPage} />
           {visitorCount !== null && (
             <p className="mt-2 text-[11px] font-medium text-slate-400">
               {ko ? "누적 방문자" : "Total visitors"} <span className="font-bold text-slate-500">{visitorCount.toLocaleString()}</span>

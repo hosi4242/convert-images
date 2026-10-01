@@ -262,6 +262,19 @@ function App() {
           <p>{ko ? "올인원 이미지 · QR · 계산 도구" : "All-in-One Image · QR · Calculator"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
           <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
+          <nav className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1.5" aria-label={ko ? "도구 안내" : "Tool guides"}>
+            {[
+              ["/image-converter", ko ? "이미지 변환" : "Image conversion"],
+              ["/image-compressor", ko ? "이미지 압축" : "Image compression"],
+              ["/image-resizer", ko ? "이미지 크기 조절" : "Image resizing"],
+              ["/qr-code", ko ? "QR코드" : "QR code"],
+              ["/calculator", ko ? "계산기" : "Calculator"],
+              ["/text-tools", ko ? "텍스트 도구" : "Text tools"],
+              ["/pdf-tools", ko ? "PDF 도구" : "PDF tools"]
+            ].map(([href, label]) => (
+              <a key={href} href={href} className="text-[11px] font-medium text-slate-400 hover:text-blue-600">{label}</a>
+            ))}
+          </nav>
           <InfoPageNav active={infoPage} onChange={setInfoPage} />
           {visitorCount !== null && (
             <p className="mt-2 text-[11px] font-medium text-slate-400">

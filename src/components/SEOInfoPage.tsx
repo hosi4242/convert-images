@@ -163,7 +163,8 @@ const pages: Record<PageKey, PageData> = {
     intro: "서비스 이용 중 오류나 개선 의견이 있다면 아래 이메일로 알려주세요.",
     icon: Mail,
     sections: [
-      ["문의 이메일", "현재 운영 이메일 주소를 확정하는 중입니다. 실제 이메일 주소가 준비되면 이 페이지에 연결할 예정입니다."],
+      ["문의 이메일", "lucidpoverty@gmail.com"],
+      ["문의 방법", "아래 이메일 주소를 클릭하면 문의 메일을 작성할 수 있습니다."],
       ["문의 내용", "오류를 알려주실 때에는 사용한 기능, 발생한 상황, 사용 기기와 브라우저 정보를 함께 적어주시면 확인에 도움이 됩니다."],
       ["개인정보 주의", "오류 문의에 불필요한 주민등록번호, 비밀번호, 금융정보 등 민감한 개인정보를 보내지 마세요."]
     ]
@@ -199,7 +200,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
           {data.sections.map(([title, body]) => (
             <section key={title} className="border-b border-slate-100 py-5 first:pt-0 last:border-b-0 last:pb-0">
               <h2 className="text-lg font-extrabold text-slate-800">{title}</h2>
-              <p className="mt-2 text-sm leading-7 text-slate-600">{body}</p>
+              <p className="mt-2 text-sm leading-7 text-slate-600">{title === "문의 이메일" ? <a className="font-semibold text-blue-600 hover:underline" href="mailto:lucidpoverty@gmail.com">lucidpoverty@gmail.com</a> : body}</p>
             </section>
           ))}
 

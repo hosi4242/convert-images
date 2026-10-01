@@ -125,6 +125,9 @@ function App() {
             </button>
           </div>
           <div className="mx-auto max-w-3xl py-6 text-center sm:py-8">
+            <div className="mb-2 text-2xl font-black tracking-tight text-white drop-shadow-sm sm:text-3xl">
+              ToolMingle
+            </div>
             <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               {ko ? "무료 · 간편 · 브라우저에서 바로 사용" : "Free · Simple · Browser-based"}

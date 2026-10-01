@@ -14,6 +14,7 @@ import PDFTools from "@/components/PDFTools";
 import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
 import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
+import SEOInfoPage, { getSEOPage } from "@/components/SEOInfoPage";
 import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
@@ -26,6 +27,9 @@ type Category = "image" | "qr" | "calculator" | "text" | "pdf";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
 
 function App() {
+  const seoPage = getSEOPage(window.location.pathname);
+  if (seoPage) return <SEOInfoPage page={seoPage} />;
+
   const { t, language, toggleLanguage } = useI18n();
   const ko = language === "ko";
   const [category, setCategory] = useState<Category>("image");

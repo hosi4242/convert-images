@@ -48,10 +48,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = language;
     if (language === "ko") {
-      document.title = "올인원 간편 도구 | 이미지 · QR · 계산 · 텍스트 · PDF";
+      document.title = "ToolMingle | 이미지 · QR · 계산 · 텍스트 · PDF";
       document.documentElement.setAttribute("data-page-description", "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 계산기, 글자 수·바이트 계산, PDF 도구를 무료로 이용할 수 있습니다.");
     } else {
-      document.title = "All-in-One Simple Tools | Image · QR · Calculator · Text · PDF";
+      document.title = "ToolMingle | Image · QR · Calculator · Text · PDF";
       document.documentElement.setAttribute("data-page-description", "Free browser-based image, QR code, calculator, text, and PDF tools with no installation or sign-up.");
     }
   }, [language]);

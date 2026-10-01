@@ -116,10 +116,10 @@ const pages: Record<PageKey, PageData> = {
     ]
   },
   about: {
-    title: "사이트 소개 | 올인원 간편 도구",
-    description: "올인원 간편 도구의 서비스 목적과 제공 기능을 안내합니다.",
+    title: "사이트 소개 | ToolMingle",
+    description: "ToolMingle의 서비스 목적과 제공 기능을 안내합니다.",
     heading: "사이트 소개",
-    intro: "올인원 간편 도구는 이미지, QR코드, 계산, 텍스트, PDF 작업을 별도 프로그램 설치 없이 브라우저에서 간편하게 이용할 수 있도록 만든 무료 웹 도구입니다.",
+    intro: "ToolMingle은 이미지, QR코드, 계산, 텍스트, PDF 작업을 별도 프로그램 설치 없이 브라우저에서 간편하게 이용할 수 있도록 만든 무료 웹 도구입니다.",
     icon: ShieldCheck,
     sections: [
       ["제공 기능", "이미지 변환·압축·크기 조정·편집·일괄 변환, QR코드 생성, 복합 계산, 글자 수·바이트 계산, PDF 관련 도구를 제공합니다."],
@@ -128,10 +128,10 @@ const pages: Record<PageKey, PageData> = {
     ]
   },
   privacy: {
-    title: "개인정보처리방침 | 올인원 간편 도구",
-    description: "올인원 간편 도구의 개인정보 및 쿠키, 방문 통계, 광고 관련 처리 방침입니다.",
+    title: "개인정보처리방침 | ToolMingle",
+    description: "ToolMingle의 개인정보 및 쿠키, 방문 통계, 광고 관련 처리 방침입니다.",
     heading: "개인정보처리방침",
-    intro: "올인원 간편 도구는 서비스 운영에 필요한 범위에서 정보를 최소한으로 처리하고, 브라우저에서 처리할 수 있는 파일 작업은 로컬 처리를 우선합니다.",
+    intro: "ToolMingle은 서비스 운영에 필요한 범위에서 정보를 최소한으로 처리하고, 브라우저에서 처리할 수 있는 파일 작업은 로컬 처리를 우선합니다.",
     icon: ShieldCheck,
     sections: [
       ["1. 파일 처리", "이미지 변환·압축·크기 조정 등 브라우저 기반 파일 작업은 사용자의 브라우저에서 처리하도록 설계되어 있으며, 변환을 위해 이미지 파일을 사이트 서버에 저장하지 않습니다. 사용자가 직접 외부 서비스로 이동하거나 외부 기능을 이용하는 경우에는 해당 서비스의 정책이 적용될 수 있습니다."],
@@ -143,8 +143,8 @@ const pages: Record<PageKey, PageData> = {
     ]
   },
   terms: {
-    title: "이용약관 | 올인원 간편 도구",
-    description: "올인원 간편 도구의 이용약관과 서비스 이용 시 유의사항을 안내합니다.",
+    title: "이용약관 | ToolMingle",
+    description: "ToolMingle의 이용약관과 서비스 이용 시 유의사항을 안내합니다.",
     heading: "이용약관",
     intro: "이 사이트는 일상적인 파일·텍스트·계산 작업을 편리하게 돕기 위한 무료 웹 도구를 제공합니다.",
     icon: FileText,
@@ -157,8 +157,8 @@ const pages: Record<PageKey, PageData> = {
     ]
   },
   contact: {
-    title: "문의하기 | 올인원 간편 도구",
-    description: "올인원 간편 도구의 오류 신고 및 개선 의견 문의 방법을 안내합니다.",
+    title: "문의하기 | ToolMingle",
+    description: "ToolMingle의 오류 신고 및 개선 의견 문의 방법을 안내합니다.",
     heading: "문의하기",
     intro: "서비스 이용 중 오류나 개선 의견이 있다면 아래 이메일로 알려주세요.",
     icon: Mail,

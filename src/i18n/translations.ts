@@ -65,7 +65,7 @@ export interface Translation {
 }
 
 const ko: Translation = {
-  headerTitle: "간편 이미지 변환기",
+  headerTitle: "ToolMingle",
   headerSubtitle: "JPG, PNG, WebP, AVIF, HEIC 이미지를 브라우저에서 빠르고 간편하게 변환하세요.",
   switchToEnglish: "English",
   switchToKorean: "한국어",
@@ -123,13 +123,13 @@ const ko: Translation = {
   errorConversionFailed: "이미지를 변환하지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
   errorCompressionFailed: "이미지 용량을 줄이지 못했습니다. 다른 이미지 파일을 사용해 주세요.",
   errorAvifNotSupported: "AVIF 변환 중 오류가 발생했습니다. 다른 이미지 파일을 사용하거나 WebP, PNG, JPG를 이용해 주세요.",
-  seoDescriptionP1: "간편 이미지 변환기는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG, PNG, WebP, AVIF뿐 아니라 아이폰에서 많이 사용하는 HEIC 이미지도 JPG, PNG, WebP, AVIF로 변환할 수 있습니다. 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
+  seoDescriptionP1: "ToolMingle의 이미지 변환 도구는 별도의 프로그램 설치 없이 웹브라우저에서 바로 이미지 형식을 바꿀 수 있는 무료 도구입니다. JPG, PNG, WebP, AVIF뿐 아니라 아이폰에서 많이 사용하는 HEIC 이미지도 JPG, PNG, WebP, AVIF로 변환할 수 있습니다. 모든 처리는 브라우저 내에서 이루어져 이미지 파일이 외부로 전송되지 않아 안전합니다.",
   seoDescriptionP2: "품질 설정을 통해 파일 크기를 줄이면서도 화질을 유지할 수 있어 웹사이트 이미지 최적화에도 유용합니다. 지금 바로 이미지를 업로드해서 간편하게 변환해 보세요.",
-  footerText: "간편 이미지 변환기 · 모든 변환은 브라우저에서 안전하게 처리되며 서버에 저장되지 않습니다",
+  footerText: "ToolMingle · 모든 변환은 브라우저에서 안전하게 처리되며 서버에 저장되지 않습니다",
 };
 
 const en: Translation = {
-  headerTitle: "Simple Image Converter",
+  headerTitle: "ToolMingle",
   headerSubtitle: "Convert JPG, PNG, WebP, AVIF, and HEIC images right in your browser — fast and easy.",
   switchToEnglish: "English",
   switchToKorean: "한국어",
@@ -187,9 +187,9 @@ const en: Translation = {
   errorConversionFailed: "Could not convert the image. Please try a different image file.",
   errorCompressionFailed: "Could not reduce the image size. Please try a different image file.",
   errorAvifNotSupported: "An error occurred during AVIF conversion. Please try a different image file or use WebP, PNG, or JPG instead.",
-  seoDescriptionP1: "Simple Image Converter is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports JPG, PNG, WebP, AVIF, and HEIC images, including converting iPhone HEIC photos to JPG, PNG, WebP, or AVIF. All processing happens locally in your browser, so your image files are never sent to an external server.",
+  seoDescriptionP1: "ToolMingle is a free tool that lets you change image formats right in your web browser — no software installation needed. It supports JPG, PNG, WebP, AVIF, and HEIC images, including converting iPhone HEIC photos to JPG, PNG, WebP, or AVIF. All processing happens locally in your browser, so your image files are never sent to an external server.",
   seoDescriptionP2: "With adjustable quality settings, you can reduce file size while maintaining image quality, making it perfect for optimizing website images too. Upload an image now and try it for yourself.",
-  footerText: "Simple Image Converter · All conversions are processed safely in your browser and are never stored on any server",
+  footerText: "ToolMingle · All conversions are processed safely in your browser and are never stored on any server",
 };
 
 const translations: Record<Language, Translation> = { ko, en };

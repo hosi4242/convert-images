@@ -42,7 +42,7 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
       title: ko ? "문의하기" : "Contact",
       intro: ko ? "서비스 이용 중 오류나 개선 의견이 있다면 문의 내용을 알려주세요." : "Tell us about an issue or suggestion.",
       sections: [
-        [ko ? "문의 방법" : "How to contact", ko ? "문의 이메일 주소가 확정되면 이 페이지에 연결할 예정입니다. 오류 문의 시 사용한 기능과 발생 상황을 함께 알려주시면 확인에 도움이 됩니다." : "A live submission method is not connected yet. A service email can be added here when the site is ready."]
+        [ko ? "문의 방법" : "How to contact", ko ? "문의 이메일: lucidpoverty@gmail.com. 오류 문의 시 사용한 기능과 발생 상황을 함께 알려주시면 확인에 도움이 됩니다." : "A live submission method is not connected yet. A service email can be added here when the site is ready."]
       ]
     }
   } as const;

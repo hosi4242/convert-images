@@ -10,6 +10,8 @@ import CompoundCalculator from "@/components/CompoundCalculator";
 import TextCounter from "@/components/TextCounter";
 import ImageEditor from "@/components/ImageEditor";
 import BatchConverter from "@/components/BatchConverter";
+import ImageSizeCompare from "@/components/ImageSizeCompare";
+import ImageDpiCalculator from "@/components/ImageDpiCalculator";
 import PDFTools from "@/components/PDFTools";
 import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
@@ -24,7 +26,7 @@ const CONVERSION_QUALITY = 0.9;
 const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
 
 type Category = "image" | "qr" | "calculator" | "text" | "pdf";
-type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch";
+type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch" | "compare" | "dpi";
 
 function App() {
   const seoPage = getSEOPage(window.location.pathname);
@@ -192,7 +194,7 @@ function App() {
           <section className="mb-5">
             <div className="mb-2 flex items-center justify-between px-1">
               <h3 className="text-sm font-bold text-slate-700">{ko ? "이미지 도구" : "Image tools"}</h3>
-              <span className="text-xs text-slate-400">{ko ? "5가지 기능" : "5 tools"}</span>
+              <span className="text-xs text-slate-400">{ko ? "7가지 기능" : "7 tools"}</span>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
               <button type="button" onClick={() => { setImageMode("convert"); setResult(null); }} className={subButton(imageMode === "convert")}><span className="whitespace-nowrap">{t.conversionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "convert" ? "opacity-100" : "opacity-0"}`} /></button>
@@ -200,6 +202,8 @@ function App() {
               <button type="button" onClick={() => { setImageMode("resize"); setResult(null); }} className={subButton(imageMode === "resize")}><span className="whitespace-nowrap">{t.resizeTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "resize" ? "opacity-100" : "opacity-0"}`} /></button>
               <button type="button" onClick={() => { setImageMode("edit"); setResult(null); }} className={subButton(imageMode === "edit")}><span className="whitespace-nowrap">{ko ? "편집" : "Edit"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "edit" ? "opacity-100" : "opacity-0"}`} /></button>
               <button type="button" onClick={() => { setImageMode("batch"); setResult(null); }} className={subButton(imageMode === "batch")}><span className="whitespace-nowrap">{ko ? "일괄 변환" : "Batch"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "batch" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("compare"); setResult(null); }} className={subButton(imageMode === "compare")}><span className="whitespace-nowrap">{ko ? "용량 비교" : "Size compare"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compare" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("dpi"); setResult(null); }} className={subButton(imageMode === "dpi")}><span className="whitespace-nowrap">{ko ? "DPI 계산" : "DPI"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "dpi" ? "opacity-100" : "opacity-0"}`} /></button>
             </div>
           </section>
         )}
@@ -216,6 +220,8 @@ function App() {
          category === "text" ? <TextCounter /> :
          category === "pdf" ? <PDFTools /> :
          imageMode === "batch" ? <BatchConverter /> :
+         imageMode === "compare" ? <ImageSizeCompare /> :
+         imageMode === "dpi" ? <ImageDpiCalculator /> :
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
            <UploadBox onFileSelect={handleFileSelect} uploadedImage={uploadedImage} />
@@ -241,17 +247,17 @@ function App() {
                 <p><strong>{ko ? "이미지 변환:" : "Image conversion:"}</strong> {ko ? "JPG, PNG, WebP, AVIF, HEIC 등 이미지 형식을 바꿀 때 사용하세요." : "Change image formats such as JPG, PNG, WebP, AVIF, and HEIC."}</p>
                 <p><strong>{ko ? "이미지 압축:" : "Image compression:"}</strong> {ko ? "이미지 크기를 유지하면서 파일 용량을 줄일 때 사용하세요." : "Reduce image file size while keeping image dimensions."}</p>
                 <p><strong>{ko ? "이미지 크기 조정:" : "Image resizing:"}</strong> {ko ? "가로·세로 크기를 원하는 크기로 변경할 때 사용하세요." : "Change image width and height to your preferred dimensions."}</p>
-                <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
+                <p><strong>{ko ? "이미지 용량 비교:" : "Image size comparison:"}</strong> {ko ? "두 이미지의 파일 용량과 절감률을 비교할 수 있습니다." : "Compare the file sizes and reduction rate of two images."}</p>\n                <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>\n                <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
                 <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
                 <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG·WebP 등 이미지 형식을 변환하고, 파일 용량을 줄이거나 크기를 조정할 수 있습니다. 간단한 편집과 여러 이미지의 일괄 변환도 지원합니다." : "Convert common image formats, reduce file size, resize images, make simple edits, and process multiple images in one batch."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG·WebP 등 이미지 형식을 변환하고, 파일 용량을 줄이거나 크기를 조정할 수 있습니다. 간단한 편집과 여러 이미지의 일괄 변환, 용량 비교와 DPI 계산도 지원합니다." : "Convert common image formats, reduce file size, resize images, make simple edits, process multiple images in one batch, compare file sizes, and calculate print size from DPI."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, and other everyday values in one place."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "여러 JPG·PNG 이미지를 하나의 PDF로 묶고, PDF 파일의 페이지 수와 기본 파일 정보를 브라우저에서 확인할 수 있습니다." : "Combine JPG and PNG images into one PDF and check basic PDF file information directly in your browser."}</p></div>
-              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수, 공백 제외 글자 수, 줄 수, 단어 수와 UTF-8 바이트 수를 바로 확인할 수 있습니다." : "Check character count, characters without spaces, line count, word count, and UTF-8 byte size instantly."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
             </div>
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
               <p className="text-xs leading-5 text-blue-700">{ko ? "파일 기반 이미지 작업은 브라우저에서 처리되며, 사이트는 변환을 위해 사용자의 이미지 파일을 외부 서버에 업로드하지 않습니다." : "Image file operations are processed in the browser, and the site does not upload your image files to an external server for conversion."}</p>

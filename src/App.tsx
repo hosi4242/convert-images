@@ -263,7 +263,9 @@ function App() {
                 <p><strong>{ko ? "이미지 변환:" : "Image conversion:"}</strong> {ko ? "JPG, PNG, WebP, AVIF, HEIC 등 이미지 형식을 바꿀 때 사용하세요." : "Change image formats such as JPG, PNG, WebP, AVIF, and HEIC."}</p>
                 <p><strong>{ko ? "이미지 압축:" : "Image compression:"}</strong> {ko ? "이미지 크기를 유지하면서 파일 용량을 줄일 때 사용하세요." : "Reduce image file size while keeping image dimensions."}</p>
                 <p><strong>{ko ? "이미지 크기 조정:" : "Image resizing:"}</strong> {ko ? "가로·세로 크기를 원하는 크기로 변경할 때 사용하세요." : "Change image width and height to your preferred dimensions."}</p>
-                <p><strong>{ko ? "이미지 용량 비교:" : "Image size comparison:"}</strong> {ko ? "두 이미지의 파일 용량과 절감률을 비교할 수 있습니다." : "Compare the file sizes and reduction rate of two images."}</p>\n                <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>\n                <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
+                <p><strong>{ko ? "이미지 용량 비교:" : "Image size comparison:"}</strong> {ko ? "두 이미지의 파일 용량과 절감률을 비교할 수 있습니다." : "Compare the file sizes and reduction rate of two images."}</p>
+                <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>
+                <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
                 <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
                 <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
               </div>

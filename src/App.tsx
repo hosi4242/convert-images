@@ -46,6 +46,22 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [infoPage, setInfoPage] = useState<InfoPageKey | null>(null);
+  const [recentTools, setRecentTools] = useState<string[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("toolmingle-recent-tools") || "[]");
+      return Array.isArray(saved) ? saved.filter((item): item is string => typeof item === "string").slice(0, 6) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const rememberTool = (id: string) => {
+    setRecentTools((prev) => {
+      const next = [id, ...prev.filter((item) => item !== id)].slice(0, 6);
+      localStorage.setItem("toolmingle-recent-tools", JSON.stringify(next));
+      return next;
+    });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -170,28 +186,70 @@ function App() {
               <span className="whitespace-nowrap">{ko ? "이미지 도구" : "Image Tools"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "image" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "변환 · 압축 · 편집" : "Convert · Compress · Edit"}</span>
             </button>
-            <button type="button" onClick={() => selectCategory("qr")} className={categoryButton(category === "qr")}>
+            <button type="button" onClick={() => { selectCategory("qr"); rememberTool("qr"); }} className={categoryButton(category === "qr")}>
               <QrCode className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "qr" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "QR 코드" : "QR Code"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "qr" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "URL · 텍스트 · Wi-Fi" : "URL · Text · Wi-Fi"}</span>
             </button>
-            <button type="button" onClick={() => selectCategory("calculator")} className={categoryButton(category === "calculator")}>
+            <button type="button" onClick={() => { selectCategory("calculator"); rememberTool("calculator"); }} className={categoryButton(category === "calculator")}>
               <Calculator className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "calculator" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "복합 계산기" : "Calculator"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "calculator" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "비율 · 할인 · 부가세" : "Percent · Discount · VAT"}</span>
             </button>
-            <button type="button" onClick={() => selectCategory("text")} className={categoryButton(category === "text")}>
+            <button type="button" onClick={() => { selectCategory("text"); rememberTool("text"); }} className={categoryButton(category === "text")}>
               <Type className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "text" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "텍스트 도구" : "Text Tools"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
             </button>
-            <button type="button" onClick={() => selectCategory("pdf")} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
+            <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "PDF 변환" : "PDF Tools"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>
             </button>
           </nav>
         </section>
+
+        {recentTools.length > 0 && (
+          <section className="mb-5">
+            <div className="mb-2 flex items-center justify-between px-1">
+              <h2 className="text-sm font-bold text-slate-700">{ko ? "최근 사용한 도구" : "Recently used"}</h2>
+              <button type="button" onClick={() => { setRecentTools([]); localStorage.removeItem("toolmingle-recent-tools"); }} className="text-xs font-medium text-slate-400 hover:text-blue-600">
+                {ko ? "기록 지우기" : "Clear"}
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+              {recentTools.map((id) => {
+                const recentMap: Record<string, { ko: string; en: string; category: Category; imageMode?: ImageMode; textMode?: TextMode }> = {
+                  image: { ko: "이미지 변환", en: "Image conversion", category: "image", imageMode: "convert" },
+                  compress: { ko: "이미지 압축", en: "Image compression", category: "image", imageMode: "compress" },
+                  resize: { ko: "이미지 크기 조절", en: "Image resizing", category: "image", imageMode: "resize" },
+                  edit: { ko: "이미지 편집", en: "Image editing", category: "image", imageMode: "edit" },
+                  batch: { ko: "이미지 일괄 변환", en: "Batch conversion", category: "image", imageMode: "batch" },
+                  compare: { ko: "이미지 용량 비교", en: "Image size comparison", category: "image", imageMode: "compare" },
+                  dpi: { ko: "DPI 계산", en: "DPI calculator", category: "image", imageMode: "dpi" },
+                  qr: { ko: "QR 코드", en: "QR code", category: "qr" },
+                  calculator: { ko: "복합 계산기", en: "Calculator", category: "calculator" },
+                  text: { ko: "글자 수·바이트", en: "Character counter", category: "text", textMode: "counter" },
+                  cleaner: { ko: "텍스트 정리", en: "Text cleaner", category: "text", textMode: "cleaner" },
+                  pdf: { ko: "PDF 도구", en: "PDF tools", category: "pdf" }
+                };
+                const item = recentMap[id];
+                if (!item) return null;
+                return (
+                  <button key={id} type="button" onClick={() => {
+                    setCategory(item.category);
+                    if (item.imageMode) setImageMode(item.imageMode);
+                    if (item.textMode) setTextMode(item.textMode);
+                    setInfoPage(null);
+                    setError(null);
+                  }} className="min-h-11 rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-left text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
+                    {ko ? item.ko : item.en}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {infoPage ? <InfoPages page={infoPage} onBack={() => setInfoPage(null)} /> : <>{category === "image" && (
           <section className="mb-5">
@@ -200,13 +258,13 @@ function App() {
               <span className="text-xs text-slate-400">{ko ? "7가지 기능" : "7 tools"}</span>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-              <button type="button" onClick={() => { setImageMode("convert"); setResult(null); }} className={subButton(imageMode === "convert")}><span className="whitespace-nowrap">{t.conversionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "convert" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("compress"); setResult(null); }} className={subButton(imageMode === "compress")}><span className="whitespace-nowrap">{t.compressionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compress" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("resize"); setResult(null); }} className={subButton(imageMode === "resize")}><span className="whitespace-nowrap">{t.resizeTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "resize" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("edit"); setResult(null); }} className={subButton(imageMode === "edit")}><span className="whitespace-nowrap">{ko ? "편집" : "Edit"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "edit" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("batch"); setResult(null); }} className={subButton(imageMode === "batch")}><span className="whitespace-nowrap">{ko ? "일괄 변환" : "Batch"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "batch" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("compare"); setResult(null); }} className={subButton(imageMode === "compare")}><span className="whitespace-nowrap">{ko ? "용량 비교" : "Size compare"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compare" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("dpi"); setResult(null); }} className={subButton(imageMode === "dpi")}><span className="whitespace-nowrap">{ko ? "DPI 계산" : "DPI"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "dpi" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("convert"); setResult(null); rememberTool("image"); }} className={subButton(imageMode === "convert")}><span className="whitespace-nowrap">{t.conversionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "convert" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("compress"); setResult(null); rememberTool("compress"); }} className={subButton(imageMode === "compress")}><span className="whitespace-nowrap">{t.compressionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compress" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("resize"); setResult(null); rememberTool("resize"); }} className={subButton(imageMode === "resize")}><span className="whitespace-nowrap">{t.resizeTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "resize" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("edit"); setResult(null); rememberTool("edit"); }} className={subButton(imageMode === "edit")}><span className="whitespace-nowrap">{ko ? "편집" : "Edit"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "edit" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("batch"); setResult(null); rememberTool("batch"); }} className={subButton(imageMode === "batch")}><span className="whitespace-nowrap">{ko ? "일괄 변환" : "Batch"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "batch" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("compare"); setResult(null); rememberTool("compare"); }} className={subButton(imageMode === "compare")}><span className="whitespace-nowrap">{ko ? "용량 비교" : "Size compare"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compare" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("dpi"); setResult(null); rememberTool("dpi"); }} className={subButton(imageMode === "dpi")}><span className="whitespace-nowrap">{ko ? "DPI 계산" : "DPI"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "dpi" ? "opacity-100" : "opacity-0"}`} /></button>
             </div>
           </section>
         )}

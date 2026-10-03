@@ -281,8 +281,8 @@ function App() {
               <span className="text-xs text-slate-400">{ko ? "2가지 기능" : "2 tools"}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => setTextMode("counter")} className={subButton(textMode === "counter")}>{ko ? "글자 수·바이트" : "Character counter"}</button>
-              <button type="button" onClick={() => setTextMode("cleaner")} className={subButton(textMode === "cleaner")}>{ko ? "텍스트 정리" : "Text cleaner"}</button>
+              <button type="button" onClick={() => { setTextMode("counter"); rememberTool("text"); }} className={subButton(textMode === "counter")}>{ko ? "글자 수·바이트" : "Character counter"}</button>
+              <button type="button" onClick={() => { setTextMode("cleaner"); rememberTool("cleaner"); }} className={subButton(textMode === "cleaner")}>{ko ? "텍스트 정리" : "Text cleaner"}</button>
             </div>
           </section>
         )}

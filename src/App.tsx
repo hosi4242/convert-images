@@ -12,6 +12,7 @@ import ImageEditor from "@/components/ImageEditor";
 import BatchConverter from "@/components/BatchConverter";
 import ImageSizeCompare from "@/components/ImageSizeCompare";
 import ImageDpiCalculator from "@/components/ImageDpiCalculator";
+import TextCleaner from "@/components/TextCleaner";
 import PDFTools from "@/components/PDFTools";
 import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
@@ -27,6 +28,7 @@ const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4
 
 type Category = "image" | "qr" | "calculator" | "text" | "pdf";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch" | "compare" | "dpi";
+type TextMode = "counter" | "cleaner";
 
 function App() {
   const seoPage = getSEOPage(window.location.pathname);
@@ -36,6 +38,7 @@ function App() {
   const ko = language === "ko";
   const [category, setCategory] = useState<Category>("image");
   const [imageMode, setImageMode] = useState<ImageMode>("convert");
+  const [textMode, setTextMode] = useState<TextMode>("counter");
   const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(null);
   const [format, setFormat] = useState<ImageFormat>("webp");
   const [isConverting, setIsConverting] = useState(false);
@@ -213,11 +216,24 @@ function App() {
           <p className="text-sm leading-5 text-blue-700">{ko ? "이미지 파일은 브라우저에서 처리되며 외부 서버로 업로드하지 않습니다." : "Image files are processed in your browser and are not uploaded to an external server."}</p>
         </div>}
 
+        {category === "text" && (
+          <section className="mb-4">
+            <div className="mb-2 flex items-center justify-between px-1">
+              <h3 className="text-sm font-bold text-slate-700">{ko ? "텍스트 도구" : "Text tools"}</h3>
+              <span className="text-xs text-slate-400">{ko ? "2가지 기능" : "2 tools"}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => setTextMode("counter")} className={subButton(textMode === "counter")}>{ko ? "글자 수·바이트" : "Character counter"}</button>
+              <button type="button" onClick={() => setTextMode("cleaner")} className={subButton(textMode === "cleaner")}>{ko ? "텍스트 정리" : "Text cleaner"}</button>
+            </div>
+          </section>
+        )}
+
         {error && <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-100/50 bg-red-50/80 px-4 py-2.5"><AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" /><p className="text-sm text-red-700">{error}</p></div>}
 
         {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
-         category === "text" ? <TextCounter /> :
+         category === "text" ? (textMode === "cleaner" ? <TextCleaner /> : <TextCounter />) :
          category === "pdf" ? <PDFTools /> :
          imageMode === "batch" ? <BatchConverter /> :
          imageMode === "compare" ? <ImageSizeCompare /> :

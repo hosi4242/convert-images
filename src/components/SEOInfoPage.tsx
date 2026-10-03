@@ -136,11 +136,12 @@ const pages: Record<PageKey, PageData> = {
     sections: [
       ["1. 파일 처리", "이미지 변환·압축·크기 조정 등 브라우저 기반 파일 작업은 사용자의 브라우저에서 처리하도록 설계되어 있으며, 변환을 위해 이미지 파일을 사이트 서버에 저장하지 않습니다. 사용자가 직접 외부 서비스로 이동하거나 외부 기능을 이용하는 경우에는 해당 서비스의 정책이 적용될 수 있습니다."],
       ["2. 방문 통계 및 기술 정보", "현재 사이트는 Cloudflare Web Analytics를 사용하며, 누적 방문자 수 표시를 위해 CountAPI 외부 서비스를 사용합니다. 이러한 서비스는 접속 과정에서 IP 주소, 브라우저·기기 정보, 방문 경로 등 기술 정보를 처리할 수 있으며 각 제공자의 정책이 적용될 수 있습니다."],
-      ["3. 광고 서비스", "현재 ToolMingle은 Google AdSense를 사용하며, 사이트 운영 및 광고 제공을 위해 Google과 같은 제3자 광고 사업자가 쿠키 또는 유사 기술을 사용할 수 있습니다. 이러한 기술은 광고 제공, 광고 성과 측정, 보안 및 경우에 따라 관심 기반 광고의 제공에 이용될 수 있습니다. Google은 사용자의 설정과 적용되는 정책에 따라 개인화되지 않은 광고 또는 개인화된 광고를 제공할 수 있습니다."],
-      ["4. 광고 및 쿠키 관리", "Google의 광고 쿠키 사용과 관련한 자세한 내용 및 사용자가 광고 개인화 설정을 관리하는 방법은 Google의 관련 안내를 확인하시기 바랍니다. 사용자의 브라우저 설정이나 광고 관련 설정에 따라 쿠키가 제한될 수 있으며, 이 경우 일부 광고 기능이 달라질 수 있습니다."],
+      ["3. 광고 서비스", "현재 ToolMingle에는 Google AdSense 관련 광고 코드가 포함되어 있습니다. 광고가 실제로 제공되는 경우 Google 및 제3자 광고 사업자가 쿠키, 웹 비콘, IP 주소 또는 기타 식별자를 사용하여 광고를 제공하고 광고 성과를 측정하거나 부정 클릭·트래픽을 방지할 수 있습니다. Google의 광고 기술은 사용자의 설정과 적용되는 정책에 따라 개인화 광고 또는 개인화되지 않은 광고를 제공할 수 있습니다."],
+      ["4. Google의 데이터 이용 및 쿠키", "Google 및 그 파트너는 광고 제공과 관련하여 사용자의 사이트 방문 정보와 쿠키 등의 기술을 사용할 수 있습니다. 자세한 내용은 Google의 파트너 사이트에서 데이터가 사용되는 방식 안내를 확인하시기 바랍니다. 사용자는 Google 광고 설정에서 광고 개인화 설정을 관리할 수 있습니다."],
       ["5. 문의 정보", "문의하기 기능을 통해 이메일 등 연락처를 제공하는 경우 문의에 답변하고 서비스 개선에 필요한 범위에서 해당 정보를 이용할 수 있습니다. 별도의 보관이 필요한 경우 관련 법령에서 정한 기간을 따릅니다."],
-      ["6. 외부 서비스", "ToolMingle은 Cloudflare Web Analytics, 누적 방문자 수 표시를 위한 CountAPI, Google AdSense 등 외부 서비스를 사용할 수 있습니다. 외부 서비스가 정보를 처리하는 경우 해당 서비스의 개인정보처리방침과 이용조건이 적용될 수 있습니다."],
-      ["7. 변경", "서비스 기능이나 외부 서비스가 변경되는 경우 이 개인정보처리방침도 실제 운영 상태에 맞게 업데이트합니다."]
+      ["6. 외부 서비스", "ToolMingle은 Cloudflare Web Analytics, 누적 방문자 수 표시를 위한 CountAPI, Google AdSense 관련 서비스 등 외부 서비스를 사용할 수 있습니다. 외부 서비스가 정보를 처리하는 경우 해당 서비스의 개인정보처리방침과 이용조건이 적용될 수 있습니다."],
+      ["7. EU·영국·스위스 이용자", "유럽경제지역(EEA), 영국 또는 스위스 이용자에 대한 광고 관련 쿠키 및 개인정보 처리는 Google의 해당 지역 동의 정책과 적용되는 법령에 따라 처리될 수 있습니다. 필요한 경우 Google의 동의 관리 기능을 통해 이용자의 선택을 요청할 수 있습니다."],
+      ["8. 변경", "서비스 기능이나 외부 서비스가 변경되는 경우 이 개인정보처리방침도 실제 운영 상태에 맞게 업데이트합니다."]
     ]
   },
   terms: {
@@ -201,7 +202,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
           {data.sections.map(([title, body]) => (
             <section key={title} className="border-b border-slate-100 py-5 first:pt-0 last:border-b-0 last:pb-0">
               <h2 className="text-lg font-extrabold text-slate-800">{title}</h2>
-              <p className="mt-2 text-sm leading-7 text-slate-600">{title === "문의 이메일" ? <a className="font-semibold text-blue-600 hover:underline" href="mailto:lucidpoverty@gmail.com">lucidpoverty@gmail.com</a> : body}</p>
+              <p className="mt-2 text-sm leading-7 text-slate-600">{title === "문의 이메일" ? <a className="font-semibold text-blue-600 hover:underline" href="mailto:lucidpoverty@gmail.com">lucidpoverty@gmail.com</a> : title === "4. Google의 데이터 이용 및 쿠키" ? <>{body} <a className="font-semibold text-blue-600 hover:underline" href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noreferrer">Google의 데이터 이용 안내</a>와 <a className="font-semibold text-blue-600 hover:underline" href="https://adssettings.google.com/" target="_blank" rel="noreferrer">Google 광고 설정</a>에서 자세한 내용을 확인할 수 있습니다.</> : body}</p>
             </section>
           ))}
 

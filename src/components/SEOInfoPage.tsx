@@ -110,7 +110,23 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
   },[language,data]);
 
   const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem("image-converter-lang",next);};
-  const related=toolKeys.filter(key=>key!==page).slice(0,6);
+  const relatedMap: Partial<Record<PageKey, PageKey[]>> = {
+    "image-converter":["image-compressor","image-resizer","image-dpi-calculator","image-size-compare"],
+    "image-compressor":["image-converter","image-resizer","image-size-compare","image-dpi-calculator"],
+    "image-resizer":["image-compressor","image-converter","image-dpi-calculator","image-size-compare"],
+    "image-size-compare":["image-compressor","image-converter","image-resizer","image-dpi-calculator"],
+    "image-dpi-calculator":["image-resizer","image-converter","image-compressor","image-size-compare"],
+    "qr-code":["image-converter","text-tools","text-cleaner"],
+    "calculator":["loan-calculator","installment-calculator","unit-converter","time-calculator"],
+    "loan-calculator":["installment-calculator","calculator","unit-converter","time-calculator"],
+    "installment-calculator":["loan-calculator","calculator","unit-converter","time-calculator"],
+    "unit-converter":["calculator","time-calculator","loan-calculator","installment-calculator"],
+    "time-calculator":["calculator","unit-converter","loan-calculator","installment-calculator"],
+    "text-tools":["text-cleaner","qr-code","calculator"],
+    "text-cleaner":["text-tools","qr-code","image-converter"],
+    "pdf-tools":["image-converter","image-compressor","image-resizer","image-size-compare"]
+  };
+  const related=(relatedMap[page] ?? toolKeys.filter(key=>key!==page).slice(0,4)).filter(key=>key!==page);
   const infoPages: PageKey[]=["about","privacy","terms","contact"];
   const label=(ko:string,en:string)=>language==="ko"?ko:en;
 

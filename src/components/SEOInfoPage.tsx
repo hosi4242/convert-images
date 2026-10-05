@@ -164,26 +164,38 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     const existing=document.getElementById("toolmingle-seo-jsonld");
     existing?.remove();
     const faq=faqItems[page]?.[language] ?? [];
-    const schema:any={
-      "@context":"https://schema.org",
+    const breadcrumb={
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":language==="ko" ? "도구" : "Tools","item":window.location.origin+"/"},
+        {"@type":"ListItem","position":2,"name":data.heading,"item":window.location.href}
+      ]
+    };
+    const graph:any[]=[{
       "@type":"WebPage",
+      "@id":window.location.href+"#webpage",
       "name":data.title,
       "description":data.description,
       "url":window.location.href,
       "inLanguage":language==="ko" ? "ko-KR" : "en-US",
       "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":window.location.origin},
-      "breadcrumb":{"@type":"BreadcrumbList","itemListElement":[
-        {"@type":"ListItem","position":1,"name":language==="ko" ? "도구" : "Tools","item":window.location.origin+"/"},
-        {"@type":"ListItem","position":2,"name":data.heading,"item":window.location.href}
-      ]}
-    };
+      "breadcrumb":{"@id":window.location.href+"#breadcrumb"}
+    },{
+      ...breadcrumb,
+      "@id":window.location.href+"#breadcrumb"
+    }];
     if(faq.length>0){
-      schema.mainEntity=faq.map(item=>({
-        "@type":"Question",
-        "name":item.q,
-        "acceptedAnswer":{"@type":"Answer","text":item.a}
-      }));
+      graph.push({
+        "@type":"FAQPage",
+        "@id":window.location.href+"#faq",
+        "mainEntity":faq.map(item=>({
+          "@type":"Question",
+          "name":item.q,
+          "acceptedAnswer":{"@type":"Answer","text":item.a}
+        }))
+      });
     }
+    const schema={"@context":"https://schema.org","@graph":graph};
     const script=document.createElement("script");
     script.id="toolmingle-seo-jsonld";
     script.type="application/ld+json";

@@ -298,7 +298,8 @@ function App() {
         {error && <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-100/50 bg-red-50/80 px-4 py-2.5"><AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" /><p className="text-sm text-red-700">{error}</p></div>}
 
         <Suspense fallback={<div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">{ko ? "도구를 불러오는 중..." : "Loading tool..."}</div>}>
-          {category === "time" ? <TimerPage /> :\n          category === "qr" ? <QRGenerator /> :
+          {category === "time" ? <TimerPage /> :
+          category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
          category === "text" ? (textMode === "cleaner" ? <TextCleaner /> : <TextCounter />) :
          category === "pdf" ? <PDFTools /> :
@@ -335,7 +336,8 @@ function App() {
                 <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>
                 <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
                 <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
-                <p><strong>{ko ? "온라인 타이머:" : "Online timer:"}</strong> {ko ? "공부, 운동, 요리, 휴식 등에 필요한 시간을 설정하고 카운트다운할 수 있습니다." : "Set a countdown for study, exercise, cooking, breaks, and other everyday tasks."}</p>\n                <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
+                <p><strong>{ko ? "온라인 타이머:" : "Online timer:"}</strong> {ko ? "공부, 운동, 요리, 휴식 등에 필요한 시간을 설정하고 카운트다운할 수 있습니다." : "Set a countdown for study, exercise, cooking, breaks, and other everyday tasks."}</p>
+                <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -343,7 +345,8 @@ function App() {
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진, 대출 이자, 할부, 시간 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, loan payments, installments, time, and other everyday values in one place."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "여러 JPG·PNG 이미지를 하나의 PDF로 묶고, PDF를 합치거나 페이지를 삭제·재정렬·분할하고 기본 파일 정보를 확인할 수 있습니다." : "Combine images into PDF, merge PDFs, delete or reorder pages, split page ranges, and check basic PDF information."}</p></div>
-              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1분부터 60분까지 간편하게 설정하고 시작·일시정지·초기화할 수 있습니다. 전체 화면과 종료 알림음도 지원합니다." : "Set 1 to 60 minutes and start, pause, resume, or reset the countdown. Fullscreen and end sound are supported."}</p></div>\n              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1분부터 60분까지 간편하게 설정하고 시작·일시정지·초기화할 수 있습니다. 전체 화면과 종료 알림음도 지원합니다." : "Set 1 to 60 minutes and start, pause, resume, or reset the countdown. Fullscreen and end sound are supported."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
             </div>
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
               <p className="text-xs leading-5 text-blue-700">{ko ? "파일 기반 이미지 작업은 브라우저에서 처리되며, 사이트는 변환을 위해 사용자의 이미지 파일을 외부 서버에 업로드하지 않습니다." : "Image file operations are processed in the browser, and the site does not upload your image files to an external server for conversion."}</p>
@@ -363,7 +366,8 @@ function App() {
               ["/image-compressor", ko ? "이미지 압축" : "Image compression"],
               ["/image-resizer", ko ? "이미지 크기 조절" : "Image resizing"],
               ["/qr-code", ko ? "QR코드" : "QR code"],
-              ["/calculator", ko ? "계산기" : "Calculator"],\n              ["/timer", ko ? "온라인 타이머" : "Online timer"],
+              ["/calculator", ko ? "계산기" : "Calculator"],
+              ["/timer", ko ? "온라인 타이머" : "Online timer"],
               ["/text-tools", ko ? "텍스트 도구" : "Text tools"],
               ["/pdf-tools", ko ? "PDF 도구" : "PDF tools"]
             ].map(([href, label]) => (

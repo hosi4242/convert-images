@@ -1,4 +1,4 @@
-export type Language = "ko" | "en";
+import type { ImplementedLanguage, Language } from "./languages";
 
 export interface Translation {
   headerTitle: string;
@@ -192,8 +192,9 @@ const en: Translation = {
   footerText: "ToolMingle · All conversions are processed safely in your browser and are never stored on any server",
 };
 
-const translations: Record<Language, Translation> = { ko, en };
+const translations: Record<ImplementedLanguage, Translation> = { ko, en };
 
+// Untranslated languages intentionally fall back to English until their content is enabled.
 export function getTranslation(lang: Language): Translation {
-  return translations[lang];
+  return translations[lang as ImplementedLanguage] ?? en;
 }

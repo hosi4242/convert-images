@@ -22,6 +22,7 @@ import TimerPage from "@/components/TimerPage";
 import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
@@ -35,8 +36,11 @@ function App() {
   const seoPage = getSEOPage(window.location.pathname);
   if (seoPage) return <SEOInfoPage page={seoPage} />;
 
-  const { t, language, toggleLanguage } = useI18n();
+  const { t, language } = useI18n();
   const ko = language === "ko";
+  const ja = language === "ja";
+  const zh = language === "zh-CN";
+  const copy = (k: string, e: string, j: string, z: string) => ko ? k : ja ? j : zh ? z : e;
   const [category, setCategory] = useState<Category>("image");
   const [imageMode, setImageMode] = useState<ImageMode>("convert");
   const [textMode, setTextMode] = useState<TextMode>("counter");
@@ -117,9 +121,7 @@ function App() {
                 <Home className="h-4 w-4" />{t.homeButton}
               </button>
             )}
-            <button type="button" onClick={toggleLanguage} className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/30">
-              <Languages className="h-4 w-4" />{language === "ko" ? "EN" : "한"}
-            </button>
+            <LanguageSelector compact />
           </div>
           <div className="mx-auto max-w-3xl py-6 text-center sm:py-8">
             <div className="mb-2 text-2xl font-black tracking-tight text-white drop-shadow-sm sm:text-3xl">
@@ -127,13 +129,13 @@ function App() {
             </div>
             <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
-              {ko ? "무료 · 간편 · 브라우저에서 바로 사용" : "Free · Simple · Browser-based"}
+              {copy("무료 · 간편 · 브라우저에서 바로 사용","Free · Simple · Browser-based","無料 · 簡単 · ブラウザですぐ使える","免费 · 简单 · 浏览器直接使用")}
             </div>
             <h1 className="text-2xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-4xl">
-              {ko ? "필요한 도구를 한곳에서" : "All the tools you need, in one place"}
+              {copy("필요한 도구를 한곳에서","All the tools you need, in one place","必要なツールをひとつに","所需工具一站式使用")}
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-blue-50 sm:text-base">
-              {ko ? "이미지부터 PDF, QR 코드, 생활 계산, 온라인 타이머까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, PDFs, QR codes, everyday calculations, and online timers — all in your browser, with no installation or sign-up."}
+              {copy("이미지부터 PDF, QR 코드, 생활 계산, 온라인 타이머까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요.","Images, PDFs, QR codes, everyday calculations, and online timers — all in your browser, with no installation or sign-up.","画像、PDF、QRコード、計算、オンラインタイマーまで。インストールや登録なしでブラウザから利用できます。","图片、PDF、二维码、日常计算和在线计时器，无需安装或注册即可在浏览器中使用。")}
             </p>
             </div>
         </div>
@@ -144,38 +146,38 @@ function App() {
 
         <section className="mb-5">
           <div className="mb-3 flex items-end justify-between gap-3 px-1">
-            <div><h2 className="text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "주요 도구" : "Main tools"}</h2></div>
+            <div><h2 className="text-lg font-extrabold text-slate-800 sm:text-xl">{copy("주요 도구","Main tools","主なツール","主要工具")}</h2></div>
           </div>
 
           <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-3 sm:gap-2.5 sm:p-2.5">
             <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}>
               <ImageIcon className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "image" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "이미지 도구" : "Image Tools"}</span>
+              <span className="whitespace-nowrap">{copy("이미지 도구","Image Tools","画像ツール","图片工具")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "image" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "변환 · 압축 · 편집" : "Convert · Compress · Edit"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("qr"); rememberTool("qr"); }} className={categoryButton(category === "qr")}>
               <QrCode className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "qr" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "QR 코드" : "QR Code"}</span>
+              <span className="whitespace-nowrap">{copy("QR 코드","QR Code","QRコード","二维码")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "qr" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "URL · 텍스트 · Wi-Fi" : "URL · Text · Wi-Fi"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("calculator"); rememberTool("calculator"); }} className={categoryButton(category === "calculator")}>
               <Calculator className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "calculator" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "복합 계산기" : "Calculator"}</span>
+              <span className="whitespace-nowrap">{copy("복합 계산기","Calculator","計算ツール","计算器")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "calculator" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "비율 · 할인 · 부가세" : "Percent · Discount · VAT"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("text"); rememberTool("text"); }} className={categoryButton(category === "text")}>
               <Type className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "text" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "텍스트 도구" : "Text Tools"}</span>
+              <span className="whitespace-nowrap">{copy("텍스트 도구","Text Tools","テキストツール","文本工具")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("time"); rememberTool("timer"); }} className={categoryButton(category === "time")}>
               <Clock3 className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "time" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "온라인 타이머" : "Online Timer"}</span>
+              <span className="whitespace-nowrap">{copy("온라인 타이머","Online Timer","オンラインタイマー","在线计时器")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "time" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "1~60분 · 직접 설정 · 전체화면" : "1–60 min · Custom · Fullscreen"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={categoryButton(category === "pdf")}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
-              <span className="whitespace-nowrap">{ko ? "PDF 변환" : "PDF Tools"}</span>
+              <span className="whitespace-nowrap">{copy("PDF 변환","PDF Tools","PDFツール","PDF工具")}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>
             </button>
           </nav>
@@ -184,9 +186,9 @@ function App() {
         {recentTools.length > 0 && (
           <section className="mb-5">
             <div className="mb-2 flex items-center justify-between px-1">
-              <h2 className="text-sm font-bold text-slate-700">{ko ? "최근 사용한 도구" : "Recently used"}</h2>
+              <h2 className="text-sm font-bold text-slate-700">{copy("최근 사용한 도구","Recently used","最近使用したツール","最近使用的工具")}</h2>
               <button type="button" onClick={() => { setRecentTools([]); localStorage.removeItem("toolmingle-recent-tools"); }} className="text-xs font-medium text-slate-400 hover:text-blue-600">
-                {ko ? "기록 지우기" : "Clear"}
+                {copy("기록 지우기","Clear","履歴を消去","清除记录")}
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -296,7 +298,7 @@ function App() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "이미지 도구" : "Image tools"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG, PNG, WebP, AVIF, HEIC·HEIF 등의 이미지 형식을 변환하고, WebP 압축, 가로·세로 픽셀 크기 조정, 회전·좌우 및 상하 반전·영역 자르기, 최대 30개 이미지 일괄 변환, 두 이미지의 파일 용량 비교, 픽셀과 DPI를 이용한 예상 인쇄 크기 계산을 제공합니다." : "Convert JPG, PNG, WebP, AVIF, and HEIC/HEIF images; compress images to WebP; resize width and height in pixels; rotate, flip, and crop images; batch-convert up to 30 images; compare the file sizes of two images; and estimate print size from pixels and DPI."}</p></div>
                 <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "URL, 일반 텍스트, 이메일 주소, 전화번호, Wi-Fi 정보를 QR 코드로 생성하고 PNG 이미지로 다운로드할 수 있습니다. Wi-Fi는 WPA/WPA2, WEP, 오픈 네트워크 형식을 지원합니다." : "Create QR codes for URLs, text, email addresses, phone numbers, and Wi-Fi information, then download them as PNG images. Wi-Fi supports WPA/WPA2, WEP, and open networks."}</p></div>
-                <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "기본 사칙연산과 나머지·거듭제곱, 퍼센트 계산, 할인 가격, 부가세, 날짜 차이, 단위 변환, 비율, 증감률, 마진·이익·마크업, 대출 원리금균등상환, 할부 계산, 시간 차이 계산을 한곳에서 이용할 수 있습니다. 길이·무게·면적·부피·온도·데이터 단위 변환도 지원합니다." : "Use basic arithmetic including remainder and powers, percentage calculations, discounts, VAT, date differences, unit conversion, ratios, percentage change, profit/margin/markup, amortizing loan payments, installment payments, and time differences. Unit conversion covers length, weight, area, volume, temperature, and data."}</p></div>
+                <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{copy("복합 계산기","Calculator","計算ツール","计算器")}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "기본 사칙연산과 나머지·거듭제곱, 퍼센트 계산, 할인 가격, 부가세, 날짜 차이, 단위 변환, 비율, 증감률, 마진·이익·마크업, 대출 원리금균등상환, 할부 계산, 시간 차이 계산을 한곳에서 이용할 수 있습니다. 길이·무게·면적·부피·온도·데이터 단위 변환도 지원합니다." : "Use basic arithmetic including remainder and powers, percentage calculations, discounts, VAT, date differences, unit conversion, ratios, percentage change, profit/margin/markup, amortizing loan payments, installment payments, and time differences. Unit conversion covers length, weight, area, volume, temperature, and data."}</p></div>
                 <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "글자 수와 UTF-8 바이트 수를 확인하고, 텍스트의 각 줄 앞뒤 공백 제거, 연속 공백 정리, 빈 줄 제거, 중복 줄 제거를 선택하여 정리할 수 있습니다. 정리 결과는 바로 복사할 수 있습니다." : "Check character counts and UTF-8 byte size, then clean pasted text by trimming each line, collapsing repeated spaces, removing blank lines, or removing duplicate lines. The cleaned result can be copied directly."}</p></div>
                 <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1·5·10·15·25·30·60분의 빠른 설정과 직접 설정을 지원하며, 시간·분·초를 입력해 원하는 길이로 설정할 수 있습니다. 시작, 일시정지, 계속, 초기화, 종료 알림음 켜기·끄기, 전체 화면을 지원합니다." : "Choose 1, 5, 10, 15, 25, 30, or 60 minutes, or set a custom duration using hours, minutes, and seconds. Start, pause, resume, and reset the countdown, toggle the end sound, and use fullscreen mode."}</p></div>
                 <div className="rounded-xl bg-slate-50 p-4"><h4 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h4><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "JPG·PNG 이미지를 하나의 PDF로 만들고, 여러 PDF를 하나로 합치며, PDF 페이지를 선택해 삭제하거나 순서를 재정렬하고, 원하는 시작·끝 페이지 범위를 분할할 수 있습니다. PDF의 페이지 수와 파일 크기 같은 기본 정보도 확인할 수 있습니다." : "Create a PDF from JPG or PNG images, merge multiple PDFs, delete selected pages, reorder pages, split a selected page range, and check basic PDF information such as page count and file size."}</p></div>

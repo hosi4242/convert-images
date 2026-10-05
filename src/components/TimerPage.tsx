@@ -22,8 +22,8 @@ export default function TimerPage() {
     document.documentElement.lang = language;
     document.title = ko ? "온라인 타이머 | 무료 타이머 - ToolMingle" : "Online Timer | Free Timer - ToolMingle";
     const description = ko
-      ? "설치 없이 브라우저에서 바로 사용하는 무료 온라인 타이머. 1분부터 60분까지 간편하게 설정하고 시작, 일시정지, 초기화할 수 있습니다."
-      : "A free online timer that runs in your browser. Set 1 to 60 minutes and start, pause, resume, or reset without installing anything.";
+      ? "설치 없이 브라우저에서 바로 사용하는 무료 온라인 타이머. 1분부터 60분까지 빠르게 선택하거나 원하는 시간을 직접 설정할 수 있습니다."
+      : "A free online timer that runs in your browser. Choose 1 to 60 minutes or set a custom duration, then start, pause, resume, or reset without installing anything.";
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
@@ -195,7 +195,7 @@ export default function TimerPage() {
         <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
           <h2 className="text-lg font-extrabold text-slate-800">{ko ? "온라인 타이머 사용법" : "How to use the online timer"}</h2>
           <ol className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-            {(ko ? ["원하는 시간을 선택합니다.","시작 버튼을 눌러 카운트다운을 시작합니다.","필요하면 일시정지하거나 초기화할 수 있습니다.","공부나 운동처럼 집중이 필요한 상황에서는 전체 화면으로 사용할 수 있습니다."] : ["Choose a preset time.","Press Start to begin the countdown.","Pause, resume, or reset whenever needed.","Use fullscreen mode when you want a distraction-free timer."]).map((item,i)=><li key={i} className="flex gap-2"><span className="font-bold text-blue-600">{i+1}.</span>{item}</li>)}
+            {(ko ? ["원하는 시간을 선택하거나 직접 설정합니다.","시작 버튼을 눌러 카운트다운을 시작합니다.","필요하면 일시정지하거나 초기화할 수 있습니다.","공부나 운동처럼 집중이 필요한 상황에서는 전체 화면으로 사용할 수 있습니다."] : ["Choose a preset time or set a custom duration.","Press Start to begin the countdown.","Pause, resume, or reset whenever needed.","Use fullscreen mode when you want a distraction-free timer."]).map((item,i)=><li key={i} className="flex gap-2"><span className="font-bold text-blue-600">{i+1}.</span>{item}</li>)}
           </ol>
         </section>
 

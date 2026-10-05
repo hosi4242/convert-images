@@ -1,7 +1,8 @@
 import { ArrowLeft, ArrowRight, Calculator, FileText, Image as ImageIcon, Mail, QrCode, ShieldCheck, Type, Ruler, Clock } from "lucide-react";
-import { useEffect, useState } from "react";
-import { detectBrowserLanguage, getStoredLanguage, type ImplementedLanguage } from "@/i18n/languages";
+import { useEffect } from "react";
+import type { ImplementedLanguage } from "@/i18n/languages";
 import LanguageSelector from "@/components/LanguageSelector";
+import { useI18n } from "@/i18n/I18nContext";
 
 type PageKey =
   | "image-converter" | "image-compressor" | "image-resizer" | "image-size-compare" | "image-dpi-calculator"
@@ -133,7 +134,7 @@ function getInitialLang(): Lang {
 }
 
 export default function SEOInfoPage({ page }: { page: PageKey }) {
-  const [language]=useState<Lang>(getInitialLang);
+  const { language } = useI18n();
   const data=pages[page][language] ?? pages[page].en!;
   const Icon=data.icon;
 
@@ -236,11 +237,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
   return (
     <main className="min-h-screen bg-slate-50 px-3 py-5 sm:px-4 sm:py-10">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-3 flex justify-end">
-          <button type="button" onClick={toggle} className="min-h-11 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700" aria-label={label("영어로 보기","한국어로 보기")}>
-            {language==="ko" ? "EN" : "한"}
-          </button>
-        </div>
+        <div className="mb-3 flex justify-end"><LanguageSelector light /></div>
         <header className="mb-5 rounded-3xl bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400 px-5 py-7 text-white shadow-lg sm:px-10 sm:py-9">
           <div className="mb-4 inline-flex rounded-xl bg-white/15 p-3"><Icon className="h-7 w-7"/></div>
           <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{data.heading}</h1>

@@ -206,7 +206,7 @@ function App() {
             <button type="button" onClick={() => { selectCategory("time"); rememberTool("timer"); }} className={categoryButton(category === "time")}>
               <Clock3 className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "time" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "온라인 타이머" : "Online Timer"}</span>
-              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "time" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "1분 · 60분 · 전체화면" : "1–60 min · Fullscreen"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "time" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "1~60분 · 직접 설정 · 전체화면" : "1–60 min · Custom · Fullscreen"}</span>
             </button>
             <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={categoryButton(category === "pdf")}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
@@ -357,7 +357,7 @@ function App() {
         <AdSlot labelKey="adSlot" />
         </>}
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
-          <p>{ko ? "ToolMingle · 이미지 · QR · 계산 · 텍스트 · PDF" : "ToolMingle · Image · QR · Calculator · Text · PDF"}</p>
+          <p>{ko ? "ToolMingle · 이미지 · QR · 계산 · 텍스트 · 타이머 · PDF" : "ToolMingle · Image · QR · Calculator · Timer · Text · PDF"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
           <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 온라인 타이머, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, online timer, and text counting."}</p>
           <nav className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1.5" aria-label={ko ? "도구 안내" : "Tool guides"}>

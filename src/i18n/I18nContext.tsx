@@ -37,7 +37,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = next;
   }, []);
 
-  // Keep the existing two-language toggle working while the language selector is expanded later.
+  // Keep the two-language toggle available for existing components.
   const toggleLanguage = useCallback(() => {
     setSiteLanguage(language === "ko" ? "en" : "ko");
   }, [language, setSiteLanguage]);

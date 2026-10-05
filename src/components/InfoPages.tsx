@@ -23,7 +23,7 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
       intro: ko ? "이 사이트는 개인정보를 최소한으로 처리하고, 브라우저에서 처리할 수 있는 기능은 로컬 처리를 우선합니다." : "This site minimizes personal-data processing and prioritizes local browser processing where possible.",
       sections: [
         [ko ? "파일 처리" : "File processing", ko ? "이미지 변환 등 브라우저 처리 기능은 선택한 파일을 브라우저에서 처리하며 사이트 서버에 저장하지 않습니다." : "Browser-based image operations process selected files in your browser and do not store them on our server."],
-        [ko ? "방문 통계" : "Usage analytics", ko ? "현재 사이트는 Cloudflare Web Analytics와 누적 방문자 수 표시를 위한 CountAPI를 사용합니다. 각 외부 서비스의 정책이 적용될 수 있습니다." : "Usage analytics may be used to understand site traffic and may be subject to the provider's policies."],
+        [ko ? "방문 통계" : "Usage analytics", ko ? "사이트 운영 과정에서 Cloudflare Web Analytics 등 기술·방문 통계 서비스가 사용될 수 있습니다. 이러한 서비스에는 각 제공자의 개인정보 및 쿠키 정책이 적용될 수 있습니다." : "Usage analytics may be used to understand site traffic and may be subject to the provider's policies."],
         [ko ? "광고 및 외부 서비스" : "Advertising and third parties", ko ? "현재 Google AdSense는 아직 연결되어 있지 않습니다. 향후 광고 서비스를 도입하면 관련 쿠키 및 데이터 처리 방식을 실제 운영 상태에 맞게 업데이트합니다." : "If advertising or analytics services are introduced, this policy will be updated to describe applicable cookies and data practices."]
       ]
     },

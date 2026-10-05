@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, useEffect } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -242,7 +242,7 @@ function App() {
                     if (item.textMode) setTextMode(item.textMode);
                     setInfoPage(null);
                     setError(null);
-                  }} className="min-h-11 rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-left text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
+                  }} className="flex min-h-11 items-center justify-center rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-center text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
                     {ko ? item.ko : item.en}
                   </button>
                 );
@@ -258,13 +258,13 @@ function App() {
               <span className="text-xs text-slate-400">{ko ? "7가지 기능" : "7 tools"}</span>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-              <button type="button" onClick={() => { setImageMode("convert"); setResult(null); rememberTool("image"); }} className={subButton(imageMode === "convert")}><span className="whitespace-nowrap">{t.conversionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "convert" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("compress"); setResult(null); rememberTool("compress"); }} className={subButton(imageMode === "compress")}><span className="whitespace-nowrap">{t.compressionTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compress" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("resize"); setResult(null); rememberTool("resize"); }} className={subButton(imageMode === "resize")}><span className="whitespace-nowrap">{t.resizeTab}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "resize" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("edit"); setResult(null); rememberTool("edit"); }} className={subButton(imageMode === "edit")}><span className="whitespace-nowrap">{ko ? "편집" : "Edit"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "edit" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("batch"); setResult(null); rememberTool("batch"); }} className={subButton(imageMode === "batch")}><span className="whitespace-nowrap">{ko ? "일괄 변환" : "Batch"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "batch" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("compare"); setResult(null); rememberTool("compare"); }} className={subButton(imageMode === "compare")}><span className="whitespace-nowrap">{ko ? "용량 비교" : "Size compare"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "compare" ? "opacity-100" : "opacity-0"}`} /></button>
-              <button type="button" onClick={() => { setImageMode("dpi"); setResult(null); rememberTool("dpi"); }} className={subButton(imageMode === "dpi")}><span className="whitespace-nowrap">{ko ? "DPI 계산" : "DPI"}</span><ArrowRight className={`h-3.5 w-3.5 ${imageMode === "dpi" ? "opacity-100" : "opacity-0"}`} /></button>
+              <button type="button" onClick={() => { setImageMode("convert"); setResult(null); rememberTool("image"); }} className={subButton(imageMode === "convert")}><span className="whitespace-nowrap">{t.conversionTab}</span></button>
+              <button type="button" onClick={() => { setImageMode("compress"); setResult(null); rememberTool("compress"); }} className={subButton(imageMode === "compress")}><span className="whitespace-nowrap">{t.compressionTab}</span></button>
+              <button type="button" onClick={() => { setImageMode("resize"); setResult(null); rememberTool("resize"); }} className={subButton(imageMode === "resize")}><span className="whitespace-nowrap">{t.resizeTab}</span></button>
+              <button type="button" onClick={() => { setImageMode("edit"); setResult(null); rememberTool("edit"); }} className={subButton(imageMode === "edit")}><span className="whitespace-nowrap">{ko ? "편집" : "Edit"}</span></button>
+              <button type="button" onClick={() => { setImageMode("batch"); setResult(null); rememberTool("batch"); }} className={subButton(imageMode === "batch")}><span className="whitespace-nowrap">{ko ? "일괄 변환" : "Batch"}</span></button>
+              <button type="button" onClick={() => { setImageMode("compare"); setResult(null); rememberTool("compare"); }} className={subButton(imageMode === "compare")}><span className="whitespace-nowrap">{ko ? "용량 비교" : "Size compare"}</span></button>
+              <button type="button" onClick={() => { setImageMode("dpi"); setResult(null); rememberTool("dpi"); }} className={subButton(imageMode === "dpi")}><span className="whitespace-nowrap">{ko ? "DPI 계산" : "DPI"}</span></button>
             </div>
           </section>
         )}

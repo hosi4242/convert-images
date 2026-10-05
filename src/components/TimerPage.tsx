@@ -5,7 +5,7 @@ import { useI18n } from "@/i18n/I18nContext";
 const PRESETS = [1, 5, 10, 15, 25, 30, 60];
 
 export default function TimerPage() {
-  const { language } = useI18n();
+  const { language, toggleLanguage } = useI18n();
   const ko = language === "ko";
   const standalone = window.location.pathname.replace(/\/$/, "") === "/timer";
   const [seconds, setSeconds] = useState(5 * 60);

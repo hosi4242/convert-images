@@ -88,6 +88,42 @@ const pages: Record<PageKey, Record<Lang, PageData>> = {
   }
 };
 
+type QAItem = { q: string; a: string };
+
+const usageExamples: Partial<Record<PageKey, Record<Lang, string[]>>> = {
+  "image-converter": { ko:["PNG 이미지를 WebP로 바꿔 웹사이트에 사용할 수 있습니다.","HEIC 사진을 JPG로 변환해 일반 문서나 프로그램에서 활용할 수 있습니다."], en:["Convert a PNG image to WebP for use on a website.","Convert a HEIC photo to JPG for wider compatibility with documents and apps."] },
+  "image-compressor": { ko:["이메일 첨부나 웹 업로드 전에 이미지 파일 용량을 줄일 수 있습니다.","사진의 픽셀 크기는 유지하면서 파일 크기를 줄이는 데 활용할 수 있습니다."], en:["Reduce an image before attaching it to an email or uploading it to a website.","Reduce file size while keeping the image dimensions unchanged."] },
+  "image-resizer": { ko:["프로필 사진을 필요한 픽셀 크기에 맞춰 조절할 수 있습니다.","웹사이트에 올릴 큰 사진의 가로·세로 크기를 줄일 수 있습니다."], en:["Resize a profile photo to the required pixel dimensions.","Reduce a large photo to a suitable width and height for a website."] },
+  "image-size-compare": { ko:["압축 전후 두 이미지의 파일 용량을 비교할 수 있습니다.","JPG와 WebP처럼 형식이 다른 이미지의 용량을 비교할 수 있습니다."], en:["Compare an image before and after compression.","Compare the file sizes of different formats such as JPG and WebP."] },
+  "image-dpi-calculator": { ko:["300 DPI 이미지의 예상 인쇄 크기를 픽셀 기준으로 확인할 수 있습니다.","인쇄용 이미지의 픽셀 크기를 기준으로 실제 출력 크기를 가늠할 수 있습니다."], en:["Estimate the print size of a 300 DPI image from its pixel dimensions.","Estimate physical output size from the pixel dimensions of a print image."] },
+  "qr-code": { ko:["웹사이트 주소를 QR코드로 만들어 명함이나 안내문에 넣을 수 있습니다.","Wi-Fi 접속 정보를 QR코드로 만들어 방문객이 쉽게 접속하도록 할 수 있습니다."], en:["Turn a website URL into a QR code for a card or notice.","Create a QR code for Wi-Fi information so visitors can connect easily."] },
+  "calculator": { ko:["상품 가격에 할인율을 적용한 최종 금액을 계산할 수 있습니다.","판매가와 원가를 입력해 마진 금액과 비율을 확인할 수 있습니다."], en:["Calculate the final price after applying a discount rate.","Enter selling price and cost to check margin amount and percentage."] },
+  "loan-calculator": { ko:["대출 원금과 금리, 기간을 입력해 예상 월 상환액을 확인할 수 있습니다.","여러 대출 조건을 비교할 때 예상 총 이자와 상환액을 참고할 수 있습니다."], en:["Enter loan principal, rate, and term to estimate the monthly payment.","Use estimated total interest and repayment when comparing loan scenarios."] },
+  "installment-calculator": { ko:["할부 원금과 기간을 입력해 예상 월 납입액을 확인할 수 있습니다.","금리 조건이 다른 할부 시나리오의 예상 총 이자를 비교할 수 있습니다."], en:["Enter principal and term to estimate the monthly installment.","Compare estimated total interest across different installment scenarios."] },
+  "unit-converter": { ko:["센티미터를 인치로 변환해 해외 제품 규격을 확인할 수 있습니다.","KB, MB, GB 등 데이터 용량 단위를 서로 변환할 수 있습니다."], en:["Convert centimeters to inches when checking international product dimensions.","Convert data sizes such as KB, MB, and GB between units."] },
+  "time-calculator": { ko:["두 시각 사이의 시간을 계산해 작업 소요 시간을 확인할 수 있습니다.","시간과 분을 더하거나 빼서 일정 계산에 활용할 수 있습니다."], en:["Calculate the time between two points to check a task duration.","Add or subtract hours and minutes when planning a schedule."] },
+  "text-tools": { ko:["작성한 글의 글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다.","입력 글의 길이가 제한된 게시물이나 문서에 맞는지 확인할 수 있습니다."], en:["Check character count and UTF-8 byte size of written text.","Check whether text fits a character or length limit."] },
+  "text-cleaner": { ko:["복사한 글에서 불필요한 공백과 줄바꿈을 정리할 수 있습니다.","문서나 웹에서 가져온 텍스트를 붙여넣고 깔끔하게 정리할 수 있습니다."], en:["Clean unnecessary spaces and line breaks from copied text.","Paste text from a document or website and clean it up quickly."] },
+  "pdf-tools": { ko:["여러 이미지를 하나의 PDF 파일로 묶을 수 있습니다.","PDF 페이지를 확인하고 필요한 범위의 새 PDF를 만들 수 있습니다."], en:["Combine multiple images into one PDF file.","Review PDF pages and create a new PDF from a selected range."] }
+};
+
+const faqItems: Partial<Record<PageKey, Record<Lang, QAItem[]>>> = {
+  "image-converter": { ko:[{q:"이미지 변환을 위해 파일을 업로드하나요?",a:"변환 처리는 브라우저에서 수행하도록 설계되어 있어 변환을 위해 이미지 파일을 외부 서버에 업로드하지 않습니다."},{q:"JPG, PNG, WebP를 서로 변환할 수 있나요?",a:"지원되는 입력 형식과 출력 형식 범위에서 서로 변환할 수 있습니다."}], en:[{q:"Do I need to upload my image to a server?",a:"The conversion is designed to run in your browser, so the image is not uploaded to an external server for conversion."},{q:"Can I convert between JPG, PNG, and WebP?",a:"Yes, conversion is available between the supported input and output formats."}] },
+  "image-compressor": { ko:[{q:"이미지 압축하면 크기도 작아지나요?",a:"이 도구는 파일 용량을 줄이는 데 초점을 두며 이미지의 가로·세로 크기를 유지하는 방식으로 사용할 수 있습니다."},{q:"압축하면 화질이 떨어지나요?",a:"압축 정도에 따라 품질에 영향을 줄 수 있으므로 중요한 원본은 별도로 보관하는 것이 좋습니다."}], en:[{q:"Does compression change the image dimensions?",a:"The tool focuses on reducing file size while keeping the image dimensions unchanged."},{q:"Will compression reduce image quality?",a:"Stronger compression can affect quality, so keep the original for important images."}] },
+  "image-resizer": { ko:[{q:"이미지 비율을 유지할 수 있나요?",a:"사진이 찌그러지는 것을 줄이려면 원본 가로세로 비율을 유지하는 것이 좋습니다."},{q:"이미지 크기를 줄이면 용량도 줄어드나요?",a:"픽셀 수가 줄어들면 일반적으로 파일 용량을 줄이는 데 도움이 되지만 실제 용량은 이미지와 형식에 따라 달라집니다."}], en:[{q:"Can I keep the original aspect ratio?",a:"Keeping the original aspect ratio helps prevent distortion."},{q:"Does resizing reduce file size?",a:"Reducing pixel dimensions often helps reduce file size, but the actual result depends on the image and format."}] },
+  "image-size-compare": { ko:[{q:"무엇을 비교할 수 있나요?",a:"두 이미지의 파일 크기와 형식, 용량 차이와 증감률을 비교할 수 있습니다."}], en:[{q:"What can I compare?",a:"You can compare the file size, format, absolute difference, and percentage change of two images."}] },
+  "image-dpi-calculator": { ko:[{q:"DPI가 높으면 인쇄 크기가 커지나요?",a:"같은 픽셀 크기라면 DPI가 높을수록 계산되는 물리적 인쇄 크기는 작아집니다."}], en:[{q:"Does a higher DPI make the print larger?",a:"For the same pixel dimensions, a higher DPI produces a smaller calculated physical print size."}] },
+  "qr-code": { ko:[{q:"QR코드를 만든 뒤 스마트폰으로 확인할 수 있나요?",a:"생성된 QR코드는 배포하거나 인쇄하기 전에 스마트폰으로 직접 스캔해 정보가 정확한지 확인하는 것을 권장합니다."}], en:[{q:"Should I test the QR code before sharing it?",a:"Yes. Scan it with a smartphone before publishing or printing to make sure the encoded information is correct."}] },
+  "calculator": { ko:[{q:"계산 결과를 실제 금융·세무 업무에 사용해도 되나요?",a:"계산 결과는 참고용이며 실제 업무에서는 해당 거래나 제도에 적용되는 공식 기준을 함께 확인해야 합니다."}], en:[{q:"Can I use the result for financial or tax decisions?",a:"The result is for reference. Verify the official rules and conditions that apply to the actual transaction or situation."}] },
+  "loan-calculator": { ko:[{q:"실제 은행 대출 금액과 같나요?",a:"아닙니다. 실제 상품은 금리 조건, 수수료, 상환 방식 등에 따라 계산 결과가 달라질 수 있습니다."}], en:[{q:"Will this match an actual bank loan?",a:"Not necessarily. Actual products can differ because of rates, fees, repayment methods, and other conditions."}] },
+  "installment-calculator": { ko:[{q:"실제 카드 할부금과 정확히 같나요?",a:"아닙니다. 카드사별 수수료, 무이자 조건과 상환 방식 등에 따라 실제 금액이 달라질 수 있습니다."}], en:[{q:"Will this exactly match a card installment?",a:"No. Actual amounts can differ because of issuer fees, promotional terms, and repayment methods."}] },
+  "unit-converter": { ko:[{q:"온도도 변환할 수 있나요?",a:"지원되는 단위 범위에서 섭씨, 화씨, 켈빈 등의 온도 단위를 변환할 수 있습니다."}], en:[{q:"Can I convert temperature?",a:"Yes, supported temperature units include Celsius, Fahrenheit, and Kelvin."}] },
+  "time-calculator": { ko:[{q:"시간 계산 결과는 어떻게 활용하나요?",a:"작업 소요 시간, 일정 간격, 시간과 분의 덧셈·뺄셈 등을 확인하는 데 활용할 수 있습니다."}], en:[{q:"What can I use the time calculator for?",a:"It can help with task durations, time intervals, and adding or subtracting hours and minutes."}] },
+  "text-tools": { ko:[{q:"한글도 글자 수와 바이트를 계산할 수 있나요?",a:"네. 입력한 텍스트의 글자 수와 UTF-8 기준 바이트 수를 확인할 수 있습니다."}], en:[{q:"Can it count Korean characters and bytes?",a:"Yes. It shows character count and UTF-8 byte size for the entered text."}] },
+  "text-cleaner": { ko:[{q:"어떤 텍스트를 정리할 수 있나요?",a:"복사한 문서나 웹페이지에서 가져온 텍스트처럼 불필요한 공백이나 줄바꿈이 포함된 텍스트를 정리하는 데 사용할 수 있습니다."}], en:[{q:"What kind of text can I clean?",a:"It is useful for copied text that contains unnecessary spaces or line breaks."}] },
+  "pdf-tools": { ko:[{q:"PDF 작업도 브라우저에서 처리되나요?",a:"지원되는 PDF 작업은 브라우저에서 처리하도록 설계되어 있습니다. 중요한 문서는 처리 후 결과를 확인하고 원본을 별도로 보관하세요."}], en:[{q:"Are PDF operations processed in the browser?",a:"Supported PDF operations are designed to run in the browser. Check important documents after processing and keep the original separately."}] }
+};
+
 const toolKeys: PageKey[] = ["image-converter","image-compressor","image-resizer","image-size-compare","image-dpi-calculator","qr-code","calculator","loan-calculator","installment-calculator","unit-converter","time-calculator","text-tools","text-cleaner","pdf-tools"];
 
 function getInitialLang(): Lang {
@@ -154,6 +190,32 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
               </p>
             </section>
           ))}
+
+          {!infoPages.includes(page) && usageExamples[page] && (
+            <section className="mt-7 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+              <h2 className="font-bold text-slate-800">{label("사용 예시","Examples")}</h2>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                {usageExamples[page]![language].map((example, index) => <li key={index} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-blue-500" />{example}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {!infoPages.includes(page) && faqItems[page] && (
+            <section className="mt-5 rounded-2xl border border-slate-200 bg-white">
+              <h2 className="border-b border-slate-100 px-4 py-4 font-bold text-slate-800 sm:px-5">{label("자주 묻는 질문","Frequently asked questions")}</h2>
+              <div className="divide-y divide-slate-100">
+                {faqItems[page]![language].map((item, index) => (
+                  <details key={index} className="group px-4 sm:px-5">
+                    <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-3 py-3 text-sm font-semibold text-slate-700 marker:hidden">
+                      <span>{item.q}</span>
+                      <span className="text-slate-400 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <p className="pb-4 text-sm leading-6 text-slate-600">{item.a}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
 
           {!infoPages.includes(page) && (
             <div className="mt-7 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 sm:p-5">

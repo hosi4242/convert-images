@@ -133,7 +133,7 @@ function App() {
               {ko ? "필요한 도구를 한곳에서" : "All the tools you need, in one place"}
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-blue-50 sm:text-base">
-              {ko ? "이미지부터 PDF, QR 코드, 생활 계산까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, QR codes, and everyday calculations — all in your browser, with no installation or sign-up."}
+              {ko ? "이미지부터 PDF, QR 코드, 생활 계산, 온라인 타이머까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, PDFs, QR codes, everyday calculations, and online timers — all in your browser, with no installation or sign-up."}
             </p>
             </div>
         </div>
@@ -294,11 +294,7 @@ function App() {
             <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4">
               <h3 className="font-bold text-slate-800">{ko ? "도구별 빠른 안내" : "Quick guide by tool"}</h3>
               <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-2">
-                <p><strong>{ko ? "이미지 변환:" : "Image conversion:"}</strong> {ko ? "JPG, PNG, WebP, AVIF, HEIC 등 이미지 형식을 바꿀 때 사용하세요." : "Change image formats such as JPG, PNG, WebP, AVIF, and HEIC."}</p>
-                <p><strong>{ko ? "이미지 압축:" : "Image compression:"}</strong> {ko ? "이미지 크기를 유지하면서 파일 용량을 줄일 때 사용하세요." : "Reduce image file size while keeping image dimensions."}</p>
-                <p><strong>{ko ? "이미지 크기 조정:" : "Image resizing:"}</strong> {ko ? "가로·세로 크기를 원하는 크기로 변경할 때 사용하세요." : "Change image width and height to your preferred dimensions."}</p>
-                <p><strong>{ko ? "이미지 용량 비교:" : "Image size comparison:"}</strong> {ko ? "두 이미지의 파일 용량과 절감률을 비교할 수 있습니다." : "Compare the file sizes and reduction rate of two images."}</p>
-                <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>
+                <p><strong>{ko ? "이미지 도구:" : "Image tools:"}</strong> {ko ? "JPG·PNG·WebP·AVIF·HEIC 등 이미지 변환부터 압축, 크기 조정, 간단한 편집, 일괄 변환, 용량 비교, DPI·인쇄 크기 계산까지 한곳에서 이용할 수 있습니다." : "Use one place for image conversion across JPG, PNG, WebP, AVIF, and HEIC, plus compression, resizing, simple editing, batch conversion, file size comparison, and DPI & print size calculation."}</p>
                 <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
                 <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
                 <p><strong>{ko ? "온라인 타이머:" : "Online timer:"}</strong> {ko ? "공부, 운동, 요리, 휴식 등에 필요한 시간을 설정하고 카운트다운할 수 있습니다." : "Set a countdown for study, exercise, cooking, breaks, and other everyday tasks."}</p>
@@ -310,7 +306,7 @@ function App() {
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진, 대출 이자, 할부, 시간 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, loan payments, installments, time, and other everyday values in one place."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "여러 JPG·PNG 이미지를 하나의 PDF로 묶고, PDF를 합치거나 페이지를 삭제·재정렬·분할하고 기본 파일 정보를 확인할 수 있습니다." : "Combine images into PDF, merge PDFs, delete or reorder pages, split page ranges, and check basic PDF information."}</p></div>
-              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1분부터 60분까지 간편하게 설정하고 시작·일시정지·초기화할 수 있습니다. 전체 화면과 종료 알림음도 지원합니다." : "Set 1 to 60 minutes and start, pause, resume, or reset the countdown. Fullscreen and end sound are supported."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1분부터 60분까지 또는 원하는 시간을 직접 설정하고 시작·일시정지·초기화할 수 있습니다. 전체 화면과 종료 알림음도 지원합니다." : "Set 1 to 60 minutes or choose a custom duration, then start, pause, resume, or reset the countdown. Fullscreen and end sound are supported."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
             </div>
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">

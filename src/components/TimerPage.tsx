@@ -145,7 +145,7 @@ export default function TimerPage() {
             <a href="/" className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">
               <ArrowLeft className="h-4 w-4" />{copy("도구로 돌아가기","Back to tools","ツールに戻る","返回工具")}
             </a>
-            <LanguageSelector />
+            <LanguageSelector light />
           </div>
         )}
 

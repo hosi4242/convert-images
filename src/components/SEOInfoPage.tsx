@@ -92,7 +92,7 @@ const pages: Record<PageKey, Partial<Record<Lang, PageData>>> = {
 
 type QAItem = { q: string; a: string };
 
-const usageExamples: Partial<Record<PageKey, Record<Lang, string[]>>> = {
+const usageExamples: Partial<Record<PageKey, Partial<Record<Lang, string[]>>>> = {
   "image-converter": { ko:["PNG 이미지를 WebP로 바꿔 웹사이트에 사용할 수 있습니다.","HEIC 사진을 JPG로 변환해 일반 문서나 프로그램에서 활용할 수 있습니다."], en:["Convert a PNG image to WebP for use on a website.","Convert a HEIC photo to JPG for wider compatibility with documents and apps."] },
   "image-compressor": { ko:["이메일 첨부나 웹 업로드 전에 이미지 파일 용량을 줄일 수 있습니다.","사진의 픽셀 크기는 유지하면서 파일 크기를 줄이는 데 활용할 수 있습니다."], en:["Reduce an image before attaching it to an email or uploading it to a website.","Reduce file size while keeping the image dimensions unchanged."] },
   "image-resizer": { ko:["프로필 사진을 필요한 픽셀 크기에 맞춰 조절할 수 있습니다.","웹사이트에 올릴 큰 사진의 가로·세로 크기를 줄일 수 있습니다."], en:["Resize a profile photo to the required pixel dimensions.","Reduce a large photo to a suitable width and height for a website."] },
@@ -229,7 +229,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
       heading: "Useful related tools",
       description: "These tools can help you complete related tasks more easily."
     }
-  }[language];
+  }[language] ?? { heading: "Useful related tools", description: "These tools can help you complete related tasks more easily." };
   const infoPages: PageKey[]=["about","privacy","terms","contact"];
   const label=(ko:string,en:string)=>language==="ko"?ko:en;
 

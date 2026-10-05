@@ -143,7 +143,53 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     document.title=data.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content",data.description);
     document.querySelector('link[rel="canonical"]')?.setAttribute("href",window.location.origin+window.location.pathname);
-  },[language,data]);
+
+    const setMeta=(selector:string,attr:string,value:string)=>{
+      let meta=document.querySelector(selector) as HTMLMetaElement|null;
+      if(!meta){
+        meta=document.createElement("meta");
+        meta.setAttribute(attr==="property" ? "property" : "name", selector.includes("property=") ? selector.match(/property="([^"]+)"/)?.[1] ?? "" : selector.match(/name="([^"]+)"/)?.[1] ?? "");
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute("content",value);
+    };
+    setMeta('meta[property="og:title"]',"property",data.title);
+    setMeta('meta[property="og:description"]',"property",data.description);
+    setMeta('meta[property="og:url"]',"property",window.location.href);
+    setMeta('meta[property="og:type"]',"property","website");
+    setMeta('meta[name="twitter:card"]',"name","summary");
+    setMeta('meta[name="twitter:title"]',"name",data.title);
+    setMeta('meta[name="twitter:description"]',"name",data.description);
+
+    const existing=document.getElementById("toolmingle-seo-jsonld");
+    existing?.remove();
+    const faq=faqItems[page]?.[language] ?? [];
+    const schema:any={
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":data.title,
+      "description":data.description,
+      "url":window.location.href,
+      "inLanguage":language==="ko" ? "ko-KR" : "en-US",
+      "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":window.location.origin},
+      "breadcrumb":{"@type":"BreadcrumbList","itemListElement":[
+        {"@type":"ListItem","position":1,"name":language==="ko" ? "도구" : "Tools","item":window.location.origin+"/"},
+        {"@type":"ListItem","position":2,"name":data.heading,"item":window.location.href}
+      ]}
+    };
+    if(faq.length>0){
+      schema.mainEntity=faq.map(item=>({
+        "@type":"Question",
+        "name":item.q,
+        "acceptedAnswer":{"@type":"Answer","text":item.a}
+      }));
+    }
+    const script=document.createElement("script");
+    script.id="toolmingle-seo-jsonld";
+    script.type="application/ld+json";
+    script.textContent=JSON.stringify(schema);
+    document.head.appendChild(script);
+  },[language,data,page]);
 
   const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem("image-converter-lang",next);};
   const relatedMap: Partial<Record<PageKey, PageKey[]>> = {

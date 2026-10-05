@@ -271,7 +271,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
             <section className="mt-5 rounded-2xl border border-slate-200 bg-white">
               <h2 className="border-b border-slate-100 px-4 py-4 font-bold text-slate-800 sm:px-5">{label("자주 묻는 질문","Frequently asked questions")}</h2>
               <div className="divide-y divide-slate-100">
-                {faqItems[page]![language].map((item, index) => (
+                {(faqItems[page]?.[language] ?? faqItems[page]?.en ?? []).map((item, index) => (
                   <details key={index} className="group px-4 sm:px-5">
                     <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-3 py-3 text-sm font-semibold text-slate-700 marker:hidden">
                       <span>{item.q}</span>
@@ -306,7 +306,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
             <h2 className="font-bold text-slate-800">{relatedCopy.heading}</h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">{relatedCopy.description}</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              {related.map(key=><a key={key} href={`/${key}`} aria-label={label(`${(pages[key][language] ?? pages[key].en!).heading} 페이지로 이동`,`Open ${pages[key][language].heading}`)} className="min-h-11 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold leading-5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">{pages[key][language].heading}</a>)}
+              {related.map(key=><a key={key} href={`/${key}`} aria-label={label(`${(pages[key][language] ?? pages[key].en!).heading} 페이지로 이동`,`Open ${(pages[key][language] ?? pages[key].en!).heading}`)} className="min-h-11 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold leading-5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">{(pages[key][language] ?? pages[key].en!).heading}</a>)}
             </div>
           </nav>
         )}

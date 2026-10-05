@@ -289,14 +289,15 @@ function App() {
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-wider text-blue-600">{ko ? "서비스 안내" : "ABOUT THE TOOLS"}</p>
               <h2 className="mt-1 text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "필요한 작업에 맞는 도구를 간편하게 선택하세요" : "Choose the right tool for your task"}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 PDF, QR 코드, 생활 계산, 텍스트 확인까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, QR generation, everyday calculations, and text utilities directly in your browser without installing software."}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-500">{ko ? "자주 사용하는 이미지 작업부터 PDF, QR 코드, 생활 계산, 텍스트 확인, 온라인 타이머까지 별도 프로그램 설치 없이 브라우저에서 이용할 수 있습니다." : "Use common image tools, PDF, QR generation, everyday calculations, text utilities, and an online timer directly in your browser without installing software."}</p>
             </div>
             <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4">
               <h3 className="font-bold text-slate-800">{ko ? "도구별 빠른 안내" : "Quick guide by tool"}</h3>
               <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-2">
                 <p><strong>{ko ? "이미지 도구:" : "Image tools:"}</strong> {ko ? "JPG·PNG·WebP·AVIF·HEIC 등 이미지 변환부터 압축, 크기 조정, 간단한 편집, 일괄 변환, 용량 비교, DPI·인쇄 크기 계산까지 한곳에서 이용할 수 있습니다." : "Use one place for image conversion across JPG, PNG, WebP, AVIF, and HEIC, plus compression, resizing, simple editing, batch conversion, file size comparison, and DPI & print size calculation."}</p>
                 <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
-                <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
+                <p><strong>{ko ? "복합 계산기:" : "Calculator:"}</strong> {ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진, 대출 이자, 할부, 시간 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, loan payments, installments, time, and other everyday values in one place."}</p>
+                <p><strong>{ko ? "텍스트 도구:" : "Text tools:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 확인하고, 공백·줄바꿈·중복 줄 등을 정리할 수 있습니다." : "Check character counts and UTF-8 byte size, and clean spaces, line breaks, and duplicate lines."}</p>
                 <p><strong>{ko ? "온라인 타이머:" : "Online timer:"}</strong> {ko ? "공부, 운동, 요리, 휴식 등에 필요한 시간을 설정하고 카운트다운할 수 있습니다." : "Set a countdown for study, exercise, cooking, breaks, and other everyday tasks."}</p>
                 <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
               </div>

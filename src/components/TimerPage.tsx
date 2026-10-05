@@ -35,6 +35,7 @@ export default function TimerPage() {
       ["모바일에서도 사용할 수 있나요?", "네. 휴대폰과 태블릿을 포함한 모바일 화면에 맞게 사용할 수 있습니다."]
     ] : [
       ["Is the online timer free?", "Yes. ToolMingle's online timer is free to use without installation or sign-up."],
+      ["Can I set a custom duration?", "Yes. Choose Custom and enter hours, minutes, and seconds."],
       ["Will the timer play a sound when it ends?", "Yes. When sound is enabled, the browser plays an alert sound when the timer finishes."],
       ["Can I use it on mobile?", "Yes. The timer is designed to work on phones and tablets as well as desktop browsers."]
     ];

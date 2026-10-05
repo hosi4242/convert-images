@@ -10,9 +10,9 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
     about: {
       icon: ShieldCheck,
       title: ko ? "사이트 소개" : "About",
-      intro: ko ? "ToolMingle은 이미지·QR·계산·텍스트·PDF 작업을 별도 프로그램 설치 없이 브라우저에서 처리할 수 있도록 만든 무료 웹 도구입니다." : "ToolMingle is a free web service for image, QR, calculator, text, and PDF tasks without installing separate software.",
+      intro: ko ? "ToolMingle은 이미지·QR·계산·텍스트·PDF·온라인 타이머 작업을 별도 프로그램 설치 없이 브라우저에서 처리할 수 있도록 만든 무료 웹 도구입니다." : "ToolMingle is a free web service for image, QR, calculator, text, and PDF tasks without installing separate software.",
       sections: [
-        [ko ? "제공 기능" : "What we provide", ko ? "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 다양한 계산기, 글자 수·바이트 계산 기능을 제공합니다." : "Image conversion, compression, resizing, editing, batch conversion, QR generation, calculators, and text counting."],
+        [ko ? "제공 기능" : "What we provide", ko ? "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 다양한 계산기, 글자 수·바이트 계산, 온라인 타이머와 PDF 도구를 제공합니다." : "Image conversion, compression, resizing, editing, batch conversion, QR generation, calculators, and text counting."],
         [ko ? "브라우저에서 처리" : "Browser-based processing", ko ? "지원되는 기능은 사용자의 브라우저에서 직접 처리하도록 설계해 불필요한 파일 업로드를 줄였습니다." : "Supported operations are designed to run directly in your browser."],
         [ko ? "서비스 운영 방향" : "Service direction", ko ? "사용하기 쉬운 무료 도구를 지속적으로 추가하고 PC와 모바일 모두에서 편리하게 이용할 수 있도록 개선합니다." : "We continuously add practical free tools and improve desktop and mobile usability."]
       ]

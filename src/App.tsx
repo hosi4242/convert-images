@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, useEffect } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Sparkles, Zap, Lock } from "lucide-react";
+import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Clock3, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -18,6 +18,7 @@ import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
 import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
 import SEOInfoPage, { getSEOPage } from "@/components/SEOInfoPage";
+import TimerPage from "@/components/TimerPage";
 import { convertImage, isSupportedImage, createPreviewUrl, isHeicFile, type ImageFormat, type ConversionResult } from "@/utils/imageConverter";
 import type { UploadedImage } from "@/types";
 import { useI18n } from "@/i18n/I18nContext";
@@ -26,11 +27,12 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
 const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
 
-type Category = "image" | "qr" | "calculator" | "text" | "pdf";
+type Category = "image" | "qr" | "calculator" | "text" | "pdf" | "time";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch" | "compare" | "dpi";
 type TextMode = "counter" | "cleaner";
 
 function App() {
+  if (window.location.pathname.replace(/\/$/,"") === "/timer") return <TimerPage />;
   const seoPage = getSEOPage(window.location.pathname);
   if (seoPage) return <SEOInfoPage page={seoPage} />;
 
@@ -201,6 +203,11 @@ function App() {
               <span className="whitespace-nowrap">{ko ? "텍스트 도구" : "Text Tools"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "text" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "글자 수 · 바이트" : "Characters · Bytes"}</span>
             </button>
+            <button type="button" onClick={() => { selectCategory("time"); rememberTool("timer"); }} className={categoryButton(category === "time")}>
+              <Clock3 className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "time" ? "text-blue-600" : "text-slate-400"}`} />
+              <span className="whitespace-nowrap">{ko ? "온라인 타이머" : "Online Timer"}</span>
+              <span className={`whitespace-nowrap text-[10px] font-medium ${category === "time" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "1분 · 60분 · 전체화면" : "1–60 min · Fullscreen"}</span>
+            </button>
             <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "PDF 변환" : "PDF Tools"}</span>
@@ -231,7 +238,8 @@ function App() {
                   calculator: { ko: "복합 계산기", en: "Calculator", category: "calculator" },
                   text: { ko: "글자 수·바이트", en: "Character counter", category: "text", textMode: "counter" },
                   cleaner: { ko: "텍스트 정리", en: "Text cleaner", category: "text", textMode: "cleaner" },
-                  pdf: { ko: "PDF 도구", en: "PDF tools", category: "pdf" }
+                  pdf: { ko: "PDF 도구", en: "PDF tools", category: "pdf" },
+                  timer: { ko: "온라인 타이머", en: "Online timer", category: "time" }
                 };
                 const item = recentMap[id];
                 if (!item) return null;
@@ -290,7 +298,7 @@ function App() {
         {error && <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-100/50 bg-red-50/80 px-4 py-2.5"><AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" /><p className="text-sm text-red-700">{error}</p></div>}
 
         <Suspense fallback={<div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">{ko ? "도구를 불러오는 중..." : "Loading tool..."}</div>}>
-          {category === "qr" ? <QRGenerator /> :
+          {category === "time" ? <TimerPage /> :\n          category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
          category === "text" ? (textMode === "cleaner" ? <TextCleaner /> : <TextCounter />) :
          category === "pdf" ? <PDFTools /> :
@@ -327,7 +335,7 @@ function App() {
                 <p><strong>{ko ? "DPI·인쇄 크기:" : "DPI & print size:"}</strong> {ko ? "픽셀과 DPI를 이용해 예상 인쇄 크기를 계산할 수 있습니다." : "Calculate an estimated print size from pixels and DPI."}</p>
                 <p><strong>{ko ? "QR 코드:" : "QR code:"}</strong> {ko ? "URL이나 텍스트를 공유하기 위한 QR 코드를 생성할 수 있습니다." : "Create a QR code for a URL or text."}</p>
                 <p><strong>{ko ? "글자 수·바이트:" : "Character & byte counter:"}</strong> {ko ? "글자 수와 UTF-8 바이트 수를 빠르게 확인할 수 있습니다." : "Check character counts and UTF-8 byte size quickly."}</p>
-                <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
+                <p><strong>{ko ? "온라인 타이머:" : "Online timer:"}</strong> {ko ? "공부, 운동, 요리, 휴식 등에 필요한 시간을 설정하고 카운트다운할 수 있습니다." : "Set a countdown for study, exercise, cooking, breaks, and other everyday tasks."}</p>\n                <p><strong>{ko ? "PDF 도구:" : "PDF tools:"}</strong> {ko ? "여러 이미지를 PDF로 묶거나 PDF의 기본 정보를 확인할 수 있습니다." : "Combine images into a PDF or check basic PDF information."}</p>
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -335,7 +343,7 @@ function App() {
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "QR 코드" : "QR code"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "웹사이트 주소나 텍스트 등 필요한 정보를 QR 코드로 만들 수 있습니다. 간단한 공유용 QR 코드를 빠르게 생성할 수 있습니다." : "Create QR codes from website addresses, text, and other supported information for quick sharing."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "복합 계산기" : "Calculator"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "비율, 퍼센트, 할인, 부가세, 날짜, 단위, 증감률, 마진, 대출 이자, 할부, 시간 등 일상에서 자주 필요한 계산을 한곳에서 확인할 수 있습니다." : "Calculate percentages, discounts, VAT, dates, units, changes, margins, loan payments, installments, time, and other everyday values in one place."}</p></div>
               <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "PDF 도구" : "PDF tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "여러 JPG·PNG 이미지를 하나의 PDF로 묶고, PDF를 합치거나 페이지를 삭제·재정렬·분할하고 기본 파일 정보를 확인할 수 있습니다." : "Combine images into PDF, merge PDFs, delete or reorder pages, split page ranges, and check basic PDF information."}</p></div>
-              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
+              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "온라인 타이머" : "Online timer"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "1분부터 60분까지 간편하게 설정하고 시작·일시정지·초기화할 수 있습니다. 전체 화면과 종료 알림음도 지원합니다." : "Set 1 to 60 minutes and start, pause, resume, or reset the countdown. Fullscreen and end sound are supported."}</p></div>\n              <div className="rounded-xl bg-slate-50 p-4"><h3 className="font-bold text-slate-800">{ko ? "텍스트 도구" : "Text tools"}</h3><p className="mt-1.5 text-sm leading-6 text-slate-500">{ko ? "입력한 글의 글자 수와 바이트를 확인하고, 복사한 텍스트의 공백·줄바꿈·중복 줄을 정리할 수 있습니다." : "Check character and byte counts, and clean spaces, line breaks, and duplicate lines in pasted text."}</p></div>
             </div>
             <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
               <p className="text-xs leading-5 text-blue-700">{ko ? "파일 기반 이미지 작업은 브라우저에서 처리되며, 사이트는 변환을 위해 사용자의 이미지 파일을 외부 서버에 업로드하지 않습니다." : "Image file operations are processed in the browser, and the site does not upload your image files to an external server for conversion."}</p>
@@ -348,14 +356,14 @@ function App() {
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "ToolMingle · 이미지 · QR · 계산 · 텍스트 · PDF" : "ToolMingle · Image · QR · Calculator · Text · PDF"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
-          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, and text counting."}</p>
+          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 온라인 타이머, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, online timer, and text counting."}</p>
           <nav className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1.5" aria-label={ko ? "도구 안내" : "Tool guides"}>
             {[
               ["/image-converter", ko ? "이미지 변환" : "Image conversion"],
               ["/image-compressor", ko ? "이미지 압축" : "Image compression"],
               ["/image-resizer", ko ? "이미지 크기 조절" : "Image resizing"],
               ["/qr-code", ko ? "QR코드" : "QR code"],
-              ["/calculator", ko ? "계산기" : "Calculator"],
+              ["/calculator", ko ? "계산기" : "Calculator"],\n              ["/timer", ko ? "온라인 타이머" : "Online timer"],
               ["/text-tools", ko ? "텍스트 도구" : "Text tools"],
               ["/pdf-tools", ko ? "PDF 도구" : "PDF tools"]
             ].map(([href, label]) => (

@@ -11,6 +11,10 @@ export default function TimerPage() {
   const [remaining, setRemaining] = useState(5 * 60);
   const [running, setRunning] = useState(false);
   const [sound, setSound] = useState(true);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customHours, setCustomHours] = useState(0);
+  const [customMinutes, setCustomMinutes] = useState(10);
+  const [customSeconds, setCustomSeconds] = useState(0);
   const audioRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
@@ -96,6 +100,22 @@ export default function TimerPage() {
     setRunning(false);
     setSeconds(value);
     setRemaining(value);
+    setCustomOpen(false);
+  };
+
+  const applyCustomTime = () => {
+    const h = Math.max(0, Math.min(23, Math.floor(customHours)));
+    const m = Math.max(0, Math.min(59, Math.floor(customMinutes)));
+    const s = Math.max(0, Math.min(59, Math.floor(customSeconds)));
+    const value = h * 3600 + m * 60 + s;
+    if (value <= 0) return;
+    setRunning(false);
+    setSeconds(value);
+    setRemaining(value);
+    setCustomHours(h);
+    setCustomMinutes(m);
+    setCustomSeconds(s);
+    setCustomOpen(false);
   };
 
   const reset = () => {
@@ -124,7 +144,7 @@ export default function TimerPage() {
           <div className="mb-2 inline-flex rounded-xl bg-white/15 p-2"><Clock3 className="h-6 w-6" /></div>
           <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">{ko ? "온라인 타이머" : "Online Timer"}</h1>
           <p className="mt-1.5 max-w-3xl text-xs leading-5 text-blue-50 sm:text-sm">
-            {ko ? "공부, 운동, 요리, 휴식 등 필요한 시간만큼 설정하고 바로 시작하세요. 설치와 회원가입이 필요하지 않습니다." : "Set the time you need for study, exercise, cooking, breaks, and more. No installation or sign-up required."}
+            {ko ? "공부, 운동, 요리, 휴식 등 필요한 시간을 자유롭게 설정하고 바로 시작하세요. 설치와 회원가입이 필요하지 않습니다." : "Set any duration you need for study, exercise, cooking, breaks, and more. No installation or sign-up required."}
           </p>
         </header>
 
@@ -138,7 +158,29 @@ export default function TimerPage() {
 
           <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:grid-cols-4">
             {PRESETS.map(minute => <button key={minute} type="button" onClick={() => setMinutes(minute)} className={`min-h-11 rounded-xl border px-3 py-2 text-sm font-bold transition ${seconds===minute*60 ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50"}`}>{minute}{ko ? "분" : " min"}</button>)}
+            <button type="button" onClick={() => setCustomOpen(v => !v)} className={`min-h-11 rounded-xl border px-3 py-2 text-sm font-bold transition ${customOpen ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50"}`}>{ko ? "직접 설정" : "Custom"}</button>
           </div>
+
+          {customOpen && (
+            <div className="mt-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-3 sm:p-4">
+              <div className="grid grid-cols-3 gap-2 sm:mx-auto sm:max-w-xl">
+                {[
+                  [ko ? "시간" : "Hours", customHours, setCustomHours, 23],
+                  [ko ? "분" : "Minutes", customMinutes, setCustomMinutes, 59],
+                  [ko ? "초" : "Seconds", customSeconds, setCustomSeconds, 59]
+                ].map(([label, value, setter, max]) => (
+                  <label key={label as string} className="text-center">
+                    <span className="mb-1 block text-xs font-bold text-slate-600">{label as string}</span>
+                    <input type="number" inputMode="numeric" min="0" max={max as number} value={value as number} onChange={e => (setter as (v:number)=>void)(Math.max(0, Math.min(max as number, Number(e.target.value) || 0)))} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-2 text-center text-base font-extrabold text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" aria-label={label as string} />
+                  </label>
+                ))}
+              </div>
+              <div className="mt-3 flex justify-center gap-2">
+                <button type="button" onClick={applyCustomTime} disabled={customHours === 0 && customMinutes === 0 && customSeconds === 0} className="min-h-11 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-extrabold text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">{ko ? "이 시간으로 설정" : "Set timer"}</button>
+                <button type="button" onClick={() => setCustomOpen(false)} className="min-h-11 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-white">{ko ? "취소" : "Cancel"}</button>
+              </div>
+            </div>
+          )}
 
           <div className="mt-4 flex flex-wrap justify-center gap-2 sm:mt-5">
             <button type="button" onClick={() => setRunning(v => !v)} disabled={remaining===0} className="min-h-14 min-w-[10rem] rounded-xl bg-blue-600 px-9 py-3.5 text-base font-extrabold text-white shadow-md ring-2 ring-blue-200/70 hover:bg-blue-700 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[12rem]">{running ? (ko ? "일시정지" : "Pause") : remaining===seconds ? (ko ? "시작" : "Start") : (ko ? "계속" : "Resume")}</button>
@@ -157,7 +199,7 @@ export default function TimerPage() {
 
         <section className="mt-4 rounded-2xl border border-slate-200 bg-white shadow-sm">
           <h2 className="border-b border-slate-100 px-5 py-4 font-extrabold text-slate-800">{ko ? "자주 묻는 질문" : "Frequently asked questions"}</h2>
-          {(ko ? [["온라인 타이머는 무료인가요?","네. 별도 설치나 회원가입 없이 무료로 사용할 수 있습니다."],["타이머가 끝나면 소리가 나나요?","소리 설정이 켜져 있으면 종료 시 알림음이 재생됩니다."],["모바일에서도 사용할 수 있나요?","네. 휴대폰과 태블릿에서도 사용할 수 있습니다."]] : [["Is the online timer free?","Yes. It is free to use without installation or sign-up."],["Will the timer play a sound?","When sound is enabled, an alert sound plays when the timer finishes."],["Can I use it on mobile?","Yes. It works on phones and tablets as well as desktop browsers."]]).map(([q,a])=><details key={q} className="border-b border-slate-100 px-5 last:border-b-0"><summary className="cursor-pointer py-4 text-sm font-bold text-slate-700">{q}</summary><p className="pb-4 text-sm leading-6 text-slate-600">{a}</p></details>)}
+          {(ko ? [["온라인 타이머는 무료인가요?","네. 별도 설치나 회원가입 없이 무료로 사용할 수 있습니다."],["원하는 시간을 직접 설정할 수 있나요?","네. 직접 설정을 눌러 시간, 분, 초를 입력하면 원하는 시간으로 설정할 수 있습니다."],["타이머가 끝나면 소리가 나나요?","소리 설정이 켜져 있으면 종료 시 알림음이 재생됩니다."],["모바일에서도 사용할 수 있나요?","네. 휴대폰과 태블릿에서도 사용할 수 있습니다."]] : [["Is the online timer free?","Yes. It is free to use without installation or sign-up."],["Can I set a custom duration?","Yes. Choose Custom and enter hours, minutes, and seconds."],["Will the timer play a sound?","When sound is enabled, an alert sound plays when the timer finishes."],["Can I use it on mobile?","Yes. It works on phones and tablets as well as desktop browsers."]]).map(([q,a])=><details key={q} className="border-b border-slate-100 px-5 last:border-b-0"><summary className="cursor-pointer py-4 text-sm font-bold text-slate-700">{q}</summary><p className="pb-4 text-sm leading-6 text-slate-600">{a}</p></details>)}
         </section>
 
         <nav className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-center">

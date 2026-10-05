@@ -109,7 +109,7 @@ const usageExamples: Partial<Record<PageKey, Record<Lang, string[]>>> = {
   "pdf-tools": { ko:["여러 이미지를 하나의 PDF 파일로 묶을 수 있습니다.","PDF 페이지를 확인하고 필요한 범위의 새 PDF를 만들 수 있습니다."], en:["Combine multiple images into one PDF file.","Review PDF pages and create a new PDF from a selected range."] }
 };
 
-const faqItems: Partial<Record<PageKey, Record<Lang, QAItem[]>>> = {
+const faqItems: Partial<Record<PageKey, Partial<Record<Lang, QAItem[]>>>> = {
   "image-converter": { ko:[{q:"이미지 변환을 위해 파일을 업로드하나요?",a:"변환 처리는 브라우저에서 수행하도록 설계되어 있어 변환을 위해 이미지 파일을 외부 서버에 업로드하지 않습니다."},{q:"JPG, PNG, WebP를 서로 변환할 수 있나요?",a:"지원되는 입력 형식과 출력 형식 범위에서 서로 변환할 수 있습니다."}], en:[{q:"Do I need to upload my image to a server?",a:"The conversion is designed to run in your browser, so the image is not uploaded to an external server for conversion."},{q:"Can I convert between JPG, PNG, and WebP?",a:"Yes, conversion is available between the supported input and output formats."}] },
   "image-compressor": { ko:[{q:"이미지 압축하면 크기도 작아지나요?",a:"이 도구는 파일 용량을 줄이는 데 초점을 두며 이미지의 가로·세로 크기를 유지하는 방식으로 사용할 수 있습니다."},{q:"압축하면 화질이 떨어지나요?",a:"압축 정도에 따라 품질에 영향을 줄 수 있으므로 중요한 원본은 별도로 보관하는 것이 좋습니다."}], en:[{q:"Does compression change the image dimensions?",a:"The tool focuses on reducing file size while keeping the image dimensions unchanged."},{q:"Will compression reduce image quality?",a:"Stronger compression can affect quality, so keep the original for important images."}] },
   "image-resizer": { ko:[{q:"이미지 비율을 유지할 수 있나요?",a:"사진이 찌그러지는 것을 줄이려면 원본 가로세로 비율을 유지하는 것이 좋습니다."},{q:"이미지 크기를 줄이면 용량도 줄어드나요?",a:"픽셀 수가 줄어들면 일반적으로 파일 용량을 줄이는 데 도움이 되지만 실제 용량은 이미지와 형식에 따라 달라집니다."}], en:[{q:"Can I keep the original aspect ratio?",a:"Keeping the original aspect ratio helps prevent distortion."},{q:"Does resizing reduce file size?",a:"Reducing pixel dimensions often helps reduce file size, but the actual result depends on the image and format."}] },
@@ -133,7 +133,7 @@ function getInitialLang(): Lang {
 }
 
 export default function SEOInfoPage({ page }: { page: PageKey }) {
-  const [language,setLanguage]=useState<Lang>(getInitialLang);
+  const [language]=useState<Lang>(getInitialLang);
   const data=pages[page][language] ?? pages[page].en!;
   const Icon=data.icon;
 
@@ -262,7 +262,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
             <section className="mt-7 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
               <h2 className="font-bold text-slate-800">{label("사용 예시","Examples")}</h2>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-                {usageExamples[page]![language].map((example, index) => <li key={index} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-blue-500" />{example}</li>)}
+                {(usageExamples[page]?.[language] ?? usageExamples[page]?.en ?? []).map((example, index) => <li key={index} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-blue-500" />{example}</li>)}
               </ul>
             </section>
           )}

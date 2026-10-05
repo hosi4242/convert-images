@@ -182,7 +182,7 @@ function App() {
             <span className="hidden text-xs text-slate-400 sm:block">{ko ? "원하는 도구를 선택하세요" : "Choose a tool to get started"}</span>
           </div>
 
-          <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-5 sm:gap-2.5 sm:p-2.5">
+          <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-3 sm:gap-2.5 sm:p-2.5">
             <button type="button" onClick={() => selectCategory("image")} className={categoryButton(category === "image")}>
               <ImageIcon className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "image" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "이미지 도구" : "Image Tools"}</span>
@@ -208,7 +208,7 @@ function App() {
               <span className="whitespace-nowrap">{ko ? "온라인 타이머" : "Online Timer"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "time" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "1분 · 60분 · 전체화면" : "1–60 min · Fullscreen"}</span>
             </button>
-            <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={`${categoryButton(category === "pdf")} col-span-2 sm:col-span-1`}>
+            <button type="button" onClick={() => { selectCategory("pdf"); rememberTool("pdf"); }} className={categoryButton(category === "pdf")}>
               <FileText className={`h-6 w-6 transition-transform group-hover:scale-105 ${category === "pdf" ? "text-blue-600" : "text-slate-400"}`} />
               <span className="whitespace-nowrap">{ko ? "PDF 변환" : "PDF Tools"}</span>
               <span className={`whitespace-nowrap text-[10px] font-medium ${category === "pdf" ? "text-blue-500" : "text-slate-400"}`}>{ko ? "PDF · 이미지" : "PDF · Images"}</span>

@@ -1,12 +1,13 @@
 import { ArrowLeft, ArrowRight, Calculator, FileText, Image as ImageIcon, Mail, QrCode, ShieldCheck, Type, Ruler, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { detectBrowserLanguage, getStoredLanguage, LANGUAGE_STORAGE_KEY, type ImplementedLanguage } from "@/i18n/languages";
 
 type PageKey =
   | "image-converter" | "image-compressor" | "image-resizer" | "image-size-compare" | "image-dpi-calculator"
   | "qr-code" | "calculator" | "loan-calculator" | "installment-calculator" | "unit-converter" | "time-calculator"
   | "text-tools" | "text-cleaner" | "pdf-tools" | "about" | "privacy" | "terms" | "contact";
 
-type Lang = "ko" | "en";
+type Lang = ImplementedLanguage;
 type PageData = {
   title: string; description: string; heading: string; intro: string;
   icon: typeof ImageIcon;
@@ -127,10 +128,7 @@ const faqItems: Partial<Record<PageKey, Record<Lang, QAItem[]>>> = {
 const toolKeys: PageKey[] = ["image-converter","image-compressor","image-resizer","image-size-compare","image-dpi-calculator","qr-code","calculator","loan-calculator","installment-calculator","unit-converter","time-calculator","text-tools","text-cleaner","pdf-tools"];
 
 function getInitialLang(): Lang {
-  if (typeof window === "undefined") return "ko";
-  const saved = localStorage.getItem("image-converter-lang");
-  if (saved === "en" || saved === "ko") return saved;
-  return navigator.language.toLowerCase().startsWith("en") ? "en" : "ko";
+  return getStoredLanguage() === "ko" ? "ko" : detectBrowserLanguage();
 }
 
 export default function SEOInfoPage({ page }: { page: PageKey }) {
@@ -203,7 +201,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     document.head.appendChild(script);
   },[language,data,page]);
 
-  const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem("image-converter-lang",next);};
+  const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem(LANGUAGE_STORAGE_KEY,next);};
   const relatedMap: Partial<Record<PageKey, PageKey[]>> = {
     "image-converter":["image-compressor","image-resizer","image-size-compare","image-dpi-calculator"],
     "image-compressor":["image-converter","image-resizer","image-size-compare","image-dpi-calculator"],

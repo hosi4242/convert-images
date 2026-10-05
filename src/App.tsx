@@ -38,9 +38,7 @@ function App() {
 
   const { t, language } = useI18n();
   const ko = language === "ko";
-  const ja = language === "ja";
-  const zh = language === "zh-CN";
-  const copy = (k: string, e: string, j: string, z: string) => ko ? k : ja ? j : zh ? z : e;
+  const copy = (k: string, e: string, _j?: string, _z?: string) => ko ? k : e;
   const [category, setCategory] = useState<Category>("image");
   const [imageMode, setImageMode] = useState<ImageMode>("convert");
   const [textMode, setTextMode] = useState<TextMode>("counter");

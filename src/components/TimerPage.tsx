@@ -8,9 +8,7 @@ const PRESETS = [1, 5, 10, 15, 25, 30, 60];
 export default function TimerPage() {
   const { language } = useI18n();
   const ko = language === "ko";
-  const ja = language === "ja";
-  const zh = language === "zh-CN";
-  const copy = (k: string, e: string, j: string, z: string) => ko ? k : ja ? j : zh ? z : e;
+  const copy = (k: string, e: string, _j?: string, _z?: string) => ko ? k : e;
   const standalone = window.location.pathname.replace(/\/$/, "") === "/timer";
   const [seconds, setSeconds] = useState(5 * 60);
   const [remaining, setRemaining] = useState(5 * 60);

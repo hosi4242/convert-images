@@ -308,6 +308,7 @@ function App() {
              : imageMode === "resize" ? <ImageResizer uploadedImage={uploadedImage} onReset={resetImage} />
              : <ImageEditor uploadedImage={uploadedImage} onReset={resetImage} />}
          </div>}
+        </Suspense>
 
         {!infoPage && (
           <section className="mt-6 rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm sm:p-6">

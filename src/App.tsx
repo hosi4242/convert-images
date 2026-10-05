@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, useEffect } from "react";
-import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Clock3, Sparkles, Zap, Lock } from "lucide-react";
+import { AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Clock3, Sparkles } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
@@ -25,7 +25,6 @@ import { useI18n } from "@/i18n/I18nContext";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const CONVERSION_QUALITY = 0.9;
-const VISITOR_COUNTER_URL = "https://countapi.mileshilliard.com/api/v1/hit/hosi4242-convert-images-visits";
 
 type Category = "image" | "qr" | "calculator" | "text" | "pdf" | "time";
 type ImageMode = "convert" | "compress" | "resize" | "edit" | "batch" | "compare" | "dpi";
@@ -46,7 +45,6 @@ function App() {
   const [isConverting, setIsConverting] = useState(false);
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [infoPage, setInfoPage] = useState<InfoPageKey | null>(null);
   const [recentTools, setRecentTools] = useState<string[]>(() => {
     try {
@@ -64,24 +62,6 @@ function App() {
       return next;
     });
   };
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch(VISITOR_COUNTER_URL)
-      .then((response) => response.ok ? response.json() : null)
-      .then((data) => {
-        if (!cancelled && (typeof data?.value === "number" || typeof data?.value === "string")) {
-          const count = Number(data.value);
-          if (Number.isFinite(count)) setVisitorCount(count);
-        }
-      })
-      .catch(() => {
-        // Visitor counter is optional; the site remains fully usable if it is unavailable.
-      });
-
-    return () => { cancelled = true; };
-  }, []);
 
   const handleFileSelect = useCallback(async (file: File) => {
     setError(null);
@@ -125,12 +105,6 @@ function App() {
   const subButton = (active: boolean) =>
     `group flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-center text-xs font-bold leading-tight transition-all sm:px-3 sm:text-sm ${active ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-sm" : "bg-white/70 text-gray-600 hover:bg-white"}`;
 
-  const featurePill = (icon: React.ReactNode, text: string) => (
-    <div className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/55 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm">
-      {icon}{text}
-    </div>
-  );
-
   return (
     <div className="min-h-screen">
       <header className="relative overflow-hidden border-b border-blue-100/50 bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400 shadow-lg shadow-blue-200/30">
@@ -161,12 +135,7 @@ function App() {
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-blue-50 sm:text-base">
               {ko ? "이미지부터 PDF, QR 코드, 생활 계산까지. 설치와 회원가입 없이 브라우저에서 간편하게 이용하세요." : "Images, QR codes, and everyday calculations — all in your browser, with no installation or sign-up."}
             </p>
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
-              {featurePill(<Zap className="h-3.5 w-3.5 text-amber-500" />, ko ? "빠른 처리" : "Fast")}
-              {featurePill(<Lock className="h-3.5 w-3.5 text-blue-600" />, ko ? "브라우저 처리" : "Browser processing")}
-              {featurePill(<ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />, ko ? "외부 전송 없음" : "No external upload")}
             </div>
-          </div>
         </div>
       </header>
 
@@ -175,11 +144,7 @@ function App() {
 
         <section className="mb-5">
           <div className="mb-3 flex items-end justify-between gap-3 px-1">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-blue-600">{ko ? "TOOLS" : "TOOLS"}</p>
-              <h2 className="mt-0.5 text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "무엇을 사용하시겠어요?" : "What would you like to use?"}</h2>
-            </div>
-            <span className="hidden text-xs text-slate-400 sm:block">{ko ? "원하는 도구를 선택하세요" : "Choose a tool to get started"}</span>
+            <div><h2 className="text-lg font-extrabold text-slate-800 sm:text-xl">{ko ? "주요 도구" : "Main tools"}</h2></div>
           </div>
 
           <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/65 p-2.5 shadow-lg shadow-slate-200/40 backdrop-blur-sm sm:grid-cols-3 sm:gap-2.5 sm:p-2.5">
@@ -359,7 +324,7 @@ function App() {
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "ToolMingle · 이미지 · QR · 계산 · 텍스트 · 타이머 · PDF" : "ToolMingle · Image · QR · Calculator · Timer · Text · PDF"}</p>
           <p className="mt-1">{ko ? "설치 없이 브라우저에서 간편하게 이용하세요." : "Simple browser-based tools with no installation required."}</p>
-          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "현재 제공 도구: 이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드, 계산기, 온라인 타이머, 글자 수·바이트 계산, PDF 도구" : "Tools: image conversion, compression, resizing, editing, batch conversion, QR codes, calculators, online timer, and text counting."}</p>
+          <p className="mt-2 text-[11px] leading-5 text-slate-400">{ko ? "무료 온라인 이미지·QR·계산·텍스트·PDF·타이머 도구를 제공합니다." : "Free online tools for images, QR codes, calculations, text, PDFs, and timers."}</p>
           <nav className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1.5" aria-label={ko ? "도구 안내" : "Tool guides"}>
             {[
               ["/image-converter", ko ? "이미지 변환" : "Image conversion"],
@@ -375,11 +340,6 @@ function App() {
             ))}
           </nav>
           <InfoPageNav active={infoPage} onChange={setInfoPage} />
-          {visitorCount !== null && (
-            <p className="mt-2 text-[11px] font-medium text-slate-400">
-              {ko ? "누적 방문자" : "Total visitors"} <span className="font-bold text-slate-500">{visitorCount.toLocaleString()}</span>
-            </p>
-          )}
         </footer>
       </main>
     </div>

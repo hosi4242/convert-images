@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, Calculator, FileText, Image as ImageIcon, Mail, QrCode, ShieldCheck, Type, Ruler, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
-import { detectBrowserLanguage, getStoredLanguage, LANGUAGE_STORAGE_KEY, type ImplementedLanguage } from "@/i18n/languages";
+import { detectBrowserLanguage, getStoredLanguage, type ImplementedLanguage } from "@/i18n/languages";
+import LanguageSelector from "@/components/LanguageSelector";
 
 type PageKey =
   | "image-converter" | "image-compressor" | "image-resizer" | "image-size-compare" | "image-dpi-calculator"
@@ -14,7 +15,7 @@ type PageData = {
   sections: Array<[string, string]>;
 };
 
-const pages: Record<PageKey, Record<Lang, PageData>> = {
+const pages: Record<PageKey, Partial<Record<Lang, PageData>>> = {
   "image-converter": {
     ko:{title:"이미지 변환 무료 도구 | JPG PNG WebP AVIF",description:"JPG, PNG, WebP, HEIC/HEIF 이미지를 JPG, PNG, WebP, AVIF 형식으로 변환하는 무료 브라우저 기반 도구입니다.",heading:"이미지 변환",intro:"JPG, PNG, WebP, HEIC/HEIF 이미지를 JPG, PNG, WebP, AVIF 형식으로 변환할 수 있습니다. 별도 프로그램 설치 없이 브라우저에서 사용할 수 있으며 지원되는 변환 과정은 브라우저에서 처리됩니다.",icon:ImageIcon,sections:[["어떤 경우에 사용하나요?","웹사이트에 올릴 이미지 형식을 바꾸거나 특정 프로그램에서 필요한 형식으로 변환할 때 사용할 수 있습니다."],["사용 방법","메인 화면에서 이미지 도구와 이미지 변환을 선택하고 파일을 추가한 뒤 원하는 출력 형식을 지정하여 변환하세요."],["지원 형식과 주의사항","입력은 JPG/JPEG, PNG, WebP, HEIC/HEIF를 지원하며 출력은 JPG, PNG, WebP, AVIF를 지원합니다. 투명 배경이나 압축 방식이 다른 형식은 변환 후 결과를 확인하세요."],["파일 처리","이미지 변환은 브라우저에서 처리하도록 설계되어 있으며 변환을 위해 이미지 파일을 외부 서버에 업로드하지 않습니다."]]},
     en:{title:"Free Image Converter | JPG PNG WebP AVIF",description:"Convert JPG, PNG, WebP, and HEIC/HEIF images to JPG, PNG, WebP, or AVIF in your browser.",heading:"Image Converter",intro:"Convert JPG, PNG, WebP, and HEIC/HEIF images to JPG, PNG, WebP, or AVIF without installing software. Supported conversion is designed to run locally in the browser.",icon:ImageIcon,sections:[["When to use it","Use it when you need a different image format for a website, document, or application."],["How to use it","Choose Image Tools and Convert Image on the home page, select a supported input file and output format, then run the conversion."],["Supported formats and notes","Supported inputs are JPG/JPEG, PNG, WebP, and HEIC/HEIF. Supported outputs are JPG, PNG, WebP, and AVIF. Check transparency and image quality after conversion when they matter."],["File processing","Image conversion is designed to run in your browser. Image files are not uploaded to an external server for conversion."]]}
@@ -133,7 +134,7 @@ function getInitialLang(): Lang {
 
 export default function SEOInfoPage({ page }: { page: PageKey }) {
   const [language,setLanguage]=useState<Lang>(getInitialLang);
-  const data=pages[page][language];
+  const data=pages[page][language] ?? pages[page].en!;
   const Icon=data.icon;
 
   useEffect(()=>{
@@ -161,7 +162,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
 
     const existing=document.getElementById("toolmingle-seo-jsonld");
     existing?.remove();
-    const faq=faqItems[page]?.[language] ?? [];
+    const faq=faqItems[page]?.[language] ?? faqItems[page]?.en ?? [];
     const breadcrumb={
       "@type":"BreadcrumbList",
       "itemListElement":[
@@ -175,7 +176,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
       "name":data.title,
       "description":data.description,
       "url":window.location.href,
-      "inLanguage":language==="ko" ? "ko-KR" : "en-US",
+      "inLanguage":language==="ko" ? "ko-KR" : language==="ja" ? "ja-JP" : language==="zh-CN" ? "zh-CN" : "en-US",
       "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":window.location.origin},
       "breadcrumb":{"@id":window.location.href+"#breadcrumb"}
     },{
@@ -201,7 +202,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     document.head.appendChild(script);
   },[language,data,page]);
 
-  const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem(LANGUAGE_STORAGE_KEY,next);};
+  
   const relatedMap: Partial<Record<PageKey, PageKey[]>> = {
     "image-converter":["image-compressor","image-resizer","image-size-compare","image-dpi-calculator"],
     "image-compressor":["image-converter","image-resizer","image-size-compare","image-dpi-calculator"],
@@ -305,7 +306,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
             <h2 className="font-bold text-slate-800">{relatedCopy.heading}</h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">{relatedCopy.description}</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              {related.map(key=><a key={key} href={`/${key}`} aria-label={label(`${pages[key][language].heading} 페이지로 이동`,`Open ${pages[key][language].heading}`)} className="min-h-11 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold leading-5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">{pages[key][language].heading}</a>)}
+              {related.map(key=><a key={key} href={`/${key}`} aria-label={label(`${(pages[key][language] ?? pages[key].en!).heading} 페이지로 이동`,`Open ${pages[key][language].heading}`)} className="min-h-11 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold leading-5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">{pages[key][language].heading}</a>)}
             </div>
           </nav>
         )}

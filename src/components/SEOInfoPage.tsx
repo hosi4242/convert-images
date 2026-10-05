@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight, Calculator, FileText, Image as ImageIcon, Mail, QrCode, ShieldCheck, Type, Ruler, Clock } from "lucide-react";
 import { useEffect } from "react";
-import type { ImplementedLanguage } from "@/i18n/languages";
+import type { Language } from "@/i18n/languages";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useI18n } from "@/i18n/I18nContext";
 
@@ -9,7 +9,7 @@ type PageKey =
   | "qr-code" | "calculator" | "loan-calculator" | "installment-calculator" | "unit-converter" | "time-calculator"
   | "text-tools" | "text-cleaner" | "pdf-tools" | "about" | "privacy" | "terms" | "contact";
 
-type Lang = ImplementedLanguage;
+type Lang = Language;
 type PageData = {
   title: string; description: string; heading: string; intro: string;
   icon: typeof ImageIcon;
@@ -173,7 +173,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
       "name":data.title,
       "description":data.description,
       "url":window.location.href,
-      "inLanguage":language==="ko" ? "ko-KR" : language==="ja" ? "ja-JP" : language==="zh-CN" ? "zh-CN" : "en-US",
+      "inLanguage":language==="ko" ? "ko-KR" : "en-US",
       "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":window.location.origin},
       "breadcrumb":{"@id":window.location.href+"#breadcrumb"}
     },{
@@ -217,24 +217,15 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     "pdf-tools":["image-converter","image-compressor","image-resizer","image-size-compare"]
   };
   const related=(relatedMap[page] ?? toolKeys.filter(key=>key!==page).slice(0,4)).filter(key=>key!==page);
-  const relatedCopy = {
-    ko: {
-      heading: "함께 사용하면 좋은 도구",
-      description: "이 도구와 함께 사용하면 관련 작업을 더 쉽게 완성할 수 있습니다."
-    },
-    en: {
-      heading: "Useful related tools",
-      description: "These tools can help you complete related tasks more easily."
-    },
-    ja: {
-      heading: "関連して使いやすいツール",
-      description: "このツールと組み合わせて、関連する作業をより簡単に完了できます。"
-    },
-    "zh-CN": {
-      heading: "推荐一起使用的工具",
-      description: "这些工具可以帮助您更轻松地完成相关任务。"
-    }
-  }[language] ?? { heading: "Useful related tools", description: "These tools can help you complete related tasks more easily." };
+  const relatedCopy = language === "ko"
+    ? {
+        heading: "함께 사용하면 좋은 도구",
+        description: "이 도구와 함께 사용하면 관련 작업을 더 쉽게 완성할 수 있습니다."
+      }
+    : {
+        heading: "Useful related tools",
+        description: "These tools can help you complete related tasks more easily."
+      };
   const infoPages: PageKey[]=["about","privacy","terms","contact"];
   const label=(ko:string,en:string)=>language==="ko"?ko:en;
 

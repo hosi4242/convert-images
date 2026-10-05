@@ -1,19 +1,19 @@
-import { useState, useCallback, useEffect } from "react";
+import { lazy, Suspense, useState, useCallback, useEffect } from "react";
 import { ShieldCheck, AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, ArrowRight, Sparkles, Zap, Lock } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";
-import ImageCompressor from "@/components/ImageCompressor";
-import ImageResizer from "@/components/ImageResizer";
-import QRGenerator from "@/components/QRGenerator";
-import CompoundCalculator from "@/components/CompoundCalculator";
-import TextCounter from "@/components/TextCounter";
-import ImageEditor from "@/components/ImageEditor";
-import BatchConverter from "@/components/BatchConverter";
-import ImageSizeCompare from "@/components/ImageSizeCompare";
-import ImageDpiCalculator from "@/components/ImageDpiCalculator";
-import TextCleaner from "@/components/TextCleaner";
-import PDFTools from "@/components/PDFTools";
+const ImageCompressor = lazy(() => import("@/components/ImageCompressor"));
+const ImageResizer = lazy(() => import("@/components/ImageResizer"));
+const QRGenerator = lazy(() => import("@/components/QRGenerator"));
+const CompoundCalculator = lazy(() => import("@/components/CompoundCalculator"));
+const TextCounter = lazy(() => import("@/components/TextCounter"));
+const ImageEditor = lazy(() => import("@/components/ImageEditor"));
+const BatchConverter = lazy(() => import("@/components/BatchConverter"));
+const ImageSizeCompare = lazy(() => import("@/components/ImageSizeCompare"));
+const ImageDpiCalculator = lazy(() => import("@/components/ImageDpiCalculator"));
+const TextCleaner = lazy(() => import("@/components/TextCleaner"));
+const PDFTools = lazy(() => import("@/components/PDFTools"));
 import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
 import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
@@ -289,7 +289,8 @@ function App() {
 
         {error && <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-100/50 bg-red-50/80 px-4 py-2.5"><AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" /><p className="text-sm text-red-700">{error}</p></div>}
 
-        {category === "qr" ? <QRGenerator /> :
+        <Suspense fallback={<div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">{ko ? "도구를 불러오는 중..." : "Loading tool..."}</div>}>
+          {category === "qr" ? <QRGenerator /> :
          category === "calculator" ? <CompoundCalculator /> :
          category === "text" ? (textMode === "cleaner" ? <TextCleaner /> : <TextCounter />) :
          category === "pdf" ? <PDFTools /> :

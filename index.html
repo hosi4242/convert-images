@@ -21,24 +21,59 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://toolmingle.dev/">
     <meta property="og:site_name" content="ToolMingle">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:locale:alternate" content="en_US">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="ToolMingle | 이미지 · QR · 계산 · 텍스트 · PDF">
     <meta name="twitter:description" content="설치와 회원가입 없이 브라우저에서 이용하는 무료 온라인 도구 모음입니다.">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "ToolMingle",
-        "url": "https://toolmingle.dev/",
-        "description": "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 계산기, 글자 수·바이트 계산, PDF 도구를 무료로 제공하는 브라우저 기반 웹 도구 모음입니다.",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "Any",
-        "browserRequirements": "Requires JavaScript",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "KRW"
-        }
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": "https://toolmingle.dev/#application",
+            "name": "ToolMingle",
+            "url": "https://toolmingle.dev/",
+            "description": "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 계산기, 글자 수·바이트 계산, PDF 도구를 무료로 제공하는 브라우저 기반 웹 도구 모음입니다.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "KRW"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://toolmingle.dev/#website",
+            "name": "ToolMingle",
+            "url": "https://toolmingle.dev/",
+            "inLanguage": ["ko-KR", "en-US"]
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://toolmingle.dev/#tools",
+            "name": "ToolMingle Tools",
+            "itemListElement": [
+              {"@type":"ListItem","position":1,"name":"이미지 변환","url":"https://toolmingle.dev/image-converter"},
+              {"@type":"ListItem","position":2,"name":"이미지 압축","url":"https://toolmingle.dev/image-compressor"},
+              {"@type":"ListItem","position":3,"name":"이미지 크기 조절","url":"https://toolmingle.dev/image-resizer"},
+              {"@type":"ListItem","position":4,"name":"이미지 용량 비교","url":"https://toolmingle.dev/image-size-compare"},
+              {"@type":"ListItem","position":5,"name":"이미지 DPI 계산기","url":"https://toolmingle.dev/image-dpi-calculator"},
+              {"@type":"ListItem","position":6,"name":"QR코드 생성","url":"https://toolmingle.dev/qr-code"},
+              {"@type":"ListItem","position":7,"name":"복합 계산기","url":"https://toolmingle.dev/calculator"},
+              {"@type":"ListItem","position":8,"name":"대출 이자 계산기","url":"https://toolmingle.dev/loan-calculator"},
+              {"@type":"ListItem","position":9,"name":"할부 계산기","url":"https://toolmingle.dev/installment-calculator"},
+              {"@type":"ListItem","position":10,"name":"단위 변환기","url":"https://toolmingle.dev/unit-converter"},
+              {"@type":"ListItem","position":11,"name":"시간 계산기","url":"https://toolmingle.dev/time-calculator"},
+              {"@type":"ListItem","position":12,"name":"텍스트 도구","url":"https://toolmingle.dev/text-tools"},
+              {"@type":"ListItem","position":13,"name":"텍스트 정리","url":"https://toolmingle.dev/text-cleaner"},
+              {"@type":"ListItem","position":14,"name":"PDF 도구","url":"https://toolmingle.dev/pdf-tools"}
+            ]
+          }
+        ]
       }
     </script>
   </head>

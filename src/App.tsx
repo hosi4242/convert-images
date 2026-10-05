@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, useEffect } from "react";
-import { AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Clock3, Sparkles } from "lucide-react";
+import { AlertCircle, Languages, Home, Image as ImageIcon, QrCode, Calculator, Type, FileText, Clock3, Sparkles, ShieldCheck } from "lucide-react";
 import UploadBox from "@/components/UploadBox";
 import ConversionSettings from "@/components/ConversionSettings";
 import ResultComparison from "@/components/ResultComparison";

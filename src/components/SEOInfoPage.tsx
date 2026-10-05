@@ -205,12 +205,12 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
 
   const toggle=()=>{const next=language==="ko"?"en":"ko";setLanguage(next);localStorage.setItem("image-converter-lang",next);};
   const relatedMap: Partial<Record<PageKey, PageKey[]>> = {
-    "image-converter":["image-compressor","image-resizer","image-dpi-calculator","image-size-compare"],
+    "image-converter":["image-compressor","image-resizer","image-size-compare","image-dpi-calculator"],
     "image-compressor":["image-converter","image-resizer","image-size-compare","image-dpi-calculator"],
-    "image-resizer":["image-compressor","image-converter","image-dpi-calculator","image-size-compare"],
+    "image-resizer":["image-converter","image-compressor","image-dpi-calculator","image-size-compare"],
     "image-size-compare":["image-compressor","image-converter","image-resizer","image-dpi-calculator"],
     "image-dpi-calculator":["image-resizer","image-converter","image-compressor","image-size-compare"],
-    "qr-code":["image-converter","text-tools","text-cleaner"],
+    "qr-code":["text-tools","text-cleaner","image-converter"],
     "calculator":["loan-calculator","installment-calculator","unit-converter","time-calculator"],
     "loan-calculator":["installment-calculator","calculator","unit-converter","time-calculator"],
     "installment-calculator":["loan-calculator","calculator","unit-converter","time-calculator"],
@@ -221,6 +221,16 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     "pdf-tools":["image-converter","image-compressor","image-resizer","image-size-compare"]
   };
   const related=(relatedMap[page] ?? toolKeys.filter(key=>key!==page).slice(0,4)).filter(key=>key!==page);
+  const relatedCopy = {
+    ko: {
+      heading: "함께 사용하면 좋은 도구",
+      description: "이 도구와 함께 사용하면 관련 작업을 더 쉽게 완성할 수 있습니다."
+    },
+    en: {
+      heading: "Useful related tools",
+      description: "These tools can help you complete related tasks more easily."
+    }
+  }[language];
   const infoPages: PageKey[]=["about","privacy","terms","contact"];
   const label=(ko:string,en:string)=>language==="ko"?ko:en;
 
@@ -293,10 +303,11 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
         </article>
 
         {related.length>0 && (
-          <nav className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5" aria-label={label("관련 도구","Related tools")}>
-            <h2 className="font-bold text-slate-800">{label("관련 도구","Related tools")}</h2>
+          <nav className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5" aria-label={relatedCopy.heading}>
+            <h2 className="font-bold text-slate-800">{relatedCopy.heading}</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-500">{relatedCopy.description}</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              {related.map(key=><a key={key} href={`/${key}`} className="min-h-10 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700">{pages[key][language].heading}</a>)}
+              {related.map(key=><a key={key} href={`/${key}`} aria-label={label(`${pages[key][language].heading} 페이지로 이동`,`Open ${pages[key][language].heading}`)} className="min-h-11 rounded-xl bg-slate-100 px-3 py-2 text-center text-xs font-semibold leading-5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">{pages[key][language].heading}</a>)}
             </div>
           </nav>
         )}

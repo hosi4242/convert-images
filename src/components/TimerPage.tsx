@@ -134,8 +134,8 @@ export default function TimerPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-3 py-5 sm:px-4 sm:py-10">
-      <div className="mx-auto max-w-4xl">
+    <main className={standalone ? "min-h-screen bg-slate-50 px-3 py-5 sm:px-4 sm:py-10" : ""}>
+      <div className={standalone ? "mx-auto max-w-4xl" : ""}>
         {standalone && (
           <div className="mb-3 flex items-center justify-between gap-2">
             <a href="/" className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">

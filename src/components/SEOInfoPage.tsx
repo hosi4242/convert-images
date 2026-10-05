@@ -225,6 +225,14 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     en: {
       heading: "Useful related tools",
       description: "These tools can help you complete related tasks more easily."
+    },
+    ja: {
+      heading: "関連して使いやすいツール",
+      description: "このツールと組み合わせて、関連する作業をより簡単に完了できます。"
+    },
+    "zh-CN": {
+      heading: "推荐一起使用的工具",
+      description: "这些工具可以帮助您更轻松地完成相关任务。"
     }
   }[language] ?? { heading: "Useful related tools", description: "These tools can help you complete related tasks more easily." };
   const infoPages: PageKey[]=["about","privacy","terms","contact"];

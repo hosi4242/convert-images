@@ -136,20 +136,24 @@ export default function TimerPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-3 py-5 sm:px-4 sm:py-10">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <a href="/" className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">
-            <ArrowLeft className="h-4 w-4" />{ko ? "도구로 돌아가기" : "Back to tools"}
-          </a>
-          <button type="button" onClick={toggleLanguage} className="min-h-11 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">{ko ? "EN" : "한"}</button>
-        </div>
+        {standalone && (
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <a href="/" className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">
+              <ArrowLeft className="h-4 w-4" />{ko ? "도구로 돌아가기" : "Back to tools"}
+            </a>
+            <button type="button" onClick={toggleLanguage} className="min-h-11 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700">{ko ? "EN" : "한"}</button>
+          </div>
+        )}
 
-        <header className="mb-4 rounded-3xl bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400 px-5 py-4 text-white shadow-lg sm:px-8 sm:py-5">
+        {standalone && (
+          <header className="mb-4 rounded-3xl bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400 px-5 py-4 text-white shadow-lg sm:px-8 sm:py-5">
           <div className="mb-2 inline-flex rounded-xl bg-white/15 p-2"><Clock3 className="h-6 w-6" /></div>
           <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">{ko ? "온라인 타이머" : "Online Timer"}</h1>
           <p className="mt-1.5 max-w-3xl text-xs leading-5 text-blue-50 sm:text-sm">
             {ko ? "공부, 운동, 요리, 휴식 등 필요한 시간을 자유롭게 설정하고 바로 시작하세요. 설치와 회원가입이 필요하지 않습니다." : "Set any duration you need for study, exercise, cooking, breaks, and more. No installation or sign-up required."}
           </p>
-        </header>
+          </header>
+        )}
 
         <section className="rounded-3xl border-2 border-blue-100 bg-white p-3 shadow-md sm:p-6">
           <div className="rounded-2xl bg-slate-900 px-4 py-12 text-center sm:py-20">
@@ -193,25 +197,25 @@ export default function TimerPage() {
           </div>
         </section>
 
-        <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        {standalone && <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
           <h2 className="text-lg font-extrabold text-slate-800">{ko ? "온라인 타이머 사용법" : "How to use the online timer"}</h2>
           <ol className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
             {(ko ? ["원하는 시간을 선택하거나 직접 설정합니다.","시작 버튼을 눌러 카운트다운을 시작합니다.","필요하면 일시정지하거나 초기화할 수 있습니다.","공부나 운동처럼 집중이 필요한 상황에서는 전체 화면으로 사용할 수 있습니다."] : ["Choose a preset time or set a custom duration.","Press Start to begin the countdown.","Pause, resume, or reset whenever needed.","Use fullscreen mode when you want a distraction-free timer."]).map((item,i)=><li key={i} className="flex gap-2"><span className="font-bold text-blue-600">{i+1}.</span>{item}</li>)}
           </ol>
-        </section>
+        </section>}
 
-        <section className="mt-4 rounded-2xl border border-slate-200 bg-white shadow-sm">
+        {standalone && <section className="mt-4 rounded-2xl border border-slate-200 bg-white shadow-sm">
           <h2 className="border-b border-slate-100 px-5 py-4 font-extrabold text-slate-800">{ko ? "자주 묻는 질문" : "Frequently asked questions"}</h2>
           {(ko ? [["온라인 타이머는 무료인가요?","네. 별도 설치나 회원가입 없이 무료로 사용할 수 있습니다."],["원하는 시간을 직접 설정할 수 있나요?","네. 직접 설정을 눌러 시간, 분, 초를 입력하면 원하는 시간으로 설정할 수 있습니다."],["타이머가 끝나면 소리가 나나요?","소리 설정이 켜져 있으면 종료 시 알림음이 재생됩니다."],["모바일에서도 사용할 수 있나요?","네. 휴대폰과 태블릿에서도 사용할 수 있습니다."]] : [["Is the online timer free?","Yes. It is free to use without installation or sign-up."],["Can I set a custom duration?","Yes. Choose Custom and enter hours, minutes, and seconds."],["Will the timer play a sound?","When sound is enabled, an alert sound plays when the timer finishes."],["Can I use it on mobile?","Yes. It works on phones and tablets as well as desktop browsers."]]).map(([q,a])=><details key={q} className="border-b border-slate-100 px-5 last:border-b-0"><summary className="cursor-pointer py-4 text-sm font-bold text-slate-700">{q}</summary><p className="pb-4 text-sm leading-6 text-slate-600">{a}</p></details>)}
-        </section>
+        </section>}
 
-        <nav className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-center">
+        {standalone && <nav className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-center">
           <p className="text-sm font-bold text-slate-700">{ko ? "다른 도구도 사용해 보세요" : "Try more tools"}</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2">
             {[["/time-calculator",ko?"시간 계산기":"Time Calculator"],["/calculator",ko?"복합 계산기":"Calculator"],["/text-tools",ko?"텍스트 도구":"Text Tools"],["/qr-code","QR Code"]].map(([href,label])=><a key={href} href={href} className="min-h-10 rounded-xl bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-blue-50 hover:text-blue-700">{label}</a>)}
           </div>
-        </nav>
-        <footer className="py-6 text-center text-xs text-slate-400">ToolMingle · {ko ? "온라인 타이머" : "Online Timer"}</footer>
+        </nav>}
+        {standalone && <footer className="py-6 text-center text-xs text-slate-400">ToolMingle · {ko ? "온라인 타이머" : "Online Timer"}</footer>}
       </div>
     </main>
   );

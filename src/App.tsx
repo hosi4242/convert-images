@@ -14,7 +14,6 @@ const ImageSizeCompare = lazy(() => import("@/components/ImageSizeCompare"));
 const ImageDpiCalculator = lazy(() => import("@/components/ImageDpiCalculator"));
 const TextCleaner = lazy(() => import("@/components/TextCleaner"));
 const PDFTools = lazy(() => import("@/components/PDFTools"));
-import AdSlot from "@/components/AdSlot";
 import InfoPages from "@/components/InfoPages";
 import InfoPageNav, { type InfoPageKey } from "@/components/InfoPageNav";
 import SEOInfoPage, { getSEOPage } from "@/components/SEOInfoPage";
@@ -140,7 +139,7 @@ function App() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-5 sm:py-7">
-        <AdSlot labelKey="adSlot" />
+
 
         <section className="mb-5">
           <div className="mb-3 flex items-end justify-between gap-3 px-1">
@@ -274,7 +273,7 @@ function App() {
          !uploadedImage ? <UploadBox onFileSelect={handleFileSelect} uploadedImage={null} /> :
          <div className="space-y-4">
            <UploadBox onFileSelect={handleFileSelect} uploadedImage={uploadedImage} />
-           <AdSlot labelKey="adSlot" />
+
            {imageMode === "convert" ? (!result
              ? <ConversionSettings format={format} onFormatChange={setFormat} onConvert={handleConvert} isConverting={isConverting} />
              : <ResultComparison originalFile={uploadedImage.file} originalPreviewUrl={uploadedImage.previewUrl} originalWidth={uploadedImage.width} originalHeight={uploadedImage.height} result={result} onDownload={() => {}} onReset={resetImage} />)
@@ -308,7 +307,6 @@ function App() {
           </section>
         )}
 
-        <AdSlot labelKey="adSlot" />
         </>}
         <footer className="mt-6 border-t border-slate-200/60 pt-5 pb-6 text-center text-xs leading-5 text-gray-500">
           <p>{ko ? "ToolMingle · 이미지 · QR · 계산 · 텍스트 · 타이머 · PDF" : "ToolMingle · Image · QR · Calculator · Timer · Text · PDF"}</p>

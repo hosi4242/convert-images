@@ -24,7 +24,7 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
       sections: [
         [ko ? "파일 처리" : "File processing", ko ? "이미지 변환 등 브라우저 처리 기능은 선택한 파일을 브라우저에서 처리하며 사이트 서버에 저장하지 않습니다." : "Browser-based image operations process selected files in your browser and do not store them on our server."],
         [ko ? "방문 통계" : "Usage analytics", ko ? "사이트 운영 과정에서 Cloudflare Web Analytics 등 기술·방문 통계 서비스가 사용될 수 있습니다. 이러한 서비스에는 각 제공자의 개인정보 및 쿠키 정책이 적용될 수 있습니다." : "Usage analytics may be used to understand site traffic and may be subject to the provider's policies."],
-        [ko ? "광고 및 외부 서비스" : "Advertising and third parties", ko ? "현재 Google AdSense는 아직 연결되어 있지 않습니다. 향후 광고 서비스를 도입하면 관련 쿠키 및 데이터 처리 방식을 실제 운영 상태에 맞게 업데이트합니다." : "If advertising or analytics services are introduced, this policy will be updated to describe applicable cookies and data practices."]
+        [ko ? "광고 및 외부 서비스" : "Advertising and third parties", ko ? "사이트에는 Google AdSense 광고 코드가 포함되어 있습니다. 광고가 게재되는 경우 Google 및 광고 파트너가 쿠키, IP 주소 또는 기기·브라우저 식별자 등을 사용하여 광고를 제공하고 광고 성과를 측정할 수 있습니다. 광고 개인 최적화 및 데이터 이용 방식은 Google 설정과 정책에 따라 달라질 수 있습니다. 자세한 내용은 Google 개인정보처리방침(https://policies.google.com/privacy)을 확인하세요." : "Google AdSense advertising code is included on this site. If ads are served, Google and its advertising partners may use cookies, IP addresses, or device/browser identifiers to deliver ads and measure ad performance. Personalization and data use may depend on Google settings and policies. See Google’s Privacy Policy at https://policies.google.com/privacy."]
       ]
     },
     terms: {
@@ -42,7 +42,7 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
       title: ko ? "문의하기" : "Contact",
       intro: ko ? "서비스 이용 중 오류나 개선 의견이 있다면 문의 내용을 알려주세요." : "Tell us about an issue or suggestion.",
       sections: [
-        [ko ? "문의 방법" : "How to contact", ko ? "문의 이메일: lucidpoverty@gmail.com. 오류 문의 시 사용한 기능과 발생 상황을 함께 알려주시면 확인에 도움이 됩니다." : "A live submission method is not connected yet. A service email can be added here when the site is ready."]
+        [ko ? "문의 방법" : "How to contact", ko ? "문의 이메일: lucidpoverty@gmail.com. 오류 문의 시 사용한 기능과 발생 상황을 함께 알려주시면 확인에 도움이 됩니다." : "Contact email: lucidpoverty@gmail.com. When reporting an issue, include the tool used and what happened so we can investigate."]
       ]
     }
   } as const;

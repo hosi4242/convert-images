@@ -8,7 +8,7 @@ const PRESETS = [1, 5, 10, 15, 25, 30, 60];
 export default function TimerPage() {
   const { language } = useI18n();
   const ko = language === "ko";
-  const copy = (k: string, e: string, _j?: string, _z?: string) => ko ? k : e;
+  const copy = (...values: string[]) => ko ? values[0] : values[1];
   const standalone = window.location.pathname.replace(/\/$/, "") === "/timer";
   const [seconds, setSeconds] = useState(5 * 60);
   const [remaining, setRemaining] = useState(5 * 60);
@@ -27,9 +27,10 @@ export default function TimerPage() {
       ? "설치 없이 브라우저에서 바로 사용하는 무료 온라인 타이머. 1분부터 60분까지 빠르게 선택하거나 원하는 시간을 직접 설정할 수 있습니다."
       : "A free online timer that runs in your browser. Choose 1 to 60 minutes or set a custom duration, then start, pause, resume, or reset without installing anything.";
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    const canonicalUrl = "https://toolmingle.dev/timer";
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
-    canonical.href = window.location.origin + "/timer";
+    canonical.href = canonicalUrl;
     const old = document.getElementById("toolmingle-timer-jsonld");
     old?.remove();
     const faq = ko ? [
@@ -46,8 +47,8 @@ export default function TimerPage() {
     const schema = {
       "@context": "https://schema.org",
       "@graph": [
-        {"@type":"WebPage","name":document.title,"description":description,"url":window.location.href,"inLanguage":ko ? "ko-KR" : "en-US"},
-        {"@type":"WebApplication","name":"ToolMingle Online Timer","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","url":window.location.href,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
+        {"@type":"WebPage","name":document.title,"description":description,"url":canonicalUrl,"inLanguage":ko ? "ko-KR" : "en-US"},
+        {"@type":"WebApplication","name":"ToolMingle Online Timer","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","url":canonicalUrl,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
         {"@type":"FAQPage","mainEntity":faq.map(([q,a])=>({"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}}))}
       ]
     };
@@ -88,7 +89,7 @@ export default function TimerPage() {
       gain.connect(ctx.destination);
       oscillator.start();
       oscillator.stop(ctx.currentTime + 0.35);
-    } catch {}
+    } catch { /* Browser APIs may be unavailable or denied. */ }
   };
 
   const formatTime = (value: number) => {
@@ -132,7 +133,7 @@ export default function TimerPage() {
     try {
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
       else await document.exitFullscreen();
-    } catch {}
+    } catch { /* Browser APIs may be unavailable or denied. */ }
   };
 
   return (

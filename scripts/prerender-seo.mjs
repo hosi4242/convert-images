@@ -39,13 +39,9 @@ let browser;
 
 function installChromium() {
   const command = process.platform === "win32" ? "npx.cmd" : "npx";
-  const args = [
-    "playwright",
-    "install",
-    ...(process.platform === "linux" ? ["--with-deps"] : []),
-    "chromium",
-  ];
-  const result = spawnSync(command, args, {
+  // Install the browser binary only. Managed CI/build environments may not
+  // grant root privileges for Playwright's --with-deps apt installation.
+  const result = spawnSync(command, ["playwright", "install", "chromium"], {
     stdio: "inherit",
     shell: process.platform === "win32",
     windowsHide: true,
@@ -143,7 +139,21 @@ try {
     throw new Error("Homepage canonical URL was unexpectedly changed");
   }
 
-  console.log(`SEO prerender complete: ${routes.length} routes`);
+  const generatedPages = await Promise.all(
+    routes.map(async (route) => {
+      const outputPath = resolve("dist", `${route.slice(1)}.html`);
+      const html = await readFile(outputPath, "utf8");
+      if (!html.includes(`https://toolmingle.dev${route}`)) {
+        throw new Error(`${route}: generated HTML does not contain its canonical URL`);
+      }
+      return outputPath;
+    }),
+  );
+  if (generatedPages.length !== routes.length) {
+    throw new Error(`Expected ${routes.length} prerendered pages, found ${generatedPages.length}`);
+  }
+
+  console.log(`SEO prerender complete: ${generatedPages.length} routes`);
 } finally {
   await browser?.close();
   server.kill();

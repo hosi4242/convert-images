@@ -138,7 +138,8 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     document.documentElement.lang=language;
     document.title=data.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content",data.description);
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href",window.location.origin+window.location.pathname);
+    const canonicalUrl = `https://toolmingle.dev${window.location.pathname.replace(/\/$/, "") || "/"}`;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href",canonicalUrl);
 
     const setMeta=(selector:string,attr:string,value:string)=>{
       let meta=document.querySelector(selector) as HTMLMetaElement|null;
@@ -151,7 +152,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     };
     setMeta('meta[property="og:title"]',"property",data.title);
     setMeta('meta[property="og:description"]',"property",data.description);
-    setMeta('meta[property="og:url"]',"property",window.location.href);
+    setMeta('meta[property="og:url"]',"property",canonicalUrl);
     setMeta('meta[property="og:type"]',"property","website");
     setMeta('meta[name="twitter:card"]',"name","summary");
     setMeta('meta[name="twitter:title"]',"name",data.title);
@@ -163,27 +164,27 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
     const breadcrumb={
       "@type":"BreadcrumbList",
       "itemListElement":[
-        {"@type":"ListItem","position":1,"name":language==="ko" ? "도구" : "Tools","item":window.location.origin+"/"},
-        {"@type":"ListItem","position":2,"name":data.heading,"item":window.location.href}
+        {"@type":"ListItem","position":1,"name":language==="ko" ? "도구" : "Tools","item":"https://toolmingle.dev"+"/"},
+        {"@type":"ListItem","position":2,"name":data.heading,"item":canonicalUrl}
       ]
     };
     const graph:any[]=[{
       "@type":"WebPage",
-      "@id":window.location.href+"#webpage",
+      "@id":canonicalUrl+"#webpage",
       "name":data.title,
       "description":data.description,
-      "url":window.location.href,
+      "url":canonicalUrl,
       "inLanguage":language==="ko" ? "ko-KR" : "en-US",
-      "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":window.location.origin},
-      "breadcrumb":{"@id":window.location.href+"#breadcrumb"}
+      "isPartOf":{"@type":"WebSite","name":"ToolMingle","url":"https://toolmingle.dev"},
+      "breadcrumb":{"@id":canonicalUrl+"#breadcrumb"}
     },{
       ...breadcrumb,
-      "@id":window.location.href+"#breadcrumb"
+      "@id":canonicalUrl+"#breadcrumb"
     }];
     if(faq.length>0){
       graph.push({
         "@type":"FAQPage",
-        "@id":window.location.href+"#faq",
+        "@id":canonicalUrl+"#faq",
         "mainEntity":faq.map(item=>({
           "@type":"Question",
           "name":item.q,

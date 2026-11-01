@@ -8,7 +8,7 @@ const PRESETS = [1, 5, 10, 15, 25, 30, 60];
 export default function TimerPage() {
   const { language } = useI18n();
   const ko = language === "ko";
-  const copy = (k: string, e: string, _j?: string, _z?: string) => ko ? k : e;
+  const copy = (...values: string[]) => ko ? values[0] : values[1];
   const standalone = window.location.pathname.replace(/\/$/, "") === "/timer";
   const [seconds, setSeconds] = useState(5 * 60);
   const [remaining, setRemaining] = useState(5 * 60);
@@ -89,7 +89,7 @@ export default function TimerPage() {
       gain.connect(ctx.destination);
       oscillator.start();
       oscillator.stop(ctx.currentTime + 0.35);
-    } catch {}
+    } catch { /* Browser APIs may be unavailable or denied. */ }
   };
 
   const formatTime = (value: number) => {
@@ -133,7 +133,7 @@ export default function TimerPage() {
     try {
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
       else await document.exitFullscreen();
-    } catch {}
+    } catch { /* Browser APIs may be unavailable or denied. */ }
   };
 
   return (

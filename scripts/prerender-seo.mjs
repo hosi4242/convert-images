@@ -110,15 +110,11 @@ try {
       ? createElement(TimerPage)
       : createElement(SEOInfoPage, { page: pageKey });
     const body = renderToString(createElement(I18nProvider, { initialLanguage: language }, component));
-    const rootPattern = /(<div id="root">)[\\s\\S]*?(<\\/div>\\s*<script type="module" src="\\/src\\/main\\.tsx")/;
+    const rootPattern = /(<div id="root">)[\s\S]*?(<\/div>\s*<script type="module" src="\\/src\\/main\\.tsx")/;
     let html = template.replace(rootPattern, `$1${body}$2`);
     if (html === template) throw new Error("Could not replace the root fallback in index.html");
 
     const timer = isTimer ? buildTimerMetadata() : null;
-    const metadata = timer ?? (() => {
-      const data = vite.ssrLoadModule ? null : null;
-      return data;
-    })();
     let title, description, canonical, schema;
     if (timer) {
       ({ title, description, canonical, schema } = timer);
@@ -132,7 +128,7 @@ try {
     }
 
     html = html.replace(/<html[^>]*lang=["'][^"']*["'][^>]*>/i, '<html lang="ko">');
-    html = html.replace(/<title>[^<]*<\\/title>/i, `<title>${escapeAttribute(title)}</title>`);
+    html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeAttribute(title)}</title>`);
     html = setMeta(html, 'meta[name="description"]', "name", "description", description);
     html = setMeta(html, 'meta[property="og:title"]', "property", "og:title", title);
     html = setMeta(html, 'meta[property="og:description"]', "property", "og:description", description);
@@ -147,7 +143,7 @@ try {
     if (!title.trim() || !description.trim() || !html.includes(`href="${canonical}"`) || !html.includes(`content="${escapeAttribute(canonical)}"`)) {
       throw new Error(`${route}: required SEO metadata was not generated`);
     }
-    const schemaMatch = html.match(/<script id="(?:toolmingle-seo-jsonld|toolmingle-timer-jsonld)" type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
+    const schemaMatch = html.match(/<script id="(?:toolmingle-seo-jsonld|toolmingle-timer-jsonld)" type="application\\/ld\\+json">([\s\S]*?)<\/script>/);
     if (!schemaMatch) throw new Error(`${route}: missing JSON-LD`);
     JSON.parse(schemaMatch[1]);
 

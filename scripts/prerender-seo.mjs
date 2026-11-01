@@ -60,7 +60,7 @@ try {
   const page = await browser.newPage({ locale: "ko-KR" });
 
   for (const route of routes) {
-    const response = await page.goto(`${origin}${route}`, { waitUntil: "networkidle" });
+    const response = await page.goto(`${origin}${route}`, { waitUntil: "domcontentloaded" });
     if (!response?.ok()) {
       throw new Error(`${route}: preview returned HTTP ${response?.status() ?? "no response"}`);
     }

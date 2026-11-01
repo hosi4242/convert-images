@@ -29,6 +29,9 @@ jobs:
       - name: Build (includes TypeScript check) and prerender SEO routes
         run: npm run build
 
+      - name: Verify Cloudflare Static Assets routing
+        run: npm run verify:cloudflare-assets
+
   lint:
     name: Lint (informational; separate from SEO validation)
     runs-on: ubuntu-latest

@@ -28,6 +28,21 @@ export default function TimerPage() {
       : "A free online timer that runs in your browser. Choose 1 to 60 minutes or set a custom duration, then start, pause, resume, or reset without installing anything.";
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
     const canonicalUrl = "https://toolmingle.dev/timer";
+    const setMeta = (selector: string, attribute: "name" | "property", key: string, value: string) => {
+      let meta = document.querySelector(selector) as HTMLMetaElement | null;
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute(attribute, key);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute("content", value);
+    };
+    const title = document.title;
+    setMeta('meta[property="og:title"]', "property", "og:title", title);
+    setMeta('meta[property="og:description"]', "property", "og:description", description);
+    setMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
+    setMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
+    setMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
     canonical.href = canonicalUrl;

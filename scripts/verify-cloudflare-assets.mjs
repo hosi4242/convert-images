@@ -17,16 +17,24 @@ const server = spawn(command, [
   "--yes", "wrangler@4.156.0", "dev", "--local",
   "--ip", host, "--port", String(port), "--log-level", "error",
 ], {
-  stdio: "ignore",
+  stdio: ["ignore", "pipe", "pipe"],
   shell: process.platform === "win32",
   windowsHide: true,
 });
+
+let wranglerOutput = "";
+for (const stream of [server.stdout, server.stderr]) {
+  stream?.setEncoding("utf8");
+  stream?.on("data", (chunk) => {
+    wranglerOutput = (wranglerOutput + chunk).slice(-12_000);
+  });
+}
 
 async function waitForServer() {
   const deadline = Date.now() + 60_000;
   while (Date.now() < deadline) {
     if (server.exitCode !== null) {
-      throw new Error(`Wrangler dev exited with code ${server.exitCode}`);
+      throw new Error(`Wrangler dev exited with code ${server.exitCode}.\n${wranglerOutput || "Wrangler produced no captured output."}`);
     }
     try {
       const response = await fetch(origin);
@@ -36,7 +44,7 @@ async function waitForServer() {
     }
     await new Promise((resolve) => setTimeout(resolve, 300));
   }
-  throw new Error("Timed out waiting for Wrangler Static Assets preview");
+  throw new Error(`Timed out waiting for Wrangler Static Assets preview.\n${wranglerOutput || "Wrangler produced no captured output."}`);
 }
 
 try {

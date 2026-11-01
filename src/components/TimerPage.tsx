@@ -9,7 +9,7 @@ export default function TimerPage() {
   const { language } = useI18n();
   const ko = language === "ko";
   const copy = (...values: string[]) => ko ? values[0] : values[1];
-  const standalone = window.location.pathname.replace(/\/$/, "") === "/timer";
+  const standalone = typeof window !== "undefined" && window.location.pathname.replace(/\/$/, "") === "/timer";
   const [seconds, setSeconds] = useState(5 * 60);
   const [remaining, setRemaining] = useState(5 * 60);
   const [running, setRunning] = useState(false);

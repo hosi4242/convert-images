@@ -8,10 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit -p tsconfig.app.json && vite build",
+    "build": "tsc --noEmit -p tsconfig.app.json && vite build && node scripts/prerender-seo.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "verify:cloudflare-assets": "node scripts/verify-cloudflare-assets.mjs"
   },
   "dependencies": {
     "@jsquash/avif": "^2.1.1",

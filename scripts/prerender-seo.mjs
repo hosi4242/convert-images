@@ -39,9 +39,9 @@ let browser;
 
 function installChromium() {
   const command = process.platform === "win32" ? "npx.cmd" : "npx";
-  // Install the browser binary only. Managed CI/build environments may not
-  // grant root privileges for Playwright's --with-deps apt installation.
-  const result = spawnSync(command, ["playwright", "install", "chromium"], {
+  // Install Chromium and its Linux shared-library dependencies. Cloudflare's
+  // Pages build image may not include all libraries required by headless Chromium.
+  const result = spawnSync(command, ["playwright", "install", "--with-deps", "chromium"], {
     stdio: "inherit",
     shell: process.platform === "win32",
     windowsHide: true,

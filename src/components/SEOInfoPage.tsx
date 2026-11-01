@@ -168,7 +168,7 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
         {"@type":"ListItem","position":2,"name":data.heading,"item":canonicalUrl}
       ]
     };
-    const graph:any[]=[{
+    const graph: Record<string, unknown>[]=[{
       "@type":"WebPage",
       "@id":canonicalUrl+"#webpage",
       "name":data.title,

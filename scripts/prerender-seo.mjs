@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -37,6 +37,24 @@ const server = spawn(process.execPath, [viteBin, "preview", "--host", host, "--p
 
 let browser;
 
+function installChromium() {
+  const command = process.platform === "win32" ? "npx.cmd" : "npx";
+  const args = [
+    "playwright",
+    "install",
+    ...(process.platform === "linux" ? ["--with-deps"] : []),
+    "chromium",
+  ];
+  const result = spawnSync(command, args, {
+    stdio: "inherit",
+    shell: process.platform === "win32",
+    windowsHide: true,
+  });
+  if (result.error || result.status !== 0) {
+    throw new Error(`Playwright Chromium installation failed: ${result.error?.message ?? `exit code ${result.status}`}`);
+  }
+}
+
 async function waitForServer() {
   const deadline = Date.now() + 30_000;
   while (Date.now() < deadline) {
@@ -55,6 +73,7 @@ async function waitForServer() {
 }
 
 try {
+  installChromium();
   await waitForServer();
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ locale: "ko-KR" });
@@ -113,10 +132,10 @@ try {
       throw new Error(`${route}: missing or invalid JSON-LD`);
     }
 
-    const outputPath = resolve("dist", route.slice(1), "index.html");
+    const outputPath = resolve("dist", `${route.slice(1)}.html`);
     await mkdir(dirname(outputPath), { recursive: true });
     await writeFile(outputPath, await page.content(), "utf8");
-    console.log(`Prerendered ${route}`);
+    console.log(`Prerendered ${route} -> ${outputPath}`);
   }
 
   const homepage = await readFile(resolve("dist/index.html"), "utf8");

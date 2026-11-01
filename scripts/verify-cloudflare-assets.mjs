@@ -12,6 +12,10 @@ const routes = [
 const host = "127.0.0.1";
 const port = 4180;
 const origin = `http://${host}:${port}`;
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 15_000) {
+  return fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+}
 const command = process.platform === "win32" ? "npx.cmd" : "npx";
 const server = spawn(command, [
   "--yes", "wrangler@4.156.0", "dev", "--local",
@@ -37,7 +41,7 @@ async function waitForServer() {
       throw new Error(`Wrangler dev exited with code ${server.exitCode}.\n${wranglerOutput || "Wrangler produced no captured output."}`);
     }
     try {
-      const response = await fetch(origin);
+      const response = await fetchWithTimeout(origin, {}, 2_000);
       if (response.ok) return;
     } catch {
       // Wrangler may still be starting.
@@ -51,7 +55,7 @@ try {
   await waitForServer();
 
   for (const route of routes) {
-    const response = await fetch(`${origin}${route}`, { redirect: "manual" });
+    const response = await fetchWithTimeout(`${origin}${route}`, { redirect: "manual" });
     const html = await response.text();
     const canonical = `https://toolmingle.dev${route}`;
     if (response.status !== 200) {
@@ -63,7 +67,7 @@ try {
     console.log(`Cloudflare route verified: ${route}`);
   }
 
-  const unknown = await fetch(`${origin}/__spa_fallback_smoke_test__`);
+  const unknown = await fetchWithTimeout(`${origin}/__spa_fallback_smoke_test__`);
   const fallbackHtml = await unknown.text();
   if (unknown.status !== 200 || !fallbackHtml.includes('href="https://toolmingle.dev/"')) {
     throw new Error("Unknown routes no longer receive the homepage SPA fallback");

@@ -57,7 +57,7 @@ async function waitForServer() {
 try {
   await waitForServer();
   browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const page = await browser.newPage({ locale: "ko-KR" });
 
   for (const route of routes) {
     const response = await page.goto(`${origin}${route}`, { waitUntil: "networkidle" });
@@ -67,14 +67,23 @@ try {
 
     await page.waitForFunction((path) => {
       const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute("href");
-      const jsonLd = document.querySelector('script[type="application/ld+json"]');
-      return canonical === `https://toolmingle.dev${path}` && Boolean(jsonLd?.textContent);
+      const jsonLdId = path === "/timer" ? "toolmingle-timer-jsonld" : "toolmingle-seo-jsonld";
+      const jsonLd = document.getElementById(jsonLdId);
+      const socialUrl = document.querySelector('meta[property="og:url"]')?.getAttribute("content");
+      return canonical === `https://toolmingle.dev${path}`
+        && socialUrl === `https://toolmingle.dev${path}`
+        && Boolean(jsonLd?.textContent);
     }, route, { timeout: 15_000 });
 
     const metadata = await page.evaluate(() => {
       const get = (selector) => document.querySelector(selector)?.getAttribute("content") ?? "";
       const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute("href") ?? "";
-      const jsonLdText = document.querySelector('script[type="application/ld+json"]')?.textContent ?? "";
+      const routeSchemaId = location.pathname === "/timer" ? "toolmingle-timer-jsonld" : "toolmingle-seo-jsonld";
+      const routeSchema = document.getElementById(routeSchemaId);
+      for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
+        if (script.id !== routeSchemaId) script.remove();
+      }
+      const jsonLdText = routeSchema?.textContent ?? "";
       let jsonLdValid = false;
       try {
         JSON.parse(jsonLdText);

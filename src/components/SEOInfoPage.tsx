@@ -129,6 +129,12 @@ const faqItems: Partial<Record<PageKey, Partial<Record<Lang, QAItem[]>>>> = {
 
 const toolKeys: PageKey[] = ["image-converter","image-compressor","image-resizer","image-size-compare","image-dpi-calculator","qr-code","calculator","loan-calculator","installment-calculator","unit-converter","time-calculator","text-tools","text-cleaner","pdf-tools"];
 
+export function getSEOPageMetadata(page: PageKey, language: Lang) {
+  const data = pages[page][language] ?? pages[page].en!;
+  const faq = faqItems[page]?.[language] ?? faqItems[page]?.en ?? [];
+  return { title: data.title, description: data.description, heading: data.heading, faq };
+}
+
 export default function SEOInfoPage({ page }: { page: PageKey }) {
   const { language } = useI18n();
   const data=pages[page][language] ?? pages[page].en!;

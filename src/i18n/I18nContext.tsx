@@ -28,8 +28,8 @@ function getInitialLanguage(): Language {
   return getStoredLanguage() ?? detectBrowserLanguage();
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+export function I18nProvider({ children, initialLanguage }: { children: ReactNode; initialLanguage?: Language }) {
+  const [language, setLanguage] = useState<Language>(initialLanguage ?? getInitialLanguage);
 
   const setSiteLanguage = useCallback((next: Language) => {
     setLanguage(next);

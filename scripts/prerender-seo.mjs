@@ -23,14 +23,14 @@ function setMeta(html, selector, attribute, key, value) {
   const escaped = escapeAttribute(value);
   const pattern = new RegExp(`<meta(?=[^>]*\\b${attribute}=["']${key}["'])[^>]*>`, "i");
   const tag = `<meta ${attribute}="${key}" content="${escaped}">`;
-  return pattern.test(html) ? html.replace(pattern, tag) : html.replace("</head>", `  ${tag}\\n</head>`);
+  return pattern.test(html) ? html.replace(pattern, tag) : html.replace("</head>", `  ${tag}\n</head>`);
 }
 
 function setCanonical(html, canonical) {
   const tag = `<link rel="canonical" href="${escapeAttribute(canonical)}">`;
   return /<link[^>]+rel=["']canonical["'][^>]*>/i.test(html)
     ? html.replace(/<link[^>]+rel=["']canonical["'][^>]*>/i, tag)
-    : html.replace("</head>", `  ${tag}\\n</head>`);
+    : html.replace("</head>", `  ${tag}\n</head>`);
 }
 
 function buildSeoSchema(route, metadata) {

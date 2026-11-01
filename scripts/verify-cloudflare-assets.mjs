@@ -22,6 +22,7 @@ const server = spawn(command, [
   "--ip", host, "--port", String(port), "--log-level", "error",
 ], {
   stdio: ["ignore", "pipe", "pipe"],
+  detached: process.platform !== "win32",
   shell: process.platform === "win32",
   windowsHide: true,
 });

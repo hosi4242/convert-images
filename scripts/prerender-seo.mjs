@@ -110,7 +110,7 @@ try {
       ? createElement(TimerPage)
       : createElement(SEOInfoPage, { page: pageKey });
     const body = renderToString(createElement(I18nProvider, { initialLanguage: language }, component));
-    const rootPattern = /(<div id="root">)[\s\S]*?(<\/div>\s*<script type="module" src="\\/src\\/main\\.tsx")/;
+    const rootPattern = /(<div id="root">)[\s\S]*?(<\/div>)/;
     let html = template.replace(rootPattern, `$1${body}$2`);
     if (html === template) throw new Error("Could not replace the root fallback in index.html");
 
@@ -138,12 +138,12 @@ try {
     html = setMeta(html, 'meta[name="twitter:title"]', "name", "twitter:title", title);
     html = setMeta(html, 'meta[name="twitter:description"]', "name", "twitter:description", description);
     html = setCanonical(html, canonical);
-    html = html.replace("</head>", `  <script id="${isTimer ? "toolmingle-timer-jsonld" : "toolmingle-seo-jsonld"}" type="application/ld+json">${JSON.stringify(schema)}</script>\\n</head>`);
+    html = html.replace("</head>", `  <script id="${isTimer ? "toolmingle-timer-jsonld" : "toolmingle-seo-jsonld"}" type="application/ld+json">${JSON.stringify(schema)}</script>\n</head>`);
 
     if (!title.trim() || !description.trim() || !html.includes(`href="${canonical}"`) || !html.includes(`content="${escapeAttribute(canonical)}"`)) {
       throw new Error(`${route}: required SEO metadata was not generated`);
     }
-    const schemaMatch = html.match(/<script id="(?:toolmingle-seo-jsonld|toolmingle-timer-jsonld)" type="application\\/ld\\+json">([\s\S]*?)<\/script>/);
+    const schemaMatch = html.match(/<script id="(?:toolmingle-seo-jsonld|toolmingle-timer-jsonld)" type="application\/ld\+json">([\s\S]*?)<\/script>/);
     if (!schemaMatch) throw new Error(`${route}: missing JSON-LD`);
     JSON.parse(schemaMatch[1]);
 

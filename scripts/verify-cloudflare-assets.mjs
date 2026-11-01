@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 
 const routes = [
   "/image-converter", "/image-compressor", "/image-resizer",
@@ -51,6 +51,19 @@ async function waitForServer() {
   throw new Error(`Timed out waiting for Wrangler Static Assets preview.\n${wranglerOutput || "Wrangler produced no captured output."}`);
 }
 
+function stopServer() {
+  if (server.exitCode !== null) return;
+  if (process.platform === "win32") {
+    spawnSync("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore", windowsHide: true });
+  } else {
+    try {
+      process.kill(-server.pid, "SIGTERM");
+    } catch {
+      server.kill("SIGTERM");
+    }
+  }
+}
+
 try {
   await waitForServer();
 
@@ -75,5 +88,5 @@ try {
 
   console.log(`Cloudflare Static Assets routing verified: ${routes.length} SEO routes and SPA fallback`);
 } finally {
-  server.kill();
+  stopServer();
 }

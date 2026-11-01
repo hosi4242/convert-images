@@ -9,40 +9,86 @@ export default function InfoPages({ page, onBack }: { page: Page; onBack: () => 
   const data = {
     about: {
       icon: ShieldCheck,
-      title: ko ? "사이트 소개" : "About",
-      intro: ko ? "ToolMingle은 이미지·QR·계산·텍스트·PDF·온라인 타이머 작업을 별도 프로그램 설치 없이 브라우저에서 처리할 수 있도록 만든 무료 웹 도구입니다." : "ToolMingle is a free web service for image, QR, calculator, text, and PDF tasks without installing separate software.",
+      title: ko ? "사이트 소개" : "About ToolMingle",
+      intro: ko
+        ? "ToolMingle은 일상에서 반복되는 디지털 작업을 더 간단하게 해결하기 위해 만든 무료 온라인 도구 모음입니다. 복잡한 프로그램을 설치하거나 계정을 만들지 않고 필요한 기능을 바로 찾아 사용할 수 있도록 설계합니다."
+        : "ToolMingle is a free collection of practical browser tools built to make everyday digital tasks simpler. The goal is to help visitors find and use a useful feature without installing a desktop application or creating an account.",
       sections: [
-        [ko ? "제공 기능" : "What we provide", ko ? "이미지 변환·압축·크기 조정·편집·일괄 변환, QR 코드 생성, 다양한 계산기, 글자 수·바이트 계산, 온라인 타이머와 PDF 도구를 제공합니다." : "Image conversion, compression, resizing, editing, batch conversion, QR generation, calculators, and text counting."],
-        [ko ? "브라우저에서 처리" : "Browser-based processing", ko ? "지원되는 기능은 사용자의 브라우저에서 직접 처리하도록 설계해 불필요한 파일 업로드를 줄였습니다." : "Supported operations are designed to run directly in your browser."],
-        [ko ? "서비스 운영 방향" : "Service direction", ko ? "사용하기 쉬운 무료 도구를 지속적으로 추가하고 PC와 모바일 모두에서 편리하게 이용할 수 있도록 개선합니다." : "We continuously add practical free tools and improve desktop and mobile usability."]
+        [ko ? "어떤 도구를 제공하나요?" : "Tools available",
+         ko ? "이미지 변환·압축·크기 조절·편집·일괄 변환·용량 비교·DPI 계산, QR 코드 생성, 퍼센트와 할인 계산, 대출 및 할부 추정, 단위·시간 변환, 텍스트 분석·정리, PDF 작업, 온라인 타이머를 제공합니다. 도구별 지원 형식과 입력 조건은 해당 도구 페이지에서 확인할 수 있습니다."
+           : "The collection includes image conversion, compression, resizing, editing, batch conversion, size comparison and DPI estimation; QR code generation; everyday, loan and installment estimates; unit and time conversion; text analysis and cleanup; PDF utilities; and an online timer. Each tool page explains its supported inputs and important limitations."],
+        [ko ? "사용 방법" : "How to use a tool",
+         ko ? "홈 화면에서 도구 종류와 기능을 선택하고 화면에 표시되는 입력값 또는 파일을 준비하세요. 실행 후 결과를 확인하고 필요한 경우 저장하거나 다운로드합니다. 파일 형식, 크기, 브라우저 지원 여부에 따라 이용 가능한 기능이 달라질 수 있습니다."
+           : "Choose a category and tool on the home page, provide the requested value or file, and run it. Review the result before saving or downloading. Available operations may depend on file format, file size and browser support."],
+        [ko ? "개인정보와 파일" : "Privacy and files",
+         ko ? "파일을 선택하기 전에 각 도구의 처리 안내를 확인하세요. 브라우저에서 로컬 처리하는 기능은 파일을 변환 목적으로 외부 서버에 전송하지 않도록 설계되어 있습니다. 광고 및 방문 통계 등 외부 서비스는 별도로 적용될 수 있으며 자세한 내용은 개인정보처리방침에 안내합니다."
+           : "Check each tool's processing note before selecting a file. Tools designed for local browser processing do not send files to an external server for conversion. Advertising and analytics services may operate separately; see the Privacy Policy for details."],
+        [ko ? "운영 및 개선" : "Maintenance and feedback",
+         ko ? "기능의 정확성, 호환성, 사용 편의성을 지속적으로 점검하고 개선합니다. 모든 환경에서 결과를 보장할 수는 없으므로 중요한 작업은 원본을 보관하고 결과를 확인하세요. 오류나 개선 의견은 문의 페이지의 이메일로 보내주세요."
+           : "We aim to improve usability, compatibility and reliability over time. Results cannot be guaranteed in every environment, so keep a copy of important originals and verify outputs. Please use the Contact page to report a problem or suggest an improvement."]
       ]
     },
     privacy: {
       icon: ShieldCheck,
       title: ko ? "개인정보처리방침" : "Privacy Policy",
-      intro: ko ? "이 사이트는 개인정보를 최소한으로 처리하고, 브라우저에서 처리할 수 있는 기능은 로컬 처리를 우선합니다." : "This site minimizes personal-data processing and prioritizes local browser processing where possible.",
+      intro: ko
+        ? "ToolMingle은 서비스 운영에 필요한 정보만 처리하고, 지원되는 기능에서는 브라우저 내 처리를 우선하도록 설계합니다. 이 안내는 사이트 기능 및 사용 중인 외부 서비스에 따라 적용됩니다."
+        : "ToolMingle aims to limit data processing to what is needed to operate the service and prefers in-browser processing where supported. This notice applies in light of the site's features and third-party services in use.",
       sections: [
-        [ko ? "파일 처리" : "File processing", ko ? "이미지 변환 등 브라우저 처리 기능은 선택한 파일을 브라우저에서 처리하며 사이트 서버에 저장하지 않습니다." : "Browser-based image operations process selected files in your browser and do not store them on our server."],
-        [ko ? "방문 통계" : "Usage analytics", ko ? "사이트 운영 과정에서 Cloudflare Web Analytics 등 기술·방문 통계 서비스가 사용될 수 있습니다. 이러한 서비스에는 각 제공자의 개인정보 및 쿠키 정책이 적용될 수 있습니다." : "Usage analytics may be used to understand site traffic and may be subject to the provider's policies."],
-        [ko ? "광고 및 외부 서비스" : "Advertising and third parties", ko ? "사이트에는 Google AdSense 광고 코드가 포함되어 있습니다. 광고가 게재되는 경우 Google 및 광고 파트너가 쿠키, IP 주소 또는 기기·브라우저 식별자 등을 사용하여 광고를 제공하고 광고 성과를 측정할 수 있습니다. 광고 개인 최적화 및 데이터 이용 방식은 Google 설정과 정책에 따라 달라질 수 있습니다. 자세한 내용은 Google 개인정보처리방침(https://policies.google.com/privacy)을 확인하세요." : "Google AdSense advertising code is included on this site. If ads are served, Google and its advertising partners may use cookies, IP addresses, or device/browser identifiers to deliver ads and measure ad performance. Personalization and data use may depend on Google settings and policies. See Google’s Privacy Policy at https://policies.google.com/privacy."]
+        [ko ? "사용자가 선택한 파일" : "Files you select",
+         ko ? "브라우저에서 직접 처리하도록 구현된 이미지 도구는 선택한 파일을 사이트 서버에 업로드하지 않고 사용자의 브라우저에서 처리합니다. 모든 도구와 모든 파일 형식이 동일한 방식으로 처리된다고 단정할 수 없으므로 각 기능의 안내를 확인하세요. 파일은 직접 다운로드하거나 저장하기 전까지 사용자의 작업 환경에 남아 있을 수 있습니다."
+           : "Image tools implemented for direct browser processing work on selected files without uploading them to this site's server. Not every tool or file format necessarily works the same way, so read the processing note for the feature you use. Files may remain in your local working environment until you download or otherwise save them."],
+        [ko ? "방문 통계 및 기술 정보" : "Analytics and technical information",
+         ko ? "사이트는 Cloudflare Web Analytics 및 Google Tag Manager 등 운영·측정 도구를 사용할 수 있습니다. 이 서비스는 방문·기술 정보를 처리할 수 있으며 각 제공자의 정책과 설정이 적용됩니다. 자세한 사항은 해당 서비스의 정책을 확인하세요."
+           : "The site may use services such as Cloudflare Web Analytics and Google Tag Manager for operation and measurement. These providers may process visit or technical information under their own policies and settings. Please consult their notices for details."],
+        [ko ? "광고 및 Google AdSense" : "Advertising and Google AdSense",
+         ko ? "사이트에는 Google AdSense 광고 스크립트가 포함되어 있습니다. 광고가 제공되는 경우 Google 및 파트너가 쿠키 또는 유사 기술, IP 주소, 브라우저·기기 정보를 이용해 광고를 제공하고 측정할 수 있습니다. 광고 개인 최적화와 관련된 선택은 Google 계정 및 광고 설정에 따라 달라질 수 있습니다. Google 개인정보처리방침: https://policies.google.com/privacy"
+           : "The site includes Google AdSense code. When ads are served, Google and its partners may use cookies or similar technologies, IP addresses, and browser or device information to deliver and measure ads. Personalization choices may depend on your Google account and ad settings. Google Privacy Policy: https://policies.google.com/privacy"],
+        [ko ? "문의 및 방침 변경" : "Contact and updates",
+         ko ? "개인정보 처리에 관한 문의는 lucidpoverty@gmail.com 으로 보내주세요. 서비스 기능이나 외부 서비스가 변경되면 이 방침도 수정될 수 있으며, 페이지에 게시된 최신 내용을 확인하시기 바랍니다."
+           : "For privacy-related questions, email lucidpoverty@gmail.com. This notice may be updated when site features or third-party services change; please review the latest version published here."]
       ]
     },
     terms: {
       icon: FileText,
       title: ko ? "이용약관" : "Terms of Use",
-      intro: ko ? "이 사이트는 편리한 무료 웹 도구를 제공하는 것을 목적으로 합니다." : "This site provides free web tools for convenience.",
+      intro: ko
+        ? "ToolMingle은 일상적인 디지털 작업을 돕는 무료 웹 도구를 제공합니다. 서비스를 이용하면 아래 사항에 동의하는 것으로 간주됩니다."
+        : "ToolMingle provides free web utilities for everyday digital tasks. By using the service, you agree to the following terms.",
       sections: [
-        [ko ? "서비스 이용" : "Use of the service", ko ? "사용자는 관련 법령과 일반적인 웹 이용 규칙을 준수하여 서비스를 이용해야 합니다." : "Users must comply with applicable laws and generally accepted web-use rules."],
-        [ko ? "결과 확인" : "Check results", ko ? "계산·변환 결과는 편의를 위한 것이므로 중요한 업무나 의사결정에 사용하기 전 결과를 직접 확인하시기 바랍니다." : "Tool results are provided for convenience. Verify results before using them for important work or decisions."],
-        [ko ? "서비스 변경" : "Changes", ko ? "서비스 기능과 화면은 안정적인 운영과 개선을 위해 변경될 수 있습니다." : "Features and interface may change as the service is maintained and improved."]
+        [ko ? "허용되는 이용" : "Acceptable use",
+         ko ? "서비스를 관련 법령에 따라 이용하고, 타인의 권리 침해, 서비스 운영 방해, 보안 우회 또는 악용을 시도하지 않아야 합니다."
+           : "Use the service in accordance with applicable laws. Do not infringe others' rights, disrupt operation, bypass security or misuse the tools."],
+        [ko ? "결과와 정확성" : "Results and accuracy",
+         ko ? "계산·변환 결과는 참고 및 편의 목적으로 제공됩니다. 입력값, 반올림, 파일 형식, 브라우저 환경에 따라 결과가 달라질 수 있습니다. 중요한 금융·세무·업무·인쇄 결과는 공식 자료 또는 전문가와 확인하세요. 대출·할부 계산은 금융상품 제안이나 금융 조언이 아닙니다."
+           : "Calculations and conversions are provided for convenience and reference. Results may vary with inputs, rounding, file formats and browser environments. Verify important financial, tax, business or print decisions against official sources or a qualified professional. Loan and installment estimates are not financial offers or advice."],
+        [ko ? "파일 및 백업" : "Files and backups",
+         ko ? "파일 작업 전 원본을 보관할 책임은 사용자에게 있습니다. 다운로드한 결과가 필요한 용도에 맞는지 직접 확인하세요."
+           : "You are responsible for keeping original copies before file operations. Check that downloaded results meet your needs."],
+        [ko ? "서비스 제공 및 변경" : "Availability and changes",
+         ko ? "서비스는 무료로 제공되며 기능, 지원 형식, 화면 및 제공 여부는 유지보수나 개선 과정에서 변경 또는 중단될 수 있습니다."
+           : "The service is provided free of charge. Features, supported formats, interface and availability may change or be discontinued during maintenance or improvement."],
+        [ko ? "문의" : "Contact",
+         ko ? "약관 또는 서비스에 대한 문의는 lucidpoverty@gmail.com 으로 보내주세요."
+           : "Questions about these terms or the service can be sent to lucidpoverty@gmail.com."]
       ]
     },
     contact: {
       icon: Mail,
-      title: ko ? "문의하기" : "Contact",
-      intro: ko ? "서비스 이용 중 오류나 개선 의견이 있다면 문의 내용을 알려주세요." : "Tell us about an issue or suggestion.",
+      title: ko ? "문의하기" : "Contact ToolMingle",
+      intro: ko
+        ? "오류 신고, 기능 제안, 사용 중 불편한 점 또는 개인정보 관련 문의를 환영합니다. 확인에 필요한 정보를 함께 보내주시면 도움이 됩니다."
+        : "We welcome bug reports, feature suggestions, usability feedback and privacy questions. A few details help us investigate.",
       sections: [
-        [ko ? "문의 방법" : "How to contact", ko ? "문의 이메일: lucidpoverty@gmail.com. 오류 문의 시 사용한 기능과 발생 상황을 함께 알려주시면 확인에 도움이 됩니다." : "Contact email: lucidpoverty@gmail.com. When reporting an issue, include the tool used and what happened so we can investigate."]
+        [ko ? "이메일" : "Email",
+         ko ? "lucidpoverty@gmail.com 으로 문의해 주세요. 사이트 운영자는 문의 내용을 확인하고 답변하기 위해 이메일 주소와 메시지 내용을 처리할 수 있습니다."
+           : "Email lucidpoverty@gmail.com. The site operator may process your email address and message to review and respond to your inquiry."],
+        [ko ? "오류를 신고할 때" : "When reporting a problem",
+         ko ? "가능하면 문제가 발생한 도구 이름 또는 페이지 주소, 사용한 브라우저와 기기, 재현 순서, 표시된 오류 문구를 적어주세요. 비밀번호, 인증 코드, 민감한 개인정보 또는 원본 파일은 보내지 마세요."
+           : "If possible, include the tool or page URL, browser and device, steps to reproduce, and the exact error message. Do not send passwords, verification codes, sensitive personal information or original files."],
+        [ko ? "답변 시간" : "Response time",
+         ko ? "문의량과 문제의 복잡도에 따라 답변이 늦어질 수 있습니다. 모든 문의에 개별 답변을 보장하지는 않습니다."
+           : "Response time depends on inquiry volume and complexity. An individual reply to every message cannot be guaranteed."]
       ]
     }
   } as const;

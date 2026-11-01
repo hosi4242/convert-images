@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Chromium for SEO prerender
+        run: npx playwright install --with-deps chromium
+
       - name: Build (includes TypeScript check)
         run: npm run build
 

@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "convert-images",
-  "compatibility_date": "2026-11-01",
+  "compatibility_date": "2026-10-30",
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",

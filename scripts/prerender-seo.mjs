@@ -111,9 +111,9 @@ try {
       : createElement(SEOInfoPage, { page: pageKey });
     const body = renderToString(createElement(I18nProvider, { initialLanguage: language }, component));
     const rootStart = template.indexOf("<div id=\"root\">");
-    const appScriptStart = template.indexOf('<script type="module" src="/src/main.tsx">', rootStart);
-    const rootClose = appScriptStart >= 0 ? template.lastIndexOf("</div>", appScriptStart) : -1;
-    if (rootStart < 0 || appScriptStart < 0 || rootClose < rootStart) {
+    const bodyEnd = template.indexOf("</body>", rootStart);
+    const rootClose = bodyEnd >= 0 ? template.lastIndexOf("</div>", bodyEnd) : -1;
+    if (rootStart < 0 || bodyEnd < 0 || rootClose < rootStart) {
       throw new Error("Could not locate the root container boundaries in index.html");
     }
     let html = template.slice(0, rootStart) + "<div id=\"root\">" + body + "</div>" + template.slice(rootClose + "</div>".length);

@@ -110,9 +110,13 @@ try {
       ? createElement(TimerPage)
       : createElement(SEOInfoPage, { page: pageKey });
     const body = renderToString(createElement(I18nProvider, { initialLanguage: language }, component));
-    const rootPattern = /(<div id="root">)[\s\S]*?(<\/div>)/;
-    let html = template.replace(rootPattern, `$1${body}$2`);
-    if (html === template) throw new Error("Could not replace the root fallback in index.html");
+    const rootStart = template.indexOf("<div id=\"root\">");
+    const appScriptStart = template.indexOf('<script type="module" src="/src/main.tsx">', rootStart);
+    const rootClose = appScriptStart >= 0 ? template.lastIndexOf("</div>", appScriptStart) : -1;
+    if (rootStart < 0 || appScriptStart < 0 || rootClose < rootStart) {
+      throw new Error("Could not locate the root container boundaries in index.html");
+    }
+    let html = template.slice(0, rootStart) + "<div id=\"root\">" + body + "</div>" + template.slice(rootClose + "</div>".length);
 
     const timer = isTimer ? buildTimerMetadata() : null;
     let title, description, canonical, schema;

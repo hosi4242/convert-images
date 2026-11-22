@@ -1,6 +1,14 @@
 import { expect, test } from "@playwright/test";
 import { existsSync } from "node:fs";
 
+test("opens the image compressor from its guide page", async ({ page }) => {
+  await page.goto("/image-compressor");
+  await page.getByRole("link", { name: /도구 사용하기|Use tool/ }).click();
+
+  await expect(page.getByRole("button", { name: /이미지 용량 줄이기|Compress Image/ }))
+    .toHaveClass(/bg-gradient-to-r/);
+});
+
 test("generates and downloads a QR code as qr-code.png", async ({ page }, testInfo) => {
   await page.goto("/");
 
@@ -23,3 +31,4 @@ test("generates and downloads a QR code as qr-code.png", async ({ page }, testIn
   expect(download.suggestedFilename()).toBe("qr-code.png");
   expect(existsSync(downloadPath)).toBe(true);
 });
+

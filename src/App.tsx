@@ -38,9 +38,27 @@ function App() {
   const { t, language } = useI18n();
   const ko = language === "ko";
   const copy = (k: string, e: string, _j?: string, _z?: string) => ko ? k : e;
-  const [category, setCategory] = useState<Category>("image");
-  const [imageMode, setImageMode] = useState<ImageMode>("convert");
-  const [textMode, setTextMode] = useState<TextMode>("counter");
+  const requestedTool = new URLSearchParams(window.location.search).get("tool");
+  const [category, setCategory] = useState<Category>(() => {
+    if (requestedTool === "qr-code") return "qr";
+    if (["calculator", "loan-calculator", "installment-calculator", "unit-converter", "time-calculator"].includes(requestedTool ?? "")) return "calculator";
+    if (["text-tools", "text-cleaner"].includes(requestedTool ?? "")) return "text";
+    if (requestedTool === "pdf-tools") return "pdf";
+    return "image";
+  });
+  const [imageMode, setImageMode] = useState<ImageMode>(() => ({
+    "image-compressor": "compress",
+    "image-resizer": "resize",
+    "image-size-compare": "compare",
+    "image-dpi-calculator": "dpi",
+  }[requestedTool ?? ""] as ImageMode | undefined) ?? "convert");
+  const [textMode, setTextMode] = useState<TextMode>(() => requestedTool === "text-cleaner" ? "cleaner" : "counter");
+  const calculatorMode = ({
+    "loan-calculator": "loan",
+    "installment-calculator": "installment",
+    "unit-converter": "unit",
+    "time-calculator": "time",
+  } as const)[requestedTool as "loan-calculator" | "installment-calculator" | "unit-converter" | "time-calculator"] ?? "basic";
   const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(null);
   const [format, setFormat] = useState<ImageFormat>("webp");
   const [isConverting, setIsConverting] = useState(false);
@@ -264,7 +282,7 @@ function App() {
         <Suspense fallback={<div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">{ko ? "도구를 불러오는 중..." : "Loading tool..."}</div>}>
           {category === "time" ? <TimerPage /> :
           category === "qr" ? <QRGenerator /> :
-         category === "calculator" ? <CompoundCalculator /> :
+         category === "calculator" ? <CompoundCalculator initialMode={calculatorMode} /> :
          category === "text" ? (textMode === "cleaner" ? <TextCleaner /> : <TextCounter />) :
          category === "pdf" ? <PDFTools /> :
          imageMode === "batch" ? <BatchConverter /> :
@@ -334,3 +352,4 @@ function App() {
 }
 
 export default App;
+

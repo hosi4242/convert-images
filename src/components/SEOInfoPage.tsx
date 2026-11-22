@@ -110,6 +110,75 @@ const usageExamples: Partial<Record<PageKey, Partial<Record<Lang, string[]>>>> =
   "pdf-tools": { ko:["여러 이미지를 하나의 PDF 파일로 묶을 수 있습니다.","PDF 페이지를 확인하고 필요한 범위의 새 PDF를 만들 수 있습니다."], en:["Combine multiple images into one PDF file.","Review PDF pages and create a new PDF from a selected range."] }
 };
 
+const practicalGuides: Partial<Record<PageKey, Partial<Record<Lang, string>>>> = {
+  "image-converter": {
+    ko: "변환 전에는 필요한 파일 형식과 투명 배경 보존 여부를 먼저 확인하세요. 예를 들어 투명 배경이 있는 PNG를 JPEG로 바꾸면 흰 배경으로 합성되므로, 투명도를 유지해야 한다면 PNG나 WebP 결과를 선택하고 저장한 파일을 다시 열어 확인하세요.",
+    en: "Before converting, check the required file format and whether transparency must be preserved. For example, converting a transparent PNG to JPEG composites it on white; choose PNG or WebP when transparency matters, then reopen the saved file to verify it."
+  },
+  "image-compressor": {
+    ko: "압축 도구는 원본 크기의 90%, 70%, 50% 품질 설정으로 WebP 파일을 만듭니다. 같은 사진도 내용과 질감에 따라 결과 용량이 달라지므로, 먼저 중간 설정으로 변환한 뒤 원본과 결과의 용량·화질을 비교해 선택하세요. 압축 후 파일이 항상 더 작아지는 것은 아닙니다.",
+    en: "The compressor creates a WebP file with 90%, 70%, or 50% quality settings. File size varies with image content and texture, so try the middle setting first and compare both size and appearance with the original. Compression does not guarantee a smaller file every time."
+  },
+  "image-resizer": {
+    ko: "가로세로 비율 잠금이 기본으로 켜져 있어 한쪽 픽셀 값을 바꾸면 다른 쪽도 비율에 맞춰 조정됩니다. 예를 들어 2400×1600 이미지를 가로 1200px로 줄이면 세로는 800px가 됩니다. 비율 잠금을 풀면 사진이 늘어나 보일 수 있고, 한 변은 1~10,000px 범위로 설정할 수 있습니다.",
+    en: "Aspect-ratio lock is on by default, so changing one dimension adjusts the other proportionally. For example, reducing a 2400×1600 image to 1200 pixels wide gives an 800-pixel height. Unlocking the ratio can distort the image; each dimension is limited to 1–10,000 pixels."
+  },
+  "image-size-compare": {
+    ko: "변화율은 (이미지 1 용량 − 이미지 2 용량) ÷ 이미지 1 용량 × 100으로 계산합니다. 예를 들어 2MB와 1.5MB를 순서대로 넣으면 이미지 2가 25% 작다고 표시됩니다. 반대로 두 번째 파일이 더 크면 음수 변화율을 보여주므로, 업로드 순서를 확인해 읽으세요.",
+    en: "The change is calculated as (Image 1 size − Image 2 size) ÷ Image 1 size × 100. If you select 2 MB and then 1.5 MB, the tool reports that Image 2 is 25% smaller. A larger second file produces a negative change, so check the selection order when reading the result."
+  },
+  "image-dpi-calculator": {
+    ko: "예상 인쇄 크기는 각 픽셀 수를 DPI로 나눠 인치로 계산하고, 인치 값에 2.54를 곱해 센티미터로 바꿉니다. 예를 들어 3000×2000px를 300 DPI로 출력하면 약 10×6.67인치(25.4×16.9cm)입니다. 이는 이론상 크기이며 실제 출력은 프린터와 여백 설정에 따라 달라질 수 있습니다.",
+    en: "Estimated print dimensions are calculated by dividing each pixel dimension by DPI to get inches, then multiplying inches by 2.54 for centimeters. A 3000×2000-pixel image at 300 DPI is about 10×6.67 inches (25.4×16.9 cm). This is a theoretical size; printer and margin settings can change the actual output."
+  },
+  "qr-code": {
+    ko: "URL·짧은 텍스트·이메일·전화번호·Wi-Fi 접속 정보를 QR 코드에 담아 PNG로 저장할 수 있습니다. 인쇄물에 넣을 때는 실제 크기로 출력한 뒤 휴대폰 카메라로 스캔해 보세요. QR 코드는 입력한 내용을 누구나 읽을 수 있으므로 비밀번호나 공개하면 안 되는 개인정보는 넣지 마세요.",
+    en: "You can encode a URL, short text, email address, phone number, or Wi-Fi access details and save the QR code as a PNG. Before using it in print, test a copy at its intended size with a phone camera. QR codes can be read by anyone, so do not encode passwords or private information."
+  },
+  "calculator": {
+    ko: "할인 계산은 가격에서 할인액을 빼고, 할인액은 가격×할인율÷100으로 구합니다. 예를 들어 20,000원 상품에 15%를 적용하면 할인액 3,000원, 계산 결과는 17,000원입니다. 부가세와 마진 계산은 입력 기준에 따라 의미가 달라질 수 있으니 실제 세무·판매 결정에는 해당 기준을 따로 확인하세요.",
+    en: "For a discount, the savings equal price × discount rate ÷ 100, and the result is price minus savings. A 15% discount on 20,000 gives savings of 3,000 and a result of 17,000. VAT and margin results depend on the inputs and applicable rules, so verify those separately for tax or business decisions."
+  },
+  "loan-calculator": {
+    ko: "원리금균등 방식에서는 연이율을 12로 나눈 월이율과 전체 상환 개월 수를 사용해 매월 같은 금액을 추정합니다. 예를 들어 원금 1,000만원, 연 4%, 1년이면 월 상환액은 약 851,500원이며 총 이자는 약 218,000원입니다. 실제 금융기관의 수수료·금리 산정일·상환 조건은 이 계산에 포함되지 않습니다.",
+    en: "For equal monthly payments, the estimate uses the annual rate divided by 12 and the total number of monthly payments. For example, 10,000,000 at 4% annually over one year is about 851,500 per month, with about 218,000 total interest. Lender fees, rate conventions, and contract terms are not included."
+  },
+  "installment-calculator": {
+    ko: "할부 계산은 입력한 연이율을 12로 나눈 월이율과 개월 수로 월 납입액을 추정합니다. 예를 들어 100만원을 연 4%로 12개월 납부하면 월 약 85,150원, 총 이자는 약 21,800원입니다. 카드사 무이자 행사나 별도 수수료는 계산에 포함되지 않으므로 실제 청구액과 다를 수 있습니다.",
+    en: "The estimate uses the entered annual rate divided by 12 and the number of months to calculate a level monthly payment. For example, 1,000,000 at 4% annually over 12 months is about 85,150 per month, with about 21,800 total interest. Promotional interest-free terms and separate fees are not included, so the billed amount can differ."
+  },
+  "unit-converter": {
+    ko: "길이·무게·면적·부피 단위는 선택한 기준 단위로 환산한 뒤 목표 단위로 다시 바꿉니다. 예를 들어 100cm는 1m이고, 온도는 단순 배율이 아니라 섭씨·화씨·켈빈 변환식을 적용합니다. 데이터 용량은 이 도구에서 KB와 상위 단위 사이에 1024 기준을 사용하므로, 1000 기준 표기와 비교할 때 기준 차이를 확인하세요.",
+    en: "Length, weight, area, and volume values are converted through a reference unit before being expressed in the target unit. For example, 100 cm is 1 m; temperature uses the Celsius/Fahrenheit/Kelvin formulas rather than a simple scale factor. This tool uses 1024-based steps for KB and larger data units, so check the convention when comparing values that use 1000-based units."
+  },
+  "time-calculator": {
+    ko: "종료 시각이 시작 시각보다 이르면 다음 날로 간주해 자정을 넘는 시간도 계산합니다. 예를 들어 22:30부터 다음 날 01:00까지는 2시간 30분이고, 휴식 30분을 입력하면 실제 시간은 2시간입니다. 날짜가 여러 번 바뀌는 장시간 근무 기록을 계산하는 도구는 아닙니다.",
+    en: "If the end time is earlier than the start time, it is treated as the next day. For example, 22:30 to 01:00 is 2 hours 30 minutes; entering a 30-minute break leaves 2 hours. This is not designed for durations spanning multiple days."
+  },
+  "text-tools": {
+    ko: "바이트 수는 입력 문자열을 UTF-8로 인코딩했을 때의 바이트 길이입니다. 예를 들어 한글 ‘가’는 UTF-8에서 3바이트이고, ‘가나’는 글자 2개·6바이트입니다. 이 값은 문자 인코딩에 따라 달라질 수 있어 특정 서비스의 글자 제한과 완전히 같다고 보장하지 않습니다.",
+    en: "Byte size is the length of the input after UTF-8 encoding. For example, the Korean syllable “가” uses 3 UTF-8 bytes, and “가나” has 2 characters and 6 bytes. Other services may count characters or bytes differently, so this may not exactly match their limits."
+  },
+  "text-cleaner": {
+    ko: "각 줄 앞뒤 공백 제거는 기본으로 적용되고, 연속 공백 줄이기·빈 줄 제거·중복 줄 제거는 필요한 항목만 선택할 수 있습니다. 예를 들어 ‘apple’이 여러 줄에 반복된 문서에서 중복 줄과 빈 줄 제거를 켜면 첫 번째 ‘apple’은 남고 뒤의 같은 줄은 제거됩니다. 복사 결과를 저장하기 전에 문단과 목록의 줄바꿈이 의도대로 남았는지 확인하세요.",
+    en: "Trimming spaces at the start and end of each line is on by default; collapsing repeated spaces, removing blank lines, and removing duplicate lines are optional. For repeated “apple” lines, enabling duplicate and blank-line removal keeps the first “apple” and removes later identical lines. Check paragraph and list breaks before saving the cleaned text."
+  },
+  "pdf-tools": {
+    ko: "현재 PDF 메뉴는 JPG·PNG 이미지로 PDF 만들기, PDF 합치기, 페이지 삭제·순서 변경, 페이지 범위 분할, 문서 정보 확인을 지원합니다. 이미지로 PDF를 만들 때 각 이미지는 최대 595×842포인트 범위에 맞게 비율을 유지해 축소하고 확대하지 않으며, JPEG 품질 90%로 포함합니다. 중요한 파일은 결과 PDF를 열어 페이지 방향·잘림·순서를 확인하고 원본도 보관하세요.",
+    en: "The PDF tools currently create PDFs from JPG/PNG images, merge PDFs, delete or reorder pages, split a page range, and show document information. When creating a PDF from images, each image is scaled down proportionally to fit within 595×842 points, never enlarged, and embedded at 90% JPEG quality. Open the result to check page orientation, cropping, and order, and keep the original file."
+  }
+};
+
+const toolEntry: Partial<Record<PageKey, string>> = {
+  "image-converter": "image-converter", "image-compressor": "image-compressor",
+  "image-resizer": "image-resizer", "image-size-compare": "image-size-compare",
+  "image-dpi-calculator": "image-dpi-calculator", "qr-code": "qr-code",
+  "calculator": "calculator", "loan-calculator": "loan-calculator",
+  "installment-calculator": "installment-calculator", "unit-converter": "unit-converter",
+  "time-calculator": "time-calculator", "text-tools": "text-tools",
+  "text-cleaner": "text-cleaner", "pdf-tools": "pdf-tools"
+};
+
 const faqItems: Partial<Record<PageKey, Partial<Record<Lang, QAItem[]>>>> = {
   "image-converter": { ko:[{q:"이미지 변환을 위해 파일을 업로드하나요?",a:"변환 처리는 브라우저에서 수행하도록 설계되어 있어 변환을 위해 이미지 파일을 외부 서버에 업로드하지 않습니다."},{q:"JPG, PNG, WebP를 서로 변환할 수 있나요?",a:"지원되는 입력 형식과 출력 형식 범위에서 서로 변환할 수 있습니다."}], en:[{q:"Do I need to upload my image to a server?",a:"The conversion is designed to run in your browser, so the image is not uploaded to an external server for conversion."},{q:"Can I convert between JPG, PNG, and WebP?",a:"Yes, conversion is available between the supported input and output formats."}] },
   "image-compressor": { ko:[{q:"이미지 압축하면 크기도 작아지나요?",a:"이 도구는 파일 용량을 줄이는 데 초점을 두며 이미지의 가로·세로 크기를 유지하는 방식으로 사용할 수 있습니다."},{q:"압축하면 화질이 떨어지나요?",a:"압축 정도에 따라 품질에 영향을 줄 수 있으므로 중요한 원본은 별도로 보관하는 것이 좋습니다."}], en:[{q:"Does compression change the image dimensions?",a:"The tool focuses on reducing file size while keeping the image dimensions unchanged."},{q:"Will compression reduce image quality?",a:"Stronger compression can affect quality, so keep the original for important images."}] },
@@ -257,6 +326,13 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
             </section>
           ))}
 
+          {practicalGuides[page]?.[language] && (
+            <section className="mt-7 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 sm:p-5">
+              <h2 className="font-bold text-slate-800">{label("계산·처리 기준과 확인할 점","How this tool works")}</h2>
+              <p className="mt-2 text-sm leading-7 text-slate-600">{practicalGuides[page]?.[language] ?? practicalGuides[page]?.en}</p>
+            </section>
+          )}
+
           {!infoPages.includes(page) && usageExamples[page] && (
             <section className="mt-7 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
               <h2 className="font-bold text-slate-800">{label("사용 예시","Examples")}</h2>
@@ -286,8 +362,8 @@ export default function SEOInfoPage({ page }: { page: PageKey }) {
           {!infoPages.includes(page) && (
             <div className="mt-7 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 sm:p-5">
               <h2 className="font-bold text-slate-800">{label("바로 사용하기","Use the tool")}</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{label("이 도구를 직접 사용하려면 메인 페이지에서 해당 기능을 선택하세요.","Open the home page and select this tool to use it directly.")}</p>
-              <a href="/" className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700">
+              <p className="mt-1 text-sm leading-6 text-slate-600">{label("버튼을 누르면 이 기능이 선택된 상태로 열립니다. 필요한 값을 입력하거나 파일을 추가해 결과를 확인하세요.","This opens the home page with this tool selected. Enter the requested values or add a file to see your result.")}</p>
+              <a href={`/?tool=${toolEntry[page] ?? page}`} className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700">
                 {label("도구 사용하기","Use tool")} <ArrowRight className="h-4 w-4"/>
               </a>
             </div>
@@ -329,3 +405,4 @@ export function getSEOPage(pathname: string): PageKey | null {
   const key=path.slice(1) as PageKey;
   return pages[key] ? key : null;
 }
+

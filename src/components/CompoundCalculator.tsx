@@ -4,9 +4,9 @@ import { useI18n } from "@/i18n/I18nContext";
 
 type CalcMode = "basic"|"percent"|"discount"|"vat"|"date"|"unit"|"ratio"|"change"|"margin"|"loan"|"installment"|"time";
 
-export default function CompoundCalculator() {
+export default function CompoundCalculator({ initialMode = "basic" }: { initialMode?: CalcMode }) {
   const { language } = useI18n(); const ko=language==="ko";
-  const [mode,setMode]=useState<CalcMode>("basic");
+  const [mode,setMode]=useState<CalcMode>(initialMode);
   const [a,setA]=useState(""); const [b,setB]=useState(""); const [op,setOp]=useState("+");
   const [percent,setPercent]=useState(""); const [price,setPrice]=useState(""); const [vatRate,setVatRate]=useState("10");
   const [start,setStart]=useState(""); const [end,setEnd]=useState(""); const [inclusive,setInclusive]=useState(false);
@@ -55,3 +55,4 @@ const unitResults=useMemo(()=>{const x=Number(unitValue),cfg=unitConfigs[unitCat
     <button type="button" onClick={reset} className="mt-4 w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50">{ko?"입력 초기화":"Reset"}</button>
   </section>;
 }
+
